@@ -1,5 +1,6 @@
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import Entity.*;
 
 public class CreateDummies {
 

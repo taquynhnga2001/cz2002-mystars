@@ -1,11 +1,6 @@
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+package Entity;
+
+import java.io.*;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -16,24 +11,28 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class Admin extends User implements Serializable{
-	
-	
-	
-	private String adminDatabase="C:\\Users\\tanch\\Documents\\NTU Year 2\\Sem 1\\OOP\\Project\\adminDatabase";
+
+	private String name;
+	private String username;
+	private String mail;
+	private String password;
+	private String phoneNum;
+
+	private String adminDatabase= "database/Admin.txt";
 	private ArrayList <CourseIndex> tempIndexList = new ArrayList <CourseIndex>();
 
-	Admin(String username, String password) throws NoSuchAlgorithmException, IOException {
+	public Admin(String name, String username, String mail, String password, String phoneNum) throws NoSuchAlgorithmException, IOException {
 		super(username, password);
 		ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(adminDatabase+"\\"+username+".txt"));         // adds admin into the database as text file
-		out.writeObject(new Admin(username, password));
+		out.writeObject(new Admin(name, username, mail, password, phoneNum));
 		out.close();  
 	}
 
 	
 	
-	void addStudent(String username, String password, String name, String gender, String matID , String nationality) throws NoSuchAlgorithmException, IOException {
+	void addStudent(String name, String username, String mail, String password, String gender, String matricNum , String nationality) throws NoSuchAlgorithmException, IOException {
 		ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(studentDatabase+"\\"+name+".txt"));         // adds student into the database as text file
-		out.writeObject(new Student(username, password, name, gender, matID , nationality));
+		out.writeObject(new Student(name, username, mail, password, gender, matricNum, nationality));
 		out.close();  
 	}
 	

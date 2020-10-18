@@ -2,7 +2,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class CourseIndex implements Comparable <CourseIndex>,Serializable{					
+public class CourseIndex implements Comparable <CourseIndex>,Serializable {					
 	private int maxStudents;
 	private String courseName;
 	private String schoolName;

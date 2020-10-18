@@ -1,6 +1,6 @@
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.Serializable;
+package Entity;
+
+import java.io.*;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,16 +11,19 @@ import javax.swing.text.html.HTMLDocument.Iterator;
 public class Student extends User implements Serializable, Comparable<Student>{      // Students are comparable and can be sorted by name>gender>natioanlity
 	
 	private String name;
+	private String username;
+	private String mail;
+	private String password;
 	private String gender;
-	private String matID;
+	private String matricNum;
 	private String nationality;
 	private HashMap <Integer,String> coursesEnrolled=new HashMap <Integer,String>();  	 
 	
-	public Student(String username, String password, String name, String gender, String matID , String nationality) throws NoSuchAlgorithmException{
+	public Student(String name, String username, String mail, String password, String gender, String matricNum , String nationality) throws NoSuchAlgorithmException{
 		super(username,password);
 		this.name=name;
 		this.gender=gender;
-		this.matID=matID;
+		this.matricNum=matricNum;
 		this.nationality=nationality;
 		
 	}
