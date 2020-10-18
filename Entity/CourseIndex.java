@@ -1,20 +1,42 @@
-import java.io.Serializable;
+package Entity;
+
+// import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class CourseIndex implements Comparable <CourseIndex>,Serializable {					
+import TextManager.CourseIndexTextMng;
+
+public class CourseIndex implements Comparable <CourseIndex> {					
 	private int maxStudents;
-	private String courseName;
-	private String schoolName;
-	private int index; 
+	private String courseCode;
+	private String index;
+	private String classType;
+	private String group;
+	private String day;
+	private String time;
+	private String venue;
+	private String remark;
+
+	private final int indexIdx = 0;
+	private final int classTypeIdx = 1;
+	private final int groupIdx = 2;
+	private final int dayIdx = 3;
+	private final int timeIdx = 4;
+	private final int venueIdx = 5;
+	private final int remarkIdx = 6;
+
 	private ArrayList <Student> studentEnrolled = new ArrayList<Student>();    
 	private ArrayList <Student> waitlist = new ArrayList<Student>();    
 	
-	CourseIndex(String courseName,String schoolName, int index,int maxStudents){
+	public CourseIndex(String index){
 		this.index=index;
-		this.maxStudents=maxStudents;
-		this.courseName=courseName;
-		this.schoolName=schoolName;
+		ArrayList<String> attributes = new CourseIndexTextMng().readCourseIndex("../database/CourseIndex.csv", index);
+		this.classType = attributes.get(classTypeIdx); // second token...
+		this.group = attributes.get(groupIdx);
+		this.day = attributes.get(dayIdx);
+		this.time = attributes.get(timeIdx);
+		this.venue = attributes.get(venueIdx);
+		this.remark = attributes.get(remarkIdx);
 	}
 	
 	int checkVacancy() {
@@ -46,7 +68,7 @@ public class CourseIndex implements Comparable <CourseIndex>,Serializable {
 	
 	@Override
     public String toString() { 
-        return "Course Name: %s, Index: %d".formatted(courseName,index); 
+        return "Course Name: %s, Index: %d".formatted(courseCode,index); 
     } 
 
 	
@@ -59,7 +81,7 @@ public class CourseIndex implements Comparable <CourseIndex>,Serializable {
 	}
 
 	public String getCourseName() {
-		return courseName;
+		return courseCode;
 	}
 
 	public int getIndex() {

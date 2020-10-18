@@ -10,6 +10,8 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import TextManager.AdminTextMng;
+
 public class Admin extends User implements Serializable{
 
 	private String name;
@@ -18,14 +20,21 @@ public class Admin extends User implements Serializable{
 	private String password;
 	private String phoneNum;
 
+	private final int nameIdx = 0;
+	private final int usernameIdx = 1;
+	private final int mailIdx = 2;
+	private final int passwordIdx = 3;
+	private final int phoneNumIdx = 4;
+
 	private String adminDatabase= "database/Admin.txt";
 	private ArrayList <CourseIndex> tempIndexList = new ArrayList <CourseIndex>();
 
-	public Admin(String name, String username, String mail, String password, String phoneNum) throws NoSuchAlgorithmException, IOException {
+	public Admin(String username, String password) {
 		super(username, password);
-		ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(adminDatabase+"\\"+username+".txt"));         // adds admin into the database as text file
-		out.writeObject(new Admin(name, username, mail, password, phoneNum));
-		out.close();  
+		ArrayList<String> attributes = new AdminTextMng().readAdmin("../database/Admin.csv", username, password);
+		this.name = attributes.get(nameIdx);
+		this.mail = attributes.get(mailIdx);
+		this.phoneNum = attributes.get(phoneNumIdx);
 	}
 
 	

@@ -12,7 +12,7 @@ import java.security.NoSuchAlgorithmException;
 public class Authentication {
 
     public static User login() {
-        String mode;
+        String domain;
         String username;
         String password;
         Scanner sc = new Scanner(System.in);
@@ -27,12 +27,12 @@ public class Authentication {
             System.out.println(">>> Error! " + e.getMessage());
         }
 
-        System.out.print("Staff/Student: ");
-        mode = sc.next();
-        while (mode != "Staff" || mode != "Student") {
+        System.out.print("Domain (Staff/Student): ");
+        domain = sc.next();
+        while (domain != "Staff" || domain != "Student") {
             System.out.println(">>> Error! Wrong input!");
-            System.out.print("Staff/Student: ");
-            mode = sc.next();
+            System.out.print("Domain (Staff/Student): ");
+            domain = sc.next();
         }
 
         System.out.print("Username: ");
@@ -42,14 +42,15 @@ public class Authentication {
 
         int haveRead = 0;
 
-        if (mode == "Student") {
+        if (domain == "Student") {
             do {
                 try {
-                    Student student = new StudentTextMng().readStudent("../database/Student.csv", username, password);
+                    Student student = new StudentTextMng().returnStudent("../database/Student.csv", username, password);
                     if (student == null)
                         System.out.println(">>> Error! Typed in wrong username and password. Type again.");
                     else {
                         haveRead = 1;
+                        System.out.println(">>> Login successfully!");
                         return student;
                     }
                 } catch (WrongUsername e) {
@@ -77,6 +78,7 @@ public class Authentication {
                         System.out.println(">>> Error! Typed in wrong username and password. Type again.");
                     else {
                         haveRead = 1;
+                        System.out.println(">>> Login successfully!");
                         return prof;
                     }
                 } catch (WrongUsername e) {
