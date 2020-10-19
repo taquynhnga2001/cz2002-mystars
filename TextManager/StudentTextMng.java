@@ -8,18 +8,13 @@ import Entity.*;
 import CustomException.*;
 
 public class StudentTextMng extends TextManager {
-    private int nameIdx = 0;
-    private int usernameIdx = 1;
-    private int mailIdx = 2;
-    private int passwordIdx = 3;
-    private int matricNumIdx = 4;
-    private int genderIdx = 5;
-    private int nationalityIdx = 6;
+
+    private final String FILEPATH = "../database/Student.csv";
 
     /** Read String from text file and return list of Student objects */
-    public ArrayList readFile(String filePath) throws IOException {
+    public ArrayList readFile() throws IOException {
         // read String from text file
-        ArrayList stringArray = (ArrayList) read(filePath);
+        ArrayList stringArray = (ArrayList) read(FILEPATH);
         ArrayList<Student> alr = new ArrayList<Student>();// to store Professors data
 
         for (int i = 1; i < stringArray.size(); i++) { // not to get the first line (heading)
@@ -32,10 +27,6 @@ public class StudentTextMng extends TextManager {
             String username = star.nextToken().trim(); // second token
             star.nextToken().trim(); // third token: mail
             String password = star.nextToken().trim();
-            // String matricNum = star.nextToken().trim();
-            // String gender = star.nextToken().trim();
-            // String nationality = star.nextToken().trim();
-            // create Student object from file data
             Student student = new Student(username, password);
             // add to Students list
             alr.add(student);
@@ -44,30 +35,21 @@ public class StudentTextMng extends TextManager {
     }
 
     /** Read String from text file and return a Student object */
-    public Student returnStudent(String filePath, String username, String password)
+    public Student returnStudent(String username, String password)
             throws IOException, WrongPassword, WrongUsername {
-        ArrayList stringArray = (ArrayList) read(filePath);
-        // ArrayList<Student> alr = new ArrayList<Student>();// to store Professors data
-        // String name_;
+        ArrayList stringArray = (ArrayList) read(FILEPATH);
         String username_;
-        // String mail_;
         String password_;
-        String matricNum_;
-        // String gender_;
-        // String nationality_;
 
         for (int i = 1; i < stringArray.size(); i++) {
             String st = (String) stringArray.get(i);
             // get individual 'fields' of the string separated by SEPARATOR
             StringTokenizer star = new StringTokenizer(st, this.SEPERATOR); // pass in the string to the string
                                                                             // tokenizer // using delimiter ","
-            star.nextToken().trim(); // first token
-            username_ = star.nextToken().trim(); // second token...
-            star.nextToken().trim();
+            star.nextToken().trim(); // first token: name
+            username_ = star.nextToken().trim(); // second token
+            star.nextToken().trim(); // fourth token: matricNum
             password_ = star.nextToken().trim();
-            matricNum_ = star.nextToken().trim();
-            // gender_ = star.nextToken().trim();
-            // nationality_ = star.nextToken().trim();
 
             if (username_ == username && password_ == password) {
                 return new Student(username_, password_);
@@ -77,17 +59,13 @@ public class StudentTextMng extends TextManager {
                 throw new WrongPassword();
             } else
                 continue;
-            // create Student object from file data
-            // Student student = new Student(name_, username_, mail_, password_, gender_,
-            // matricNum_, nationality_);
-            // return student;
         }
         return null;
     }
 
     /** Read String from text file and return Student's attributes */
-    public ArrayList<String> readStudent(String filePath, String matricNum) throws IOException {
-        ArrayList stringArray = (ArrayList) read(filePath); // lines of Students' data
+    public ArrayList<String> readStudent(String matricNum) throws IOException {
+        ArrayList stringArray = (ArrayList) read(FILEPATH); // lines of Students' data
         ArrayList<String> alr = new ArrayList<String>(); // to store Student's attributes
         String name;
         String username;
@@ -127,8 +105,8 @@ public class StudentTextMng extends TextManager {
 
     // Overload
     /** Read String from text file and return Student's attributes */
-    public ArrayList<String> readStudent(String filePath, String username, String password) throws IOException {
-        ArrayList stringArray = (ArrayList) read(filePath); // lines of Students' data
+    public ArrayList<String> readStudent(String username, String password) throws IOException {
+        ArrayList stringArray = (ArrayList) read(FILEPATH); // lines of Students' data
         ArrayList<String> alr = new ArrayList<String>();// to store Student's attributes
         String name;
         String username_;
@@ -166,19 +144,31 @@ public class StudentTextMng extends TextManager {
         return null;
     }
 
-    // public void saveFile(String filename, List al) throws IOException {
-    // List alw = new ArrayList();// to store Students data
+    /** Save a list of Student objects to database */
+    public void saveStudent(List<Student> students) throws IOException {
+        List<String> al = new ArrayList<>(); // to store Student data
+        String HEADING = "name,username,mail,password,matricNum,gender,nationality";
+        al.add(HEADING);
 
-    // for (int i = 0; i < al.size(); i++) {
-    // Student student = (Student) al.get(i);
-    // StringBuilder st = new StringBuilder();
-    // st.append(student.getName().trim());
-    // st.append(SEPARATOR);
-    // st.append(student.getEmail().trim());
-    // st.append(SEPARATOR);
-    // st.append(student.getContact());
-    // alw.add(st.toString());
-    // }
-    // write(filename, alw);
-    // }
+        for (int i = 0; i < students.size(); i++) {
+            Student student = students.get(i);
+            StringBuilder st = new StringBuilder();
+            st.append(student.getName().trim());
+            st.append(SEPERATOR);
+            st.append(student.getUsername().trim());
+            st.append(SEPERATOR);
+            st.append(student.getMail().trim());
+            st.append(SEPERATOR);
+            st.append(student.getPassword().trim());
+            st.append(SEPERATOR);
+            st.append(student.getMatricNum().trim());
+            st.append(SEPERATOR);
+            st.append(student.getGender().trim());
+            st.append(SEPERATOR);
+            st.append(student.getNationality().trim());
+            al.add(st.toString());
+        }
+        write("../database/Student.csv", al);
+    }
+
 }

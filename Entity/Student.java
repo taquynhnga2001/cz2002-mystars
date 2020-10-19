@@ -10,8 +10,8 @@ import javax.swing.text.html.HTMLDocument.Iterator;
 
 import TextManager.StudentTextMng;
 
-public class Student extends User implements Serializable, Comparable<Student> { // Students are comparable and can be
-																					// sorted by name>gender>natioanlity
+public class Student extends User implements Comparable<Student> { // Students are comparable and can be
+																   // sorted by name>gender>natioanlity
 	private String name;
 	// private String username;
 	private String mail;
@@ -32,7 +32,7 @@ public class Student extends User implements Serializable, Comparable<Student> {
 
 	public Student(String username, String password) {
 		super(username, password);
-		ArrayList<String> attributes = new StudentTextMng().readStudent("../database/Student.csv", username, password);
+		ArrayList<String> attributes = new StudentTextMng().readStudent(username, password);
 		this.name = attributes.get(nameIdx);
 		// this.username = attributes.get(usernameIdx);
 		this.mail = attributes.get(mailIdx);
@@ -103,11 +103,15 @@ public class Student extends User implements Serializable, Comparable<Student> {
 	public String getName() {
 		return name;
 	}
-
+	public String getMail() {
+		return mail;
+	}
+	public String getMatricNum() {
+		return matricNum;
+	}
 	public String getGender() {
 		return gender;
 	}
-
 	public String getNationality() {
 		return nationality;
 	}

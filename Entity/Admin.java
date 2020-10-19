@@ -31,7 +31,7 @@ public class Admin extends User implements Serializable{
 
 	public Admin(String username, String password) {
 		super(username, password);
-		ArrayList<String> attributes = new AdminTextMng().readAdmin("../database/Admin.csv", username, password);
+		ArrayList<String> attributes = new AdminTextMng().readAdmin(username, password);
 		this.name = attributes.get(nameIdx);
 		this.mail = attributes.get(mailIdx);
 		this.phoneNum = attributes.get(phoneNumIdx);
@@ -74,6 +74,16 @@ public class Admin extends User implements Serializable{
 		for(Student s: courseIndex.getStudentArray()){
 			System.out.println(s);					                        // prints students(sorted)							
 		}
+	}
+
+	public String getName() {
+		return name;
+	}
+	public String getMail() {
+		return mail;
+	}
+	public String getPhoneNume() {
+		return phoneNum;
 	}
 
 }

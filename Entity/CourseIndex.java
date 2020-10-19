@@ -1,14 +1,15 @@
 package Entity;
 
-// import java.io.Serializable;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import CustomException.WrongCourseIndex;
 import TextManager.CourseIndexTextMng;
+// import jdk.internal.jimage.decompressor.SignatureParser.ParseResult;
 
-public class CourseIndex implements Comparable <CourseIndex> {					
-	private int maxStudents;
-	private String courseCode;
+public class CourseIndex extends Course implements Comparable <CourseIndex> {					
+	// course index information
 	private String index;
 	private String classType;
 	private String group;
@@ -16,6 +17,10 @@ public class CourseIndex implements Comparable <CourseIndex> {
 	private String time;
 	private String venue;
 	private String remark;
+	// course code - course index information
+	private int capacity; // maximum students in this courseIndex
+	private int vacancy;
+	private int waitlistSize;
 
 	private final int indexIdx = 0;
 	private final int classTypeIdx = 1;
@@ -25,26 +30,62 @@ public class CourseIndex implements Comparable <CourseIndex> {
 	private final int venueIdx = 5;
 	private final int remarkIdx = 6;
 
+	private final int courseCodeIdx = 1;
+	private final int capacityIdx = 2;
+	private final int vacancyIdx = 3;
+	private final int waitlistIdx = 4;
+
 	private ArrayList <Student> studentEnrolled = new ArrayList<Student>();    
-	private ArrayList <Student> waitlist = new ArrayList<Student>();    
+	// private ArrayList <Student> waitlist = new ArrayList<Student>();    
+
+	private static Course makeCourse(String index) {
+		int courseCodeIdx = 1;
+		try {
+			ArrayList<String> info = new CourseIndexTextMng().readIndexInfo(index);
+			String courseCode = info.get(courseCodeIdx);
+			return new Course(courseCode);
+		} catch (WrongCourseIndex e) {
+			System.out.println(">>> Error: " + e.getMessage());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 	
 	public CourseIndex(String index){
-		this.index=index;
-		ArrayList<String> attributes = new CourseIndexTextMng().readCourseIndex("../database/CourseIndex.csv", index);
-		this.classType = attributes.get(classTypeIdx); // second token...
-		this.group = attributes.get(groupIdx);
-		this.day = attributes.get(dayIdx);
-		this.time = attributes.get(timeIdx);
-		this.venue = attributes.get(venueIdx);
-		this.remark = attributes.get(remarkIdx);
+		this(makeCourse(index));    // return super constructor
+		try {
+			ArrayList<String> attributes = new CourseIndexTextMng().readCourseIndex(index);
+			this.classType = attributes.get(classTypeIdx);
+			this.group = attributes.get(groupIdx);
+			this.day = attributes.get(dayIdx);
+			this.time = attributes.get(timeIdx);
+			this.venue = attributes.get(venueIdx);
+			this.remark = attributes.get(remarkIdx);
+
+			ArrayList<String> info = new CourseIndexTextMng().readIndexInfo(index);
+			this.capacity = Integer.parseInt(info.get(capacityIdx));
+			this.vacancy = Integer.parseInt(info.get(vacancyIdx));
+			this.waitlistSize = Integer.parseInt(info.get(waitlistIdx));
+
+		} catch (WrongCourseIndex e) {
+			System.out.println("Error: " + e.getMessage());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private CourseIndex(Course course) {
+		super(course.getCode());
 	}
 	
+	
 	int checkVacancy() {
-		return maxStudents-studentEnrolled.size();
+		return capacity-studentEnrolled.size();
 	}
-	int checkWaitlist() {
-		return waitlist.size();
-	}
+	// int checkWaitlist() {
+	// 	return waitlist.size();
+	// }
 	
 	void enrollStudent(Student student) {                           // enroll student 
 		studentEnrolled.add(student);
@@ -53,11 +94,11 @@ public class CourseIndex implements Comparable <CourseIndex> {
 		studentEnrolled.remove(student);							// drop student
 	}
 	void joinWaitlist(Student student) {							// add to waitlist
-		waitlist.add(student);
+		waitlistSize.add(student);
 	}
 	void enrollFromWaitist() {										
-		studentEnrolled.add(waitlist.get(0));						// enroll the first student in waitlist		
-		waitlist.remove(0);
+		studentEnrolled.add(waitlistSize.get(0));						// enroll the first student in waitlist		
+		waitlistSize.remove(0);
 	}
 	
 	@Override
@@ -80,14 +121,27 @@ public class CourseIndex implements Comparable <CourseIndex> {
 		return studentEnrolled;
 	}
 
-	public String getCourseName() {
-		return courseCode;
-	}
-
-	public int getIndex() {
+	public String getIndex() {
 		return index;
 	}
-
+	public String getClassType() {
+		return classType;
+	}
+	public String getGroup() {
+		return group;
+	}
+	public String getDay() {
+		return day;
+	}
+	public String getTime() {
+		return time;
+	}
+	public String getVenue() {
+		return venue;
+	}
+	public String getRemark() {
+		return remark;
+	}
 	
 	
 	

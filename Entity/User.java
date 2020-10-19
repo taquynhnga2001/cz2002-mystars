@@ -65,4 +65,11 @@ public class User implements Serializable { // realises serializable so that pas
 		return courseIndex.checkVacancy();
 	}
 
+	public String getUsername() {
+		return username;
+	}
+	public String getPassword() {
+		return password;
+	}
+
 }

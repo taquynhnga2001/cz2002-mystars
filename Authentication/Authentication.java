@@ -20,9 +20,9 @@ public class Authentication {
         // read Student and Admin database
         try {
             StudentTextMng stm = new StudentTextMng();
-            stm.readFile("../database/Student.csv");
+            stm.readFile();
             AdminTextMng atm = new AdminTextMng();
-            atm.readFile("../database/Admin.csv");
+            atm.readFile();
         } catch (IOException e) {
             System.out.println(">>> Error! " + e.getMessage());
         }
@@ -45,7 +45,7 @@ public class Authentication {
         if (domain == "Student") {
             do {
                 try {
-                    Student student = new StudentTextMng().returnStudent("../database/Student.csv", username, password);
+                    Student student = new StudentTextMng().returnStudent(username, password);
                     if (student == null)
                         System.out.println(">>> Error! Typed in wrong username and password. Type again.");
                     else {
@@ -73,7 +73,7 @@ public class Authentication {
         } else {
             do {
                 try {
-                    Admin prof = new AdminTextMng().readAdmin("../database/Admin.csv", username, password);
+                    Admin prof = new AdminTextMng().returnAdmin(username, password);
                     if (prof == null)
                         System.out.println(">>> Error! Typed in wrong username and password. Type again.");
                     else {

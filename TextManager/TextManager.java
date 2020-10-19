@@ -32,6 +32,6 @@ abstract public class TextManager {
         return data;        // each data row is a line record
     }
 
-    abstract public ArrayList readFile(String filePath) throws IOException;
+    abstract public ArrayList readFile() throws IOException;
     // abstract public void saveFile(String filename, List al) throws IOException;
 }

@@ -6,9 +6,12 @@ import Entity.Admin;
 import CustomException.*;
 
 public class AdminTextMng extends TextManager {
-    public ArrayList readFile(String filePath) throws IOException {
+
+    private final String FILEPATH = "../database/Admin.csv";
+    
+    public ArrayList readFile() throws IOException {
         // read String from text file
-        ArrayList stringArray = (ArrayList) read(filePath);
+        ArrayList stringArray = (ArrayList) read(FILEPATH);
         ArrayList<Admin> alr = new ArrayList<Admin>();// to store Admins data
 
         for (int i = 0; i < stringArray.size(); i++) {
@@ -21,8 +24,6 @@ public class AdminTextMng extends TextManager {
             String username = star.nextToken().trim(); // second token...
             star.nextToken().trim(); // third token: mail
             String password = star.nextToken().trim();
-            // String phoneNum = star.nextToken().trim();
-            // create Admin object from file data
             Admin admin = new Admin(username, password);
             // add to Admins list
             alr.add(admin);
@@ -30,15 +31,14 @@ public class AdminTextMng extends TextManager {
         return alr; // list of Admins
     }
 
-    public Admin returnAdmin(String filePath, String username, String password) throws IOException, WrongPassword, WrongUsername {
+    public Admin returnAdmin(String username, String password) throws IOException, WrongPassword, WrongUsername {
         // read String from text file and return Admin object
-        ArrayList stringArray = (ArrayList) read(filePath);
+        ArrayList stringArray = (ArrayList) read(FILEPATH);
         ArrayList<Admin> alr = new ArrayList<Admin>();// to store Admins data
         String name_;
         String username_;
         String mail_;
         String password_;
-        String phoneNum_;
 
         for (int i = 1; i < stringArray.size(); i++) {
             String st = (String) stringArray.get(i);
@@ -49,7 +49,6 @@ public class AdminTextMng extends TextManager {
             username_ = star.nextToken().trim(); // second token...
             mail_ = star.nextToken().trim();
             password_ = star.nextToken().trim();
-            phoneNum_ = star.nextToken().trim();
 
             if (username_ == username && password_ == password) {
                 return new Admin(username_, password_);
@@ -60,15 +59,12 @@ public class AdminTextMng extends TextManager {
             } else
                 continue;
         }
-        // create Professor object from file data
-        // Admin prof = new Admin(username_, password_);
-        // return prof;
         return null;
     }
 
-    public ArrayList<String> readAdmin(String filePath, String username, String password) throws IOException {
+    public ArrayList<String> readAdmin(String username, String password) throws IOException {
         // read String from text file and return Admin's attributes
-        ArrayList stringArray = (ArrayList) read(filePath); // lines of Admins' data
+        ArrayList stringArray = (ArrayList) read(FILEPATH); // lines of Admins' data
         ArrayList<String> alr = new ArrayList<String>();// to store Admin's attributes
         String name;
         String username_;
@@ -98,5 +94,28 @@ public class AdminTextMng extends TextManager {
                 continue;
         }
         return null;
+    }
+
+    /** Save a list of Admin objects to database */
+    public void saveStudent(List<Admin> admins) throws IOException {
+        List<String> al = new ArrayList<>(); // to store Student data
+        String HEADING = "name,username,mail,password,phoneNum";
+        al.add(HEADING);
+
+        for (int i = 0; i < admins.size(); i++) {
+            Admin admin = admins.get(i);
+            StringBuilder st = new StringBuilder();
+            st.append(admin.getName().trim());
+            st.append(SEPERATOR);
+            st.append(admin.getUsername().trim());
+            st.append(SEPERATOR);
+            st.append(admin.getMail().trim());
+            st.append(SEPERATOR);
+            st.append(admin.getPassword().trim());
+            st.append(SEPERATOR);
+            st.append(admin.getPhoneNume().trim());
+            al.add(st.toString());
+        }
+        write("../database/Admin.csv", al);
     }
 }
