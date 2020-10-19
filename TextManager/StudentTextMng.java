@@ -4,12 +4,13 @@ import java.io.*;
 import java.util.*;
 import java.util.ArrayList;
 
+import Constants.FilePath;
 import Entity.*;
 import CustomException.*;
 
 public class StudentTextMng extends TextManager {
 
-    private final String FILEPATH = "../database/Student.csv";
+    private final String FILEPATH = FilePath.STUDENT;
 
     /** Read String from text file and return list of Student objects */
     public ArrayList readFile() throws IOException {
@@ -138,14 +139,13 @@ public class StudentTextMng extends TextManager {
                 alr.add(gender);
                 alr.add(nationality);
                 return alr;
-            } else
-                continue;
+            }
         }
         return null;
     }
 
     /** Save a list of Student objects to database */
-    public void saveStudent(List<Student> students) throws IOException {
+    public void saveStudents(List<Student> students) throws IOException {
         List<String> al = new ArrayList<>(); // to store Student data
         String HEADING = "name,username,mail,password,matricNum,gender,nationality";
         al.add(HEADING);
@@ -170,5 +170,4 @@ public class StudentTextMng extends TextManager {
         }
         write("../database/Student.csv", al);
     }
-
 }

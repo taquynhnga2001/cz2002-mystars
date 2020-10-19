@@ -1,10 +1,10 @@
 package Entity;
 
 import java.io.*;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+// import java.security.MessageDigest;
+// import java.security.NoSuchAlgorithmException;
 
-public class User implements Serializable { // realises serializable so that password can be hashed
+public class User{ // realises serializable so that password can be hashed
 	private String username;
 	private String password;
 	protected String studentDatabase = "database/Student.txt";
@@ -38,32 +38,32 @@ public class User implements Serializable { // realises serializable so that pas
 	// 	return true;
 	// }
 
-	CourseIndex readCourseIndex(int index) throws FileNotFoundException, IOException, ClassNotFoundException {
-		String path = courseDatabase + "\\" + index + ".txt";
-		ObjectInputStream in = new ObjectInputStream(new FileInputStream(path));
-		CourseIndex courseIndex = (CourseIndex) in.readObject();
-		in.close();
-		return courseIndex;
-	}
+	// CourseIndexType readCourseIndex(int index) throws FileNotFoundException, IOException, ClassNotFoundException {
+	// 	String path = courseDatabase + "\\" + index + ".txt";
+	// 	ObjectInputStream in = new ObjectInputStream(new FileInputStream(path));
+	// 	CourseIndexType courseIndex = (CourseIndexType) in.readObject();
+	// 	in.close();
+	// 	return courseIndex;
+	// }
 
-	void saveChanges(CourseIndex courseIndex, int index) throws FileNotFoundException, IOException {
-		String path = courseDatabase + "\\" + index + ".txt"; // save courseIndex as text file in course folder
-		ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(path));
-		out.writeObject(courseIndex);
-		out.close();
-	}
+	// void saveChanges(CourseIndexType courseIndex, int index) throws FileNotFoundException, IOException {
+	// 	String path = courseDatabase + "\\" + index + ".txt"; // save courseIndex as text file in course folder
+	// 	ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(path));
+	// 	out.writeObject(courseIndex);
+	// 	out.close();
+	// }
 
-	void saveChanges(Student student) throws FileNotFoundException, IOException {
-		String path = studentDatabase + "\\" + student.getName() + ".txt"; // save Student profile in studentDatabase
-		ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(path));
-		out.writeObject(student);
-		out.close();
-	}
+	// void saveChanges(Student student) throws FileNotFoundException, IOException {
+	// 	String path = studentDatabase + "\\" + student.getName() + ".txt"; // save Student profile in studentDatabase
+	// 	ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(path));
+	// 	out.writeObject(student);
+	// 	out.close();
+	// }
 
-	int checkVacancy(int index) throws FileNotFoundException, ClassNotFoundException, IOException {
-		CourseIndex courseIndex = readCourseIndex(index);
-		return courseIndex.checkVacancy();
-	}
+	// int checkVacancy(int index) throws FileNotFoundException, ClassNotFoundException, IOException {
+	// 	CourseIndexType courseIndex = readCourseIndex(index);
+	// 	return courseIndex.getVacancy();
+	// }
 
 	public String getUsername() {
 		return username;
@@ -71,5 +71,4 @@ public class User implements Serializable { // realises serializable so that pas
 	public String getPassword() {
 		return password;
 	}
-
 }

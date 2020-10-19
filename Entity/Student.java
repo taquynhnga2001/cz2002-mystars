@@ -10,12 +10,11 @@ import javax.swing.text.html.HTMLDocument.Iterator;
 
 import TextManager.StudentTextMng;
 
-public class Student extends User implements Comparable<Student> { // Students are comparable and can be
+public class Student extends User{ // Students are comparable and can be
 																   // sorted by name>gender>natioanlity
+																//    implements Comparable<Student> 
 	private String name;
-	// private String username;
 	private String mail;
-	// private String password;
 	private String gender;
 	private String matricNum;
 	private String nationality;
@@ -30,7 +29,7 @@ public class Student extends User implements Comparable<Student> { // Students a
 
 	private HashMap<Integer, String> coursesEnrolled = new HashMap<Integer, String>();
 
-	public Student(String username, String password) {
+	public Student(String username, String password) throws IOException{
 		super(username, password);
 		ArrayList<String> attributes = new StudentTextMng().readStudent(username, password);
 		this.name = attributes.get(nameIdx);
@@ -54,51 +53,51 @@ public class Student extends User implements Comparable<Student> { // Students a
 	// 	this(username, password);
 	// }
 
-	void addCourseIndex(int index) throws FileNotFoundException, ClassNotFoundException, IOException {
-		CourseIndex courseIndex = readCourseIndex(index);
-		if (courseIndex.checkVacancy() > 0) {
-			courseIndex.enrollStudent(this); // if slot available, enroll student and update profile
-			coursesEnrolled.put(index, courseIndex.getCourseName());
+	// void addCourseIndex(int index) throws FileNotFoundException, ClassNotFoundException, IOException {
+	// 	CourseIndexType courseIndex = readCourseIndex(index);
+	// 	if (courseIndex.getVacancy() > 0) {
+	// 		courseIndex.enrollStudent(this); // if slot available, enroll student and update profile
+	// 		coursesEnrolled.put(index, courseIndex.getCourseCode());
 
-		} else {
-			courseIndex.joinWaitlist(this); // if slots unavailable, join them to waitlist
-		}
-		saveChanges(courseIndex, index);
-		saveChanges(this); // update changes to databases
-	}
+	// 	} else {
+	// 		courseIndex.joinWaitlist(this); // if slots unavailable, join them to waitlist
+	// 	}
+	// 	saveChanges(courseIndex, index);
+	// 	saveChanges(this); // update changes to databases
+	// }
 
-	void dropCourseIndex(int index) throws FileNotFoundException, ClassNotFoundException, IOException {
-		CourseIndex courseIndex = readCourseIndex(index);
-		courseIndex.dropStudent(this); // drop student and enroll the first student in waitlist
+	// void dropCourseIndex(int index) throws FileNotFoundException, ClassNotFoundException, IOException {
+	// 	CourseIndexType courseIndex = readCourseIndex(index);
+	// 	courseIndex.dropStudent(this); // drop student and enroll the first student in waitlist
 
-		if (courseIndex.checkWaitlist() > 0) {
-			courseIndex.enrollFromWaitist();
-		}
-		saveChanges(courseIndex, index);
-		saveChanges(this); // update changes to databases
-	}
+	// 	if (courseIndex.getWaitlistSize() > 0) {
+	// 		courseIndex.enrollFromWaitist();
+	// 	}
+	// 	saveChanges(courseIndex, index);
+	// 	saveChanges(this); // update changes to databases
+	// }
 
-	void printCoursesEnrolled() { // prints courses enrolled and indexes
-		for (Integer key : coursesEnrolled.keySet()) {
-			System.out.printf("Course Name: %s, Index: %d", coursesEnrolled.get(key), key);
-		}
-	}
+	// void printCoursesEnrolled() { // prints courses enrolled and indexes
+	// 	for (Integer key : coursesEnrolled.keySet()) {
+	// 		System.out.printf("Course Name: %s, Index: %d", coursesEnrolled.get(key), key);
+	// 	}
+	// }
 
-	@Override
-	public int compareTo(Student student) { // compares in the order, Name, gender, nationality
-		// TODO Auto-generated method stub
-		if (this.getName().compareTo(student.getName()) != 0) {
-			return this.getName().compareTo(student.getName());
-		}
-		if (this.getGender().compareTo(student.getGender()) != 0) {
-			return this.getGender().compareTo(student.getGender());
-		}
-		return this.getNationality().compareTo(student.getNationality());
-	}
+	// @Override
+	// public int compareTo(Student student) { // compares in the order, Name, gender, nationality
+	// 	// TODO Auto-generated method stub
+	// 	if (this.getName().compareTo(student.getName()) != 0) {
+	// 		return this.getName().compareTo(student.getName());
+	// 	}
+	// 	if (this.getGender().compareTo(student.getGender()) != 0) {
+	// 		return this.getGender().compareTo(student.getGender());
+	// 	}
+	// 	return this.getNationality().compareTo(student.getNationality());
+	// }
 
-	public String toString() { // Student can be printed to show name, gender, nationality
-		return "Name: %s, Gender: %s, Nationality: %s".formatted(name, gender, nationality);
-	}
+	// public String toString() { // Student can be printed to show name, gender, nationality
+	// 	return "Name: %s, Gender: %s, Nationality: %s".formatted(name, gender, nationality);
+	// }
 
 	public String getName() {
 		return name;

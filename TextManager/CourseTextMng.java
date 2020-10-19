@@ -4,29 +4,26 @@ import java.io.*;
 import java.util.*;
 import java.util.ArrayList;
 
+import Constants.FilePath;
 import CustomException.WrongCourseCode;
 import Entity.*;
 
 public class CourseTextMng extends TextManager {
 
-    private final String FILEPATH = "../database/Course.csv";
+    private final String FILEPATH = FilePath.COURSE;
     private final String SEPERATOR = ",";
 
     /** Read String from text file and return list of Course objects */
     public ArrayList readFile() throws IOException {
-        // read String from text file
         ArrayList stringArray = (ArrayList) read(FILEPATH);
-        ArrayList<Course> alr = new ArrayList<Course>();// to store Course data
+        ArrayList<Course> alr = new ArrayList<Course>(); // to store Course data
 
         for (int i = 1; i < stringArray.size(); i++) {
             String st = (String) stringArray.get(i);
-            // get individual 'fields' of the string separated by SEPARATOR
             StringTokenizer star = new StringTokenizer(st, this.SEPERATOR); // pass in the string to the string
                                                                             // tokenizer // using delimiter ","
-
             String courseCode = star.nextToken().trim(); // first token: courseCode
             Course course = new Course(courseCode);
-            // add to Course list
             alr.add(course);
         }
         return alr; // list of CourseIdx
@@ -40,7 +37,6 @@ public class CourseTextMng extends TextManager {
 
         for (int i = 1; i < stringArray.size(); i++) {
             String st = (String) stringArray.get(i);
-            // get individual 'fields' of the string separated by SEPARATOR
             StringTokenizer star = new StringTokenizer(st, this.SEPERATOR); // pass in the string to the string
                                                                             // tokenizer // using delimiter ","
             courseCode = star.nextToken().trim(); // first token
@@ -62,7 +58,6 @@ public class CourseTextMng extends TextManager {
 
         for (int i = 1; i < stringArray.size(); i++) {
             String st = (String) stringArray.get(i);
-            // get individual 'fields' of the string separated by SEPARATOR
             StringTokenizer star = new StringTokenizer(st, this.SEPERATOR); // pass in the string to the string
                                                                             // tokenizer // using delimiter ","
             courseCode = star.nextToken().trim(); // first token
@@ -79,7 +74,8 @@ public class CourseTextMng extends TextManager {
         throw new WrongCourseCode();
     }
 
-    public void saveCourse(List<Course> courses) throws IOException {
+    /** Save courses in database after adding or updating */
+    public void saveCourses(List<Course> courses) throws IOException {
         List<String> al = new ArrayList<String>(); // to store Course data
         String HEADING = "courseCode,School,AU";
         al.add(HEADING);

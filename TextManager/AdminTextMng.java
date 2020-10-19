@@ -2,12 +2,14 @@ package TextManager;
 
 import java.io.*;
 import java.util.*;
+
+import Constants.FilePath;
 import Entity.Admin;
 import CustomException.*;
 
 public class AdminTextMng extends TextManager {
 
-    private final String FILEPATH = "../database/Admin.csv";
+    private final String FILEPATH = FilePath.ADMIN;
     
     public ArrayList readFile() throws IOException {
         // read String from text file
@@ -34,10 +36,7 @@ public class AdminTextMng extends TextManager {
     public Admin returnAdmin(String username, String password) throws IOException, WrongPassword, WrongUsername {
         // read String from text file and return Admin object
         ArrayList stringArray = (ArrayList) read(FILEPATH);
-        ArrayList<Admin> alr = new ArrayList<Admin>();// to store Admins data
-        String name_;
         String username_;
-        String mail_;
         String password_;
 
         for (int i = 1; i < stringArray.size(); i++) {
@@ -45,9 +44,9 @@ public class AdminTextMng extends TextManager {
             // get individual 'fields' of the string separated by SEPARATOR
             StringTokenizer star = new StringTokenizer(st, this.SEPERATOR); // pass in the string to the string
                                                                             // tokenizer // using delimiter ","
-            name_ = star.nextToken().trim(); // first token
-            username_ = star.nextToken().trim(); // second token...
-            mail_ = star.nextToken().trim();
+            star.nextToken().trim(); // first token: name
+            username_ = star.nextToken().trim(); // second token
+            star.nextToken().trim(); // third token: mail
             password_ = star.nextToken().trim();
 
             if (username_ == username && password_ == password) {
@@ -97,7 +96,7 @@ public class AdminTextMng extends TextManager {
     }
 
     /** Save a list of Admin objects to database */
-    public void saveStudent(List<Admin> admins) throws IOException {
+    public void saveAdmins(List<Admin> admins) throws IOException {
         List<String> al = new ArrayList<>(); // to store Student data
         String HEADING = "name,username,mail,password,phoneNum";
         al.add(HEADING);

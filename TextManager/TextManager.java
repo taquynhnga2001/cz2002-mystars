@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.*;
 
 abstract public class TextManager {
+    
     public final String SEPERATOR = ",";
 
     /** Write fixed content to the given file. */
