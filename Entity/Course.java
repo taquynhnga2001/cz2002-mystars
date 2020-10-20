@@ -1,31 +1,36 @@
-package Entity;
+package entity;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
-import CustomException.WrongCourseCode;
-import TextManager.CourseTextMng;
+import custom_exceptions.*;
+import text_manager.*;
 
 public class Course {
     protected String courseCode;
     protected String school;
     protected int AU;
-    private CourseIndex[] courseIndexs;
+    private ArrayList<CourseIndex> courseIndexs;
 
     // private final int courseCodeIdx = 0;
-    private final int schoolIdx = 1;
-    private final int AUIdx = 2;
+    private final int schoolIdx = 0;
+    private final int AUIdx = 1;
 
     public Course(String courseCode) {
         this.courseCode = courseCode;
         try {
-            ArrayList<String> attributes = new CourseTextMng().readCourse(this.courseCode);
+            ArrayList<String> attributes = CourseTextMng.readCourse(this.courseCode);
             this.school = attributes.get(schoolIdx);
             this.AU = Integer.parseInt(attributes.get(AUIdx));
-
-
+            // construct CourseIndexs for this Course
+            this.courseIndexs = CourseIndexTextMng.readCourseIndexsOfCourse(this.courseCode);
+            for (int i=0; i < this.courseIndexs.size(); i++) {
+                CourseIndex courseIndex = this.courseIndexs.get(i);
+                courseIndex.setCourseCode(this.courseCode);
+            }
         } catch (WrongCourseCode e) {
             System.out.println(">>> Error: " + e.getMessage());
+            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -39,6 +44,9 @@ public class Course {
     }
     public int getAU() {
         return AU;
+    }
+    public ArrayList<CourseIndex> getCourseIndexs(){
+        return courseIndexs;
     }
     
     public void setCouseCode(String courseCode) {

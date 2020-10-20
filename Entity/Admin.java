@@ -1,16 +1,16 @@
-package Entity;
+package entity;
 
 import java.io.*;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+// import java.nio.file.Files;
+// import java.nio.file.Path;
+// import java.nio.file.Paths;
 
-import java.security.NoSuchAlgorithmException;
+// import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.Collections;
+// import java.util.Collections;
 
-import TextManager.AdminTextMng;
+import text_manager.*;
 
 public class Admin extends User {
 
@@ -26,13 +26,13 @@ public class Admin extends User {
 	private final int passwordIdx = 3;
 	private final int phoneNumIdx = 4;
 
-	private String adminDatabase= "database/Admin.txt";
-	private ArrayList <CourseIndexType> tempIndexList = new ArrayList <CourseIndexType>();
+	// private String adminDatabase= "database/Admin.txt";
+	// private ArrayList <CourseIndexType> tempIndexList = new ArrayList <CourseIndexType>();
 
 	public Admin(String username, String password) throws IOException {
 		super(username, password);
 		try {
-			ArrayList<String> attributes = new AdminTextMng().readAdmin(username, password);
+			ArrayList<String> attributes = AdminTextMng.readAdmin(username, password);
 			this.name = attributes.get(nameIdx);
 			this.mail = attributes.get(mailIdx);
 			this.phoneNum = attributes.get(phoneNumIdx);

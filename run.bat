@@ -1,0 +1,6 @@
+del "C:\Users\admin\PycharmProjects\cz2002-mystars\authentication\*.class"
+del "C:\Users\admin\PycharmProjects\cz2002-mystars\constants\*.class"
+del "C:\Users\admin\PycharmProjects\cz2002-mystars\custom_exceptions\*.class"
+del "C:\Users\admin\PycharmProjects\cz2002-mystars\entity\*.class"
+del "C:\Users\admin\PycharmProjects\cz2002-mystars\text_manager\*.class"
+del "C:\Users\admin\PycharmProjects\cz2002-mystars\view\*.class"

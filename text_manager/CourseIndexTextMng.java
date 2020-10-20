@@ -1,33 +1,34 @@
-package TextManager;
+package text_manager;
 
 import java.io.*;
 import java.util.*;
 
-import Constants.FilePath;
-import CustomException.WrongCourseCode;
-import CustomException.WrongCourseIndex;
-import Entity.*;
+import constants.FilePath;
+import custom_exceptions.*;
+import entity.*;
 
 public class CourseIndexTextMng extends TextManager {
 
-    private final String FILEPATH = FilePath.COURSE_INDEX;
-    private final String SEPERATOR = ",";
+    private static final String FILEPATH = FilePath.COURSE_INDEX;
+    private static final String SEPERATOR = ",";
 
-    /** Read String from text file and return list of CourseIdx objects */
-    public ArrayList readFile() throws IOException {
-        // read String from text file
-        ArrayList stringArray = (ArrayList) read(FILEPATH);
-        ArrayList<CourseIndexType> alr = new ArrayList<CourseIndexType>();// to store CourseIndex data
+    /** Read String from text file and return list of CourseIdx objects of a Course */
+    public static ArrayList<CourseIndex> readCourseIndexsOfCourse(String courseCode) throws IOException {
+        ArrayList<String> stringArray = read(FILEPATH);
+        ArrayList<CourseIndex> alr = new ArrayList<>();// to store CourseIndex objects
 
         for (int i = 1; i < stringArray.size(); i++) {
             String st = (String) stringArray.get(i);
             // get individual 'fields' of the string separated by SEPARATOR
-            StringTokenizer star = new StringTokenizer(st, this.SEPERATOR); // pass in the string to the string
-                                                                            // tokenizer // using delimiter ","
-
+            StringTokenizer star = new StringTokenizer(st, SEPERATOR); // pass in the string to the string
+                                                                       // tokenizer using delimiter ","
             String index = star.nextToken().trim(); // first token: name
-            CourseIndexType courseIndex = new CourseIndexType(index);
-            alr.add(courseIndex);
+            String courseCode_ = star.nextToken().trim(); // 2nd token: courseCode
+
+            if (courseCode_.equalsIgnoreCase(courseCode)) {
+                CourseIndex courseIndex = new CourseIndex(index);
+                alr.add(courseIndex);
+            }
         }
         return alr; // list of CourseIdx
     }
@@ -35,8 +36,8 @@ public class CourseIndexTextMng extends TextManager {
     /**
      * Read course index information about course code, capacity, vacancy, wailist
      */
-    public ArrayList<String> readCourseIndex(String courseIndex) throws IOException, WrongCourseIndex {
-        ArrayList stringIndexArray = (ArrayList) read(FILEPATH); // read index, course code, vacancy, wailist, capacity
+    public static ArrayList<String> readCourseIndex(String courseIndex) throws IOException, WrongCourseIndex {
+        ArrayList<String> stringIndexArray = read(FILEPATH); // read index, course code, vacancy, wailist, capacity
 
         ArrayList<String> alr = new ArrayList<String>();// to store CourseIndex's attributes
         String courseIndex_;
@@ -47,10 +48,10 @@ public class CourseIndexTextMng extends TextManager {
 
         for (int i = 1; i < stringIndexArray.size(); i++) {
             String st = (String) stringIndexArray.get(i);
-            StringTokenizer star = new StringTokenizer(st, this.SEPERATOR);
+            StringTokenizer star = new StringTokenizer(st, SEPERATOR);
             courseIndex_ = star.nextToken().trim();
 
-            if (courseIndex == courseIndex_) {
+            if (courseIndex.equalsIgnoreCase(courseIndex_)) {
                 courseCode = star.nextToken().trim();
                 capacity = star.nextToken().trim();
                 vacancy = star.nextToken().trim();
@@ -66,7 +67,7 @@ public class CourseIndexTextMng extends TextManager {
     }
 
     /** Save a list of CourseIndex objects to database */
-    public void saveCourseIndex(List<CourseIndex> courseIndexes) throws IOException {
+    public static void saveCourseIndex(List<CourseIndex> courseIndexes) throws IOException {
         List<String> al = new ArrayList<>(); // to store CourseIndex data
         String HEADING = "index,classType,group,day,time,venue,remark";
         al.add(HEADING);

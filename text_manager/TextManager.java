@@ -1,14 +1,14 @@
-package TextManager;
+package text_manager;
 
 import java.io.*;
 import java.util.*;
 
-abstract public class TextManager {
+public class TextManager {
     
-    public final String SEPERATOR = ",";
+    public static final String SEPERATOR = ",";
 
     /** Write fixed content to the given file. */
-    public static void write(String filePath, List data) throws IOException {
+    public static void write(String filePath, List<String> data) throws IOException {
         PrintWriter out = new PrintWriter(new FileWriter(filePath));
         try {
             for (int i = 0; i < data.size(); i++) {
@@ -20,9 +20,9 @@ abstract public class TextManager {
     }
 
     /** Read the contents of the given file. */
-    public static List read(String filePath) throws IOException {
-        List data = new ArrayList();
-        Scanner scanner = new Scanner(new FileInputStream(filePath));
+    public static ArrayList<String> read(String filePath) throws IOException {
+        ArrayList<String> data = new ArrayList<>();
+        Scanner scanner = new Scanner(new File(filePath));
         try {
             while (scanner.hasNextLine()) {
                 data.add(scanner.nextLine());
@@ -33,6 +33,6 @@ abstract public class TextManager {
         return data;        // each data row is a line record
     }
 
-    abstract public ArrayList readFile() throws IOException;
+    // abstract public ArrayList readFile() throws IOException;
     // abstract public void saveFile(String filename, List al) throws IOException;
 }

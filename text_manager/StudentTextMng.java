@@ -1,27 +1,29 @@
-package TextManager;
+package text_manager;
 
 import java.io.*;
 import java.util.*;
 import java.util.ArrayList;
 
-import Constants.FilePath;
-import Entity.*;
-import CustomException.*;
+import constants.FilePath;
+import entity.*;
+import custom_exceptions.*;
+import custom_exceptions.WrongUsername;
 
 public class StudentTextMng extends TextManager {
 
-    private final String FILEPATH = FilePath.STUDENT;
+    private static final String FILEPATH = FilePath.STUDENT;
+    private static final String SEPERATOR = ",";
 
     /** Read String from text file and return list of Student objects */
-    public ArrayList readFile() throws IOException {
+    public static ArrayList<Student> readFile() throws IOException {
         // read String from text file
-        ArrayList stringArray = (ArrayList) read(FILEPATH);
+        ArrayList<String> stringArray = read(FILEPATH);
         ArrayList<Student> alr = new ArrayList<Student>();// to store Professors data
 
         for (int i = 1; i < stringArray.size(); i++) { // not to get the first line (heading)
             String st = (String) stringArray.get(i);
             // get individual 'fields' of the string separated by SEPARATOR
-            StringTokenizer star = new StringTokenizer(st, this.SEPERATOR); // pass in the string to the string
+            StringTokenizer star = new StringTokenizer(st, SEPERATOR); // pass in the string to the string
                                                                             // tokenizer // using delimiter ","
 
             star.nextToken().trim(); // first token: name
@@ -36,78 +38,78 @@ public class StudentTextMng extends TextManager {
     }
 
     /** Read String from text file and return a Student object */
-    public Student returnStudent(String username, String password)
+    public static Student returnStudent(String username, String password)
             throws IOException, WrongPassword, WrongUsername {
-        ArrayList stringArray = (ArrayList) read(FILEPATH);
+        ArrayList<String> stringArray = read(FILEPATH);
         String username_;
         String password_;
 
         for (int i = 1; i < stringArray.size(); i++) {
             String st = (String) stringArray.get(i);
             // get individual 'fields' of the string separated by SEPARATOR
-            StringTokenizer star = new StringTokenizer(st, this.SEPERATOR); // pass in the string to the string
+            StringTokenizer star = new StringTokenizer(st, SEPERATOR); // pass in the string to the string
                                                                             // tokenizer // using delimiter ","
             star.nextToken().trim(); // first token: name
             username_ = star.nextToken().trim(); // second token
             star.nextToken().trim(); // fourth token: matricNum
             password_ = star.nextToken().trim();
 
-            if (username_ == username && password_ == password) {
+            if (username_.equals(username) && password_.equals(password)) {
                 return new Student(username_, password_);
-            } else if (password_ == password && username_ != username) {
-                throw new WrongUsername();
-            } else if (username_ == username && password_ != password) {
+            } else if (username_.equalsIgnoreCase(username) && !password_.equals(password)) {
                 throw new WrongPassword();
+            } else if (password_.equals(password) && !username_.equalsIgnoreCase(username)) {
+                throw new WrongUsername();
             } else
                 continue;
         }
         return null;
     }
 
-    /** Read String from text file and return Student's attributes */
-    public ArrayList<String> readStudent(String matricNum) throws IOException {
-        ArrayList stringArray = (ArrayList) read(FILEPATH); // lines of Students' data
-        ArrayList<String> alr = new ArrayList<String>(); // to store Student's attributes
-        String name;
-        String username;
-        String mail;
-        String password;
-        String matricNum_;
-        String gender;
-        String nationality;
+    // /** Read String from text file and return Student's attributes */
+    // public ArrayList<String> readStudent(String matricNum) throws IOException {
+    //     ArrayList<String> stringArray = read(FILEPATH); // lines of Students' data
+    //     ArrayList<String> alr = new ArrayList<String>(); // to store Student's attributes
+    //     String name;
+    //     String username;
+    //     String mail;
+    //     String password;
+    //     String matricNum_;
+    //     String gender;
+    //     String nationality;
 
-        for (int i = 1; i < stringArray.size(); i++) {
-            String st = (String) stringArray.get(i);
-            // get individual 'fields' of the string separated by SEPARATOR
-            StringTokenizer star = new StringTokenizer(st, this.SEPERATOR); // pass in the string to the string
-                                                                            // tokenizer // using delimiter ","
-            name = star.nextToken().trim(); // first token
-            username = star.nextToken().trim(); // second token...
-            mail = star.nextToken().trim();
-            password = star.nextToken().trim();
-            matricNum_ = star.nextToken().trim();
-            gender = star.nextToken().trim();
-            nationality = star.nextToken().trim();
+    //     for (int i = 1; i < stringArray.size(); i++) {
+    //         String st = (String) stringArray.get(i);
+    //         // get individual 'fields' of the string separated by SEPARATOR
+    //         StringTokenizer star = new StringTokenizer(st, this.SEPERATOR); // pass in the string to the string
+    //                                                                         // tokenizer // using delimiter ","
+    //         name = star.nextToken().trim(); // first token
+    //         username = star.nextToken().trim(); // second token...
+    //         mail = star.nextToken().trim();
+    //         password = star.nextToken().trim();
+    //         matricNum_ = star.nextToken().trim();
+    //         gender = star.nextToken().trim();
+    //         nationality = star.nextToken().trim();
 
-            if (matricNum_ == matricNum) {
-                alr.add(name);
-                alr.add(username);
-                alr.add(mail);
-                alr.add(password);
-                alr.add(matricNum);
-                alr.add(gender);
-                alr.add(nationality);
-                return alr;
-            } else
-                continue;
-        }
-        return null;
-    }
+    //         if (matricNum_.equals(matricNum)) {
+    //             alr.add(name);
+    //             alr.add(username);
+    //             alr.add(mail);
+    //             alr.add(password);
+    //             alr.add(matricNum);
+    //             alr.add(gender);
+    //             alr.add(nationality);
+    //             return alr;
+    //         } else
+    //             continue;
+    //     }
+    //     return null;
+    // }
 
     // Overload
     /** Read String from text file and return Student's attributes */
-    public ArrayList<String> readStudent(String username, String password) throws IOException {
-        ArrayList stringArray = (ArrayList) read(FILEPATH); // lines of Students' data
+    public static ArrayList<String> readStudent(String username, String password) throws IOException {
+        ArrayList<String> stringArray = read(FILEPATH); // lines of Students' data
         ArrayList<String> alr = new ArrayList<String>();// to store Student's attributes
         String name;
         String username_;
@@ -120,7 +122,7 @@ public class StudentTextMng extends TextManager {
         for (int i = 0; i < stringArray.size(); i++) {
             String st = (String) stringArray.get(i);
             // get individual 'fields' of the string separated by SEPARATOR
-            StringTokenizer star = new StringTokenizer(st, this.SEPERATOR); // pass in the string to the string
+            StringTokenizer star = new StringTokenizer(st, SEPERATOR); // pass in the string to the string
                                                                             // tokenizer // using delimiter ","
             name = star.nextToken().trim(); // first token
             username_ = star.nextToken().trim(); // second token...
@@ -130,7 +132,7 @@ public class StudentTextMng extends TextManager {
             gender = star.nextToken().trim();
             nationality = star.nextToken().trim();
 
-            if (username_ == username && password_ == password) {
+            if (username_.equalsIgnoreCase(username) && password_.equals(password)) {
                 alr.add(name);
                 alr.add(username);
                 alr.add(mail);
@@ -145,7 +147,7 @@ public class StudentTextMng extends TextManager {
     }
 
     /** Save a list of Student objects to database */
-    public void saveStudents(List<Student> students) throws IOException {
+    public static void saveStudents(List<Student> students) throws IOException {
         List<String> al = new ArrayList<>(); // to store Student data
         String HEADING = "name,username,mail,password,matricNum,gender,nationality";
         al.add(HEADING);

@@ -1,26 +1,26 @@
-package TextManager;
+package text_manager;
 
 import java.io.*;
 import java.util.*;
 import java.util.ArrayList;
 
-import Constants.FilePath;
-import CustomException.WrongCourseCode;
-import Entity.*;
+import constants.FilePath;
+import custom_exceptions.*;
+import entity.*;
 
 public class CourseTextMng extends TextManager {
 
-    private final String FILEPATH = FilePath.COURSE;
-    private final String SEPERATOR = ",";
+    private static final String FILEPATH = FilePath.COURSE;
+    private static final String SEPERATOR = ",";
 
     /** Read String from text file and return list of Course objects */
-    public ArrayList readFile() throws IOException {
-        ArrayList stringArray = (ArrayList) read(FILEPATH);
+    public static ArrayList<Course> readFile() throws IOException {
+        ArrayList<String> stringArray = read(FILEPATH);
         ArrayList<Course> alr = new ArrayList<Course>(); // to store Course data
 
         for (int i = 1; i < stringArray.size(); i++) {
             String st = (String) stringArray.get(i);
-            StringTokenizer star = new StringTokenizer(st, this.SEPERATOR); // pass in the string to the string
+            StringTokenizer star = new StringTokenizer(st, SEPERATOR); // pass in the string to the string
                                                                             // tokenizer // using delimiter ","
             String courseCode = star.nextToken().trim(); // first token: courseCode
             Course course = new Course(courseCode);
@@ -30,18 +30,18 @@ public class CourseTextMng extends TextManager {
     }
 
     /** Read string from text file and return a Course object */
-    public Course returnCourse(String courseCode_) throws IOException, WrongCourseCode {
-        ArrayList stringArray = (ArrayList) read(FILEPATH);
-        ArrayList<Course> alr = new ArrayList<Course>();// to store Course data
+    public static Course returnCourse(String courseCode_) throws IOException, WrongCourseCode {
+        ArrayList<String> stringArray = read(FILEPATH);
+        // ArrayList<Course> alr = new ArrayList<Course>();// to store Course data
         String courseCode;
 
         for (int i = 1; i < stringArray.size(); i++) {
             String st = (String) stringArray.get(i);
-            StringTokenizer star = new StringTokenizer(st, this.SEPERATOR); // pass in the string to the string
+            StringTokenizer star = new StringTokenizer(st, SEPERATOR); // pass in the string to the string
                                                                             // tokenizer // using delimiter ","
             courseCode = star.nextToken().trim(); // first token
 
-            if (courseCode == courseCode_) {
+            if (courseCode.equalsIgnoreCase(courseCode_)) {
                 return new Course(courseCode);
             }
         }
@@ -49,8 +49,8 @@ public class CourseTextMng extends TextManager {
     }
 
     /** Read String from text file and return Course attributes */
-    public ArrayList<String> readCourse(String courseCode_) throws IOException, WrongCourseCode {
-        ArrayList stringArray = (ArrayList) read(FILEPATH);
+    public static ArrayList<String> readCourse(String courseCode_) throws IOException, WrongCourseCode {
+        ArrayList<String> stringArray = read(FILEPATH);
         ArrayList<String> alr = new ArrayList<String>();// to store Course's attributes
         String courseCode;
         String school;
@@ -58,14 +58,14 @@ public class CourseTextMng extends TextManager {
 
         for (int i = 1; i < stringArray.size(); i++) {
             String st = (String) stringArray.get(i);
-            StringTokenizer star = new StringTokenizer(st, this.SEPERATOR); // pass in the string to the string
+            StringTokenizer star = new StringTokenizer(st, SEPERATOR); // pass in the string to the string
                                                                             // tokenizer // using delimiter ","
             courseCode = star.nextToken().trim(); // first token
 
-            if (courseCode == courseCode_) {
+            if (courseCode.equalsIgnoreCase(courseCode_)) {
                 school = star.nextToken().trim(); // second token...
                 AU = star.nextToken().trim();
-                alr.add(courseCode);
+                // alr.add(courseCode);
                 alr.add(school);
                 alr.add(AU);
                 return alr;
@@ -75,7 +75,7 @@ public class CourseTextMng extends TextManager {
     }
 
     /** Save courses in database after adding or updating */
-    public void saveCourses(List<Course> courses) throws IOException {
+    public static void saveCourses(List<Course> courses) throws IOException {
         List<String> al = new ArrayList<String>(); // to store Course data
         String HEADING = "courseCode,School,AU";
         al.add(HEADING);

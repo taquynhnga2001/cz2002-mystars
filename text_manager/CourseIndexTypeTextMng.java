@@ -1,33 +1,36 @@
-package TextManager;
+package text_manager;
 
 import java.io.*;
 import java.util.*;
 
-import CustomException.WrongCourseIndex;
-import Entity.*;
-import Constants.*;
+import custom_exceptions.*;
+import entity.*;
+import constants.*;
 
 public class CourseIndexTypeTextMng extends TextManager {
 
-    private final String FILEPATH = FilePath.COURSE_INDEX_TYPE;
+    private final static String FILEPATH = FilePath.COURSE_INDEX_TYPE;
+    private static final String SEPERATOR = ",";
 
-    /** Read String from text file and return list of CourseIdx objects */
-    public ArrayList readFile() throws IOException {
-        // read String from text file
-        ArrayList stringArray = (ArrayList) read(FILEPATH);
+    /** Read String from text file and return list of CourseIndexType objects of a CourseIndex */
+    public static ArrayList<CourseIndexType> readClassTypesOfCourseIndex(String courseIndex) throws IOException {
+        ArrayList<String> stringArray = read(FILEPATH);
         ArrayList<CourseIndexType> alr = new ArrayList<CourseIndexType>();// to store CourseIndex data
 
         for (int i = 1; i < stringArray.size(); i++) {
             String st = (String) stringArray.get(i);
             // get individual 'fields' of the string separated by SEPARATOR
-            StringTokenizer star = new StringTokenizer(st, this.SEPERATOR); // pass in the string to the string
+            StringTokenizer star = new StringTokenizer(st, SEPERATOR); // pass in the string to the string
                                                                             // tokenizer // using delimiter ","
 
-            String index = star.nextToken().trim(); // first token: name
-            CourseIndexType courseIndex = new CourseIndexType(index);
-            alr.add(courseIndex);
+            String index = star.nextToken().trim(); // first token: courseIndex
+            String classType = star.nextToken().trim().toUpperCase(); // second token: classType
+            if (index.equals(courseIndex)) {
+                CourseIndexType courseIndexType = new CourseIndexType(index, classType);
+                alr.add(courseIndexType);
+            }  
         }
-        return alr; // list of CourseIdx
+        return alr; // list of classTypes
     }
 
     // /** Read string from text file and return CourseIndex object */
@@ -49,11 +52,11 @@ public class CourseIndexTypeTextMng extends TextManager {
     // }
 
     /** Read String from text file and return CourseIndex attributes */
-    public ArrayList<String> readCourseIndexType(String index) throws IOException, WrongCourseIndex{
-        ArrayList stringArray = (ArrayList) read(FILEPATH);
+    public static ArrayList<String> readCourseIndexType(String index, String classType) throws IOException, WrongCourseIndex{
+        ArrayList<String> stringArray = read(FILEPATH);
         ArrayList<String> alr = new ArrayList<String>();// to store CourseIndex's attributes
         String index_;
-        String classType;
+        String classType_;
         String group;
         String day;
         String time;
@@ -63,24 +66,27 @@ public class CourseIndexTypeTextMng extends TextManager {
         for (int i = 1; i < stringArray.size(); i++) {
             String st = (String) stringArray.get(i);
             // get individual 'fields' of the string separated by SEPARATOR
-            StringTokenizer star = new StringTokenizer(st, this.SEPERATOR); // pass in the string to the string
+            StringTokenizer star = new StringTokenizer(st, SEPERATOR); // pass in the string to the string
                                                                             // tokenizer // using delimiter ","
             index_ = star.nextToken().trim(); // first token
+            classType_ = star.nextToken().trim().toUpperCase(); //second token
 
-            if (index_ == index) {
-                classType = star.nextToken().trim(); // second token...
+            if (index_.equals(index) && classType_.equals(classType)) {
+                // classType = star.nextToken().trim(); // second token...
                 group = star.nextToken().trim();
                 day = star.nextToken().trim();
                 time = star.nextToken().trim();
                 venue = star.nextToken().trim();
-                remark = star.nextToken().trim().replace("|", ",");
-                alr.add(index_);
-                alr.add(classType);
+                // alr.add(index_);
+                // alr.add(classType);
                 alr.add(group);
                 alr.add(day);
                 alr.add(time);
                 alr.add(venue);
-                alr.add(remark);
+                if (star.hasMoreTokens()) {
+                    remark = star.nextToken().trim().replace("|", ",");
+                    alr.add(remark);
+                }
                 return alr;
             }
         }
@@ -90,7 +96,7 @@ public class CourseIndexTypeTextMng extends TextManager {
 
 
     /** Save a list of CourseIndexType objects to database */
-    public void saveCourseIndexTypes(List<CourseIndexType> courseIndexes) throws IOException {
+    public static void saveCourseIndexTypes(List<CourseIndexType> courseIndexes) throws IOException {
         List<String> al = new ArrayList<>(); // to store CourseIndex data
         String HEADING = "index,classType,group,day,time,venue,remark";
         al.add(HEADING);
@@ -113,7 +119,7 @@ public class CourseIndexTypeTextMng extends TextManager {
             st.append(courseIndex.getRemark().trim().replace(",", "|"));
             al.add(st.toString());
         }
-        write(FILEPATH, al);
+        write(FILEPATH, al); 
     }
     
 }

@@ -1,25 +1,26 @@
-package TextManager;
+package text_manager;
 
 import java.io.*;
 import java.util.*;
 
-import Constants.FilePath;
-import Entity.Admin;
-import CustomException.*;
+import constants.FilePath;
+import entity.*;
+import custom_exceptions.*;
 
 public class AdminTextMng extends TextManager {
 
-    private final String FILEPATH = FilePath.ADMIN;
+    private static final String FILEPATH = FilePath.ADMIN;
+    private static final String SEPERATOR = ",";
     
-    public ArrayList readFile() throws IOException {
+    public static ArrayList<Admin> readFile() throws IOException {
         // read String from text file
-        ArrayList stringArray = (ArrayList) read(FILEPATH);
+        ArrayList<String> stringArray = read(FILEPATH);
         ArrayList<Admin> alr = new ArrayList<Admin>();// to store Admins data
 
         for (int i = 0; i < stringArray.size(); i++) {
             String st = (String) stringArray.get(i);
             // get individual 'fields' of the string separated by SEPARATOR
-            StringTokenizer star = new StringTokenizer(st, this.SEPERATOR); // pass in the string to the string
+            StringTokenizer star = new StringTokenizer(st, SEPERATOR); // pass in the string to the string
                                                                             // tokenizer // using delimiter ","
 
             star.nextToken().trim(); // first token: name
@@ -33,27 +34,27 @@ public class AdminTextMng extends TextManager {
         return alr; // list of Admins
     }
 
-    public Admin returnAdmin(String username, String password) throws IOException, WrongPassword, WrongUsername {
+    public static Admin returnAdmin(String username, String password) throws IOException, WrongPassword, WrongUsername {
         // read String from text file and return Admin object
-        ArrayList stringArray = (ArrayList) read(FILEPATH);
+        ArrayList<String> stringArray = read(FILEPATH);
         String username_;
         String password_;
 
         for (int i = 1; i < stringArray.size(); i++) {
             String st = (String) stringArray.get(i);
             // get individual 'fields' of the string separated by SEPARATOR
-            StringTokenizer star = new StringTokenizer(st, this.SEPERATOR); // pass in the string to the string
+            StringTokenizer star = new StringTokenizer(st, SEPERATOR); // pass in the string to the string
                                                                             // tokenizer // using delimiter ","
             star.nextToken().trim(); // first token: name
             username_ = star.nextToken().trim(); // second token
             star.nextToken().trim(); // third token: mail
             password_ = star.nextToken().trim();
 
-            if (username_ == username && password_ == password) {
+            if (username_.equals(username) && password_.equals(password)) {
                 return new Admin(username_, password_);
-            } else if (password_ == password && username_ != username) {
+            } else if (password_.equals(password) && !username_.equals(username)) {
                 throw new WrongUsername();
-            } else if (username_ == username && password_ != password) {
+            } else if (username_.equals(username) && !password_.equals(password)) {
                 throw new WrongPassword();
             } else
                 continue;
@@ -61,9 +62,9 @@ public class AdminTextMng extends TextManager {
         return null;
     }
 
-    public ArrayList<String> readAdmin(String username, String password) throws IOException {
+    public static ArrayList<String> readAdmin(String username, String password) throws IOException {
         // read String from text file and return Admin's attributes
-        ArrayList stringArray = (ArrayList) read(FILEPATH); // lines of Admins' data
+        ArrayList<String> stringArray = read(FILEPATH); // lines of Admins' data
         ArrayList<String> alr = new ArrayList<String>();// to store Admin's attributes
         String name;
         String username_;
@@ -74,7 +75,7 @@ public class AdminTextMng extends TextManager {
         for (int i = 1; i < stringArray.size(); i++) {
             String st = (String) stringArray.get(i);
             // get individual 'fields' of the string separated by SEPARATOR
-            StringTokenizer star = new StringTokenizer(st, this.SEPERATOR); // pass in the string to the string
+            StringTokenizer star = new StringTokenizer(st, SEPERATOR); // pass in the string to the string
                                                                             // tokenizer // using delimiter ","
             name = star.nextToken().trim(); // first token
             username_ = star.nextToken().trim(); // second token...
@@ -82,7 +83,7 @@ public class AdminTextMng extends TextManager {
             password_ = star.nextToken().trim();
             phoneNum = star.nextToken().trim();
 
-            if (username_ == username && password_ == password) {
+            if (username_.equals(username) && password_.equals(password)) {
                 alr.add(name);
                 alr.add(username);
                 alr.add(mail);
@@ -96,7 +97,7 @@ public class AdminTextMng extends TextManager {
     }
 
     /** Save a list of Admin objects to database */
-    public void saveAdmins(List<Admin> admins) throws IOException {
+    public static void saveAdmins(List<Admin> admins) throws IOException {
         List<String> al = new ArrayList<>(); // to store Student data
         String HEADING = "name,username,mail,password,phoneNum";
         al.add(HEADING);
@@ -115,6 +116,6 @@ public class AdminTextMng extends TextManager {
             st.append(admin.getPhoneNume().trim());
             al.add(st.toString());
         }
-        write("../database/Admin.csv", al);
+        write("../database/Admin.csv", al); 
     }
 }

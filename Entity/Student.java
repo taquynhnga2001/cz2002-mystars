@@ -1,14 +1,14 @@
-package Entity;
+package entity;
 
 import java.io.*;
-import java.security.NoSuchAlgorithmException;
+// import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.Collections;
+// import java.util.Collections;
 import java.util.HashMap;
 
-import javax.swing.text.html.HTMLDocument.Iterator;
+// import javax.swing.text.html.HTMLDocument.Iterator;
 
-import TextManager.StudentTextMng;
+import text_manager.*;
 
 public class Student extends User{ // Students are comparable and can be
 																   // sorted by name>gender>natioanlity
@@ -27,11 +27,11 @@ public class Student extends User{ // Students are comparable and can be
 	private final int genderIdx = 5;
 	private final int nationalityIdx = 6;
 
-	private HashMap<Integer, String> coursesEnrolled = new HashMap<Integer, String>();
+	// private HashMap<Integer, String> coursesEnrolled = new HashMap<Integer, String>();
 
 	public Student(String username, String password) throws IOException{
 		super(username, password);
-		ArrayList<String> attributes = new StudentTextMng().readStudent(username, password);
+		ArrayList<String> attributes = StudentTextMng.readStudent(username, password);
 		this.name = attributes.get(nameIdx);
 		// this.username = attributes.get(usernameIdx);
 		this.mail = attributes.get(mailIdx);

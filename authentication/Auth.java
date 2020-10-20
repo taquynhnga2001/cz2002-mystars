@@ -1,38 +1,29 @@
-package Authentication;
+package authentication;
 
-import TextManager.*;
-import Entity.*;
-import CustomException.*;
+import text_manager.*;
+import entity.*;
+import custom_exceptions.*;
 
 import java.io.IOException;
 import java.util.Scanner;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public class Authentication {
+public class Auth {
 
     public static User login() {
         String domain;
         String username;
         String password;
+
         Scanner sc = new Scanner(System.in);
-
-        // read Student and Admin database
-        try {
-            StudentTextMng stm = new StudentTextMng();
-            stm.readFile();
-            AdminTextMng atm = new AdminTextMng();
-            atm.readFile();
-        } catch (IOException e) {
-            System.out.println(">>> Error! " + e.getMessage());
-        }
-
         System.out.print("Domain (Staff/Student): ");
-        domain = sc.next();
-        while (domain != "Staff" || domain != "Student") {
+        domain = sc.nextLine();
+        
+        while (!domain.equalsIgnoreCase("Staff") && !domain.equalsIgnoreCase("Student")) {
             System.out.println(">>> Error! Wrong input!");
             System.out.print("Domain (Staff/Student): ");
-            domain = sc.next();
+            domain = sc.nextLine();
         }
 
         System.out.print("Username: ");
@@ -42,15 +33,19 @@ public class Authentication {
 
         int haveRead = 0;
 
-        if (domain == "Student") {
+        if (domain.equalsIgnoreCase("Student")) {
             do {
                 try {
                     Student student = new StudentTextMng().returnStudent(username, password);
-                    if (student == null)
-                        System.out.println(">>> Error! Typed in wrong username and password. Type again.");
-                    else {
+                    if (student == null) {
+                        System.out.println(">>> Error! Typed in wrong username and password. Type again.\n");
+                        System.out.print("Username: ");
+                        username = sc.next();
+                        System.out.print("Password: ");
+                        password = getHash(sc.next());
+                    } else {
                         haveRead = 1;
-                        System.out.println(">>> Login successfully!");
+                        System.out.println(">>> Login successfully!\n");
                         return student;
                     }
                 } catch (WrongUsername e) {
@@ -75,7 +70,7 @@ public class Authentication {
                 try {
                     Admin prof = new AdminTextMng().returnAdmin(username, password);
                     if (prof == null)
-                        System.out.println(">>> Error! Typed in wrong username and password. Type again.");
+                        System.out.println(">>> Error! Typed in wrong username and password. Type again.\n");
                     else {
                         haveRead = 1;
                         System.out.println(">>> Login successfully!");
@@ -98,6 +93,7 @@ public class Authentication {
                 }
             } while (haveRead == 0);
         }
+        sc.close();
         return null;
     }
 

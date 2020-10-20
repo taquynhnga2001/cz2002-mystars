@@ -1,11 +1,11 @@
-package Entity;
+package entity;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
+// import java.util.Collections;
 
-import CustomException.WrongCourseIndex;
-import TextManager.CourseIndexTypeTextMng;
+import custom_exceptions.*;
+import text_manager.*;
 // import jdk.internal.jimage.decompressor.SignatureParser.ParseResult;
 
 public class CourseIndexType {					
@@ -21,13 +21,13 @@ public class CourseIndexType {
 
 	private String courseCode;
 
-	private final int indexIdx = 0;
-	private final int classTypeIdx = 1;
-	private final int groupIdx = 2;
-	private final int dayIdx = 3;
-	private final int timeIdx = 4;
-	private final int venueIdx = 5;
-	private final int remarkIdx = 6;
+	// private final int indexIdx = 0;
+	// private final int classTypeIdx = 1;
+	private final int groupIdx = 0;
+	private final int dayIdx = 1;
+	private final int timeIdx = 2;
+	private final int venueIdx = 3;
+	private final int remarkIdx = 4;
 
 
 
@@ -48,16 +48,19 @@ public class CourseIndexType {
 	// 	return null;
 	// }
 	
-	public CourseIndexType(String index){
+	public CourseIndexType(String index, String classType){
+		this.index = index;
+		this.classType = classType.toUpperCase();
 		try {
-			ArrayList<String> attributes = new CourseIndexTypeTextMng().readCourseIndexType(index);
-			this.classType = attributes.get(classTypeIdx);
+			ArrayList<String> attributes = CourseIndexTypeTextMng.readCourseIndexType(index, classType);
 			this.group = attributes.get(groupIdx);
 			this.day = attributes.get(dayIdx);
 			this.time = attributes.get(timeIdx);
 			this.venue = attributes.get(venueIdx);
-			this.remark = attributes.get(remarkIdx);	
-
+			if (attributes.size() > this.remarkIdx) {
+				this.remark = attributes.get(remarkIdx);	
+			} else this.remark = "";
+			
 		} catch (WrongCourseIndex e) {
 			System.out.println("Error: " + e.getMessage());
 		} catch (IOException e) {
@@ -121,6 +124,10 @@ public class CourseIndexType {
 	public String getRemark() {
 		return remark;
 	}
+	public String getCourseCode() {
+		// courseCode of a courseIndexType is set when contructing a course
+		return courseCode;
+	}
 
 
 	public void setIndex(String index) {
@@ -140,6 +147,9 @@ public class CourseIndexType {
 	}
 	public void setRemark(String remark) {
 		this.remark = remark;
+	}
+	public void setCourseCode(String courseCode) {
+		this.courseCode = courseCode;
 	}
 
 	
