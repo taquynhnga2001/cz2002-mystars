@@ -24,22 +24,6 @@ public class CourseIndexType {
 	private final int timeIdx = 1;
 	private final int venueIdx = 2;
 	private final int remarkIdx = 3;
-
-	// private ArrayList <Student> waitlist = new ArrayList<Student>();    
-
-	// private static Course makeCourse(String index) {
-	// 	int courseCodeIdx = 1;
-	// 	try {
-	// 		ArrayList<String> info = new CourseIndexTextMng().readIndexInfo(index);
-	// 		String courseCode = info.get(courseCodeIdx);
-	// 		return new Course(courseCode);
-	// 	} catch (WrongCourseIndex e) {
-	// 		System.out.println(">>> Error: " + e.getMessage());
-	// 	} catch (IOException e) {
-	// 		e.printStackTrace();
-	// 	}
-	// 	return null;
-	// }
 	
 	public CourseIndexType(String index, String classType, String day){
 		this.index = index;
@@ -48,7 +32,6 @@ public class CourseIndexType {
 		try {
 			ArrayList<String> attributes = CourseIndexTypeTextMng.readCourseIndexType(index, classType, day);
 			this.group = attributes.get(groupIdx);
-			// this.day = attributes.get(dayIdx);
 			this.time = attributes.get(timeIdx);
 			this.venue = attributes.get(venueIdx);
 			if (attributes.size() > this.remarkIdx) {

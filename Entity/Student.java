@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import custom_exceptions.AlreadyEnrolled;
 import custom_exceptions.AlreadyInWaitlist;
+import custom_exceptions.DidntEnrollOrWait;
 import custom_exceptions.NoVacancy;
 import custom_exceptions.WrongCourseIndex;
 
@@ -120,9 +121,13 @@ public class Student extends User{ // Students are comparable and can be
 	public int getRegisteredAU() {
 		return registeredAU;
 	}
+	public void setRegisteredAU(int i) {
+		registeredAU = i;
+	}
 
 	/** Filter from course DB to point to Enrolled courses */
 	public ArrayList<CourseIndex> getCourseEnrolled(ArrayList<Course> courseDB) {
+		registeredAU = 0;
 		ArrayList<CourseIndex> al = new ArrayList<>();
 		// loop through all courses in the database that have student registered
 		for (int i=0; i<courseDB.size(); i++) {
@@ -153,6 +158,7 @@ public class Student extends User{ // Students are comparable and can be
 		return al;
 	}
 	
+	/** Filter from course DB to point to waitlist courses */
 	public ArrayList<CourseIndex> getCourseWaitlist(ArrayList<Course> courseDB) {
 		ArrayList<CourseIndex> al = new ArrayList<>();
 		// loop through all courses in the database that still have students in waitlist
@@ -189,6 +195,15 @@ public class Student extends User{ // Students are comparable and can be
 	/** Add the courseIndex string to the ArrayList<String> courseWaitlist */
 	public void waitCourse(String courseIndex) {
 		courseWaitlist.add(courseIndex);
+	}
+	
+	/**
+	 * Drop the courseIndex string in the ArrayList<String> courseEnrolled and courseWaitlist 
+	 * If true: drop successfully 
+	 * If false: throw Exception*/
+	public void dropCourse(String courseIndex) {
+		courseEnrolled.remove(courseIndex);
+		courseWaitlist.remove(courseIndex);
 	}
 		
 }

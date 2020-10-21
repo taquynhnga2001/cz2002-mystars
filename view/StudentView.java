@@ -10,22 +10,14 @@ import registration_controller.*;
 
 public class StudentView extends UserView {
 
-    // private static ArrayList<Course> courseDB;
-    // private static ArrayList<CourseIndex> courseEnrolled;
-    // private static ArrayList<CourseIndex> courseWaitlist;
     private static Scanner sc = new Scanner(System.in);
     
     public static void view(Student student) {
         // retrieve DataTime now, if is in access period then continue, otherwise notify student access period
 
-        // load database for courses
-        // courseDB = loadCourses();
-        // courseEnrolled = student.getCourseEnrolled(courseDB);
-        // courseWaitlist = student.getCourseWaitlist(courseDB);
-
-        // Scanner sc = new Scanner(System.in);
         String choice;
         do {
+            System.out.println("Registered AUs: " + student.getRegisteredAU());
             System.out.println("\n========== HOME ==========\n");
             System.out.println("(A) Add Course");
             System.out.println("(D) Drop Course");
@@ -43,7 +35,10 @@ public class StudentView extends UserView {
                     addCourse(student);
                     break;
                 }
-                case "D":
+                case "D": {
+                    dropCourse(student);
+                    break;
+                }
                 case "R":
                 case "V":
                 case "I":
@@ -58,10 +53,10 @@ public class StudentView extends UserView {
         System.out.print("Enter Course Index that you want to add: ");
         String courseIndex = sc.next();
         try {
-            // CourseIndex courseIndex = CourseTextMng.getCourseIndex(courseDB, courseIndex_);
             StudentController.addCourse(student, courseIndex);
             System.out.println("Add course successfully!");
-            
+            System.out.println("Registed AUs: " + student.getRegisteredAU());
+
         } catch (WrongCourseIndex e) {
             System.out.println(">>> Error! " + e.getMessage());
         } catch (AlreadyEnrolled e) {
@@ -80,7 +75,23 @@ public class StudentView extends UserView {
     }
 
     public static void dropCourse(Student student) {
-
+        System.out.println("\n----- Drop Course -----");
+        System.out.print("Enter Course Index that you want to drop: ");
+        String courseIndex = sc.next();
+        try {
+            CourseIndex courseDropped = StudentController.dropCourse(student, courseIndex);
+            // save courseIndexs in the database if no exceptions thrown here
+            // CourseIndexTextMng.saveCourseIndex(courseDB);
+            System.out.println("Drop course successfully!");
+            student.setRegisteredAU(student.getRegisteredAU() - courseDropped.getAU());
+            System.out.println("Registed AUs: " + student.getRegisteredAU());
+        } catch (WrongCourseIndex e) {
+            System.out.println(">>> Error! " + e.getMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (DidntEnrollOrWait e) {
+            System.out.println(">>> " + e.getMessage());
+        }
     }
     public static void courseRegistered(Student student) {
 

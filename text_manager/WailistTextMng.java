@@ -62,9 +62,11 @@ public class WailistTextMng extends TextManager {
     /** Delete wailist registration when the vacancy is available or admin add for a student
      * Cannot check if the student is in waitlist of this courseIndex yet 
      */
-    public static void delEnrolledCourses(String matricNum, String courseIndex) throws IOException {
+    public static void delWaitlistCourses(String matricNum, String courseIndex) throws IOException {
         ArrayList<String> stringArray = read(FILEPATH); // to store the old database
-        ArrayList<String> al = new ArrayList<>(); // to rewrite the new database
+        ArrayList<String> al = new ArrayList<>();
+        String HEADING = "matricNum,courseIndex";
+        al.add(HEADING);
 
         for (int i = 1; i < stringArray.size(); i++) {
             String st = (String) stringArray.get(i);
@@ -73,7 +75,7 @@ public class WailistTextMng extends TextManager {
             String matricNum_ = star.nextToken().trim(); // first token: matricNum
             String courseIndex_ = star.nextToken().trim(); // second token: courseIndex
             if (!matricNum_.equalsIgnoreCase(matricNum) || !courseIndex_.equalsIgnoreCase(courseIndex)) {
-                al.add(st);
+                al.add(stringArray.get(i));
             }
         }
         write(FILEPATH, al);
