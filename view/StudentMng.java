@@ -58,6 +58,7 @@ public class StudentMng extends UserMng {
     // }
 
     public static void printCouses() {
+        System.out.println("Course\tIndex\tGroup\tDay\tTime\tVenue\tRemark");
         try {
             ArrayList<Course> courses = CourseTextMng.readFile();
             for (int i = 0; i < courses.size(); i++) {
@@ -66,7 +67,13 @@ public class StudentMng extends UserMng {
                     ArrayList<CourseIndexType> classTypes = courseIndexs.get(j).getClassTypes();
                     for (int k=0; k<classTypes.size(); k++) {
                         CourseIndexType classType = classTypes.get(k);
-                        System.out.println("- " + classType.getCourseCode() + " " + classType.getTime());
+                        System.out.print(classType.getCourseCode());
+                        System.out.print("\t" + classType.getIndex());
+                        System.out.print("\t" + classType.getGroup());
+                        System.out.print("\t" + classType.getDay());
+                        System.out.print("\t" + classType.getTime());
+                        System.out.print("\t\t" + classType.getVenue());
+                        System.out.print("\t" + classType.getRemark() + "\n");
                     }
                 }
             }

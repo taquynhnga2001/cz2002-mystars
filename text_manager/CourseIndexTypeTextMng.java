@@ -25,8 +25,10 @@ public class CourseIndexTypeTextMng extends TextManager {
 
             String index = star.nextToken().trim(); // first token: courseIndex
             String classType = star.nextToken().trim().toUpperCase(); // second token: classType
+            star.nextToken(); // 3rd token: group
+            String day = star.nextToken().trim().toUpperCase(); // 4th token: day
             if (index.equals(courseIndex)) {
-                CourseIndexType courseIndexType = new CourseIndexType(index, classType);
+                CourseIndexType courseIndexType = new CourseIndexType(index, classType, day);
                 alr.add(courseIndexType);
             }  
         }
@@ -52,13 +54,13 @@ public class CourseIndexTypeTextMng extends TextManager {
     // }
 
     /** Read String from text file and return CourseIndex attributes */
-    public static ArrayList<String> readCourseIndexType(String index, String classType) throws IOException, WrongCourseIndex{
+    public static ArrayList<String> readCourseIndexType(String index, String classType, String day) throws IOException, WrongCourseIndex{
         ArrayList<String> stringArray = read(FILEPATH);
         ArrayList<String> alr = new ArrayList<String>();// to store CourseIndex's attributes
         String index_;
         String classType_;
         String group;
-        String day;
+        String day_;
         String time;
         String venue;
         String remark;
@@ -70,17 +72,19 @@ public class CourseIndexTypeTextMng extends TextManager {
                                                                             // tokenizer // using delimiter ","
             index_ = star.nextToken().trim(); // first token
             classType_ = star.nextToken().trim().toUpperCase(); //second token
+            group = star.nextToken().trim();
+            day_ = star.nextToken().trim().toUpperCase();
 
-            if (index_.equals(index) && classType_.equals(classType)) {
+            if (index_.equals(index) && classType_.equals(classType) && day_.equalsIgnoreCase(day)) {
                 // classType = star.nextToken().trim(); // second token...
-                group = star.nextToken().trim();
-                day = star.nextToken().trim();
+                // group = star.nextToken().trim();
+                // day = star.nextToken().trim();
                 time = star.nextToken().trim();
                 venue = star.nextToken().trim();
                 // alr.add(index_);
                 // alr.add(classType);
                 alr.add(group);
-                alr.add(day);
+                // alr.add(day);
                 alr.add(time);
                 alr.add(venue);
                 if (star.hasMoreTokens()) {

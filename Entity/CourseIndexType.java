@@ -24,10 +24,10 @@ public class CourseIndexType {
 	// private final int indexIdx = 0;
 	// private final int classTypeIdx = 1;
 	private final int groupIdx = 0;
-	private final int dayIdx = 1;
-	private final int timeIdx = 2;
-	private final int venueIdx = 3;
-	private final int remarkIdx = 4;
+	// private final int dayIdx = 1;
+	private final int timeIdx = 1;
+	private final int venueIdx = 2;
+	private final int remarkIdx = 3;
 
 
 
@@ -48,13 +48,14 @@ public class CourseIndexType {
 	// 	return null;
 	// }
 	
-	public CourseIndexType(String index, String classType){
+	public CourseIndexType(String index, String classType, String day){
 		this.index = index;
 		this.classType = classType.toUpperCase();
+		this.day = day.toUpperCase();
 		try {
-			ArrayList<String> attributes = CourseIndexTypeTextMng.readCourseIndexType(index, classType);
+			ArrayList<String> attributes = CourseIndexTypeTextMng.readCourseIndexType(index, classType, day);
 			this.group = attributes.get(groupIdx);
-			this.day = attributes.get(dayIdx);
+			// this.day = attributes.get(dayIdx);
 			this.time = attributes.get(timeIdx);
 			this.venue = attributes.get(venueIdx);
 			if (attributes.size() > this.remarkIdx) {

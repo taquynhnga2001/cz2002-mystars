@@ -33,7 +33,7 @@ public class CourseIndex {
 			classTypes = CourseIndexTypeTextMng.readClassTypesOfCourseIndex(this.index);
 			for (int i = 0; i<classTypes.size(); i++) {
 				CourseIndexType classType = classTypes.get(i);
-				classType.setCourseCode(this.courseCode);
+				classType.setCourseCode(this.courseCode); // set courseCode for each CourseIndexType object of this CourseIndex
 			}
 
         } catch (WrongCourseIndex e) {
