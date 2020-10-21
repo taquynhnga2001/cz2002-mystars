@@ -1,14 +1,14 @@
 package entity;
 
-import java.io.*;
+import java.util.*;
 // import java.security.MessageDigest;
 // import java.security.NoSuchAlgorithmException;
+
+import custom_exceptions.WrongCourseIndex;
 
 public class User{ // realises serializable so that password can be hashed
 	private String username;
 	private String password;
-	protected String studentDatabase = "database/Student.txt";
-	protected String courseDatabase = "database/CouseIndex.txt";
 
 	public User(String username, String password) { // Users will have a username and password to login
 		this.username = username;
@@ -70,5 +70,21 @@ public class User{ // realises serializable so that password can be hashed
 	}
 	public String getPassword() {
 		return password;
+	}
+	public int checkVacancy(ArrayList<Course> courses, String courseIndex) throws WrongCourseIndex {
+		// loop through all courses in the database
+		for (int i=0; i<courses.size(); i++) {
+			Course course = courses.get(i);
+			ArrayList<CourseIndex> courseIndexs = course.getCourseIndexs();
+
+			// loop through all courseIndexs of that course in the database
+			for (int j=0; j<courseIndexs.size(); j++) {
+				CourseIndex courseIndex_ = courseIndexs.get(j);
+				if (courseIndex_.getIndex().equalsIgnoreCase(courseIndex)) {
+					return courseIndex_.getVacancy();
+				}
+			}
+		}
+		throw new WrongCourseIndex();
 	}
 }

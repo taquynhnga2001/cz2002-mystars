@@ -12,7 +12,6 @@ public class Course {
     protected int AU;
     private ArrayList<CourseIndex> courseIndexs;
 
-    // private final int courseCodeIdx = 0;
     private final int schoolIdx = 0;
     private final int AUIdx = 1;
 
@@ -27,6 +26,7 @@ public class Course {
             for (int i=0; i < this.courseIndexs.size(); i++) {
                 CourseIndex courseIndex = this.courseIndexs.get(i);
                 courseIndex.setCourseCode(this.courseCode);
+                courseIndex.setAU(this.AU);
             }
         } catch (WrongCourseCode e) {
             System.out.println(">>> Error: " + e.getMessage());

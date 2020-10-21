@@ -1,7 +1,7 @@
-courseIndex,courseCode,capacity,vacancy,waitlist
+index,courseCode,capacity,vacancy,waitlist
 10184,CZ2001,10,10,0
 10185,CZ2001,10,10,0
-10186,CZ2001,10,10,0
+10186,CZ2001,10,0,0
 10198,CZ2002,10,10,0
 10199,CZ2002,10,10,0
 10200,CZ2002,10,10,0

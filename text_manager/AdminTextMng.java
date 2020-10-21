@@ -85,9 +85,7 @@ public class AdminTextMng extends TextManager {
 
             if (username_.equals(username) && password_.equals(password)) {
                 alr.add(name);
-                alr.add(username);
                 alr.add(mail);
-                alr.add(password);
                 alr.add(phoneNum);
                 return alr;
             } else

@@ -24,7 +24,7 @@ public class StudentTextMng extends TextManager {
             String st = (String) stringArray.get(i);
             // get individual 'fields' of the string separated by SEPARATOR
             StringTokenizer star = new StringTokenizer(st, SEPERATOR); // pass in the string to the string
-                                                                            // tokenizer // using delimiter ","
+                                                                       // tokenizer // using delimiter ","
 
             star.nextToken().trim(); // first token: name
             String username = star.nextToken().trim(); // second token
@@ -48,7 +48,7 @@ public class StudentTextMng extends TextManager {
             String st = (String) stringArray.get(i);
             // get individual 'fields' of the string separated by SEPARATOR
             StringTokenizer star = new StringTokenizer(st, SEPERATOR); // pass in the string to the string
-                                                                            // tokenizer // using delimiter ","
+                                                                       // tokenizer // using delimiter ","
             star.nextToken().trim(); // first token: name
             username_ = star.nextToken().trim(); // second token
             star.nextToken().trim(); // fourth token: matricNum
@@ -68,42 +68,44 @@ public class StudentTextMng extends TextManager {
 
     // /** Read String from text file and return Student's attributes */
     // public ArrayList<String> readStudent(String matricNum) throws IOException {
-    //     ArrayList<String> stringArray = read(FILEPATH); // lines of Students' data
-    //     ArrayList<String> alr = new ArrayList<String>(); // to store Student's attributes
-    //     String name;
-    //     String username;
-    //     String mail;
-    //     String password;
-    //     String matricNum_;
-    //     String gender;
-    //     String nationality;
+    // ArrayList<String> stringArray = read(FILEPATH); // lines of Students' data
+    // ArrayList<String> alr = new ArrayList<String>(); // to store Student's
+    // attributes
+    // String name;
+    // String username;
+    // String mail;
+    // String password;
+    // String matricNum_;
+    // String gender;
+    // String nationality;
 
-    //     for (int i = 1; i < stringArray.size(); i++) {
-    //         String st = (String) stringArray.get(i);
-    //         // get individual 'fields' of the string separated by SEPARATOR
-    //         StringTokenizer star = new StringTokenizer(st, this.SEPERATOR); // pass in the string to the string
-    //                                                                         // tokenizer // using delimiter ","
-    //         name = star.nextToken().trim(); // first token
-    //         username = star.nextToken().trim(); // second token...
-    //         mail = star.nextToken().trim();
-    //         password = star.nextToken().trim();
-    //         matricNum_ = star.nextToken().trim();
-    //         gender = star.nextToken().trim();
-    //         nationality = star.nextToken().trim();
+    // for (int i = 1; i < stringArray.size(); i++) {
+    // String st = (String) stringArray.get(i);
+    // // get individual 'fields' of the string separated by SEPARATOR
+    // StringTokenizer star = new StringTokenizer(st, this.SEPERATOR); // pass in
+    // the string to the string
+    // // tokenizer // using delimiter ","
+    // name = star.nextToken().trim(); // first token
+    // username = star.nextToken().trim(); // second token...
+    // mail = star.nextToken().trim();
+    // password = star.nextToken().trim();
+    // matricNum_ = star.nextToken().trim();
+    // gender = star.nextToken().trim();
+    // nationality = star.nextToken().trim();
 
-    //         if (matricNum_.equals(matricNum)) {
-    //             alr.add(name);
-    //             alr.add(username);
-    //             alr.add(mail);
-    //             alr.add(password);
-    //             alr.add(matricNum);
-    //             alr.add(gender);
-    //             alr.add(nationality);
-    //             return alr;
-    //         } else
-    //             continue;
-    //     }
-    //     return null;
+    // if (matricNum_.equals(matricNum)) {
+    // alr.add(name);
+    // alr.add(username);
+    // alr.add(mail);
+    // alr.add(password);
+    // alr.add(matricNum);
+    // alr.add(gender);
+    // alr.add(nationality);
+    // return alr;
+    // } else
+    // continue;
+    // }
+    // return null;
     // }
 
     // Overload
@@ -123,20 +125,18 @@ public class StudentTextMng extends TextManager {
             String st = (String) stringArray.get(i);
             // get individual 'fields' of the string separated by SEPARATOR
             StringTokenizer star = new StringTokenizer(st, SEPERATOR); // pass in the string to the string
-                                                                            // tokenizer // using delimiter ","
+                                                                       // tokenizer // using delimiter ","
             name = star.nextToken().trim(); // first token
             username_ = star.nextToken().trim(); // second token...
             mail = star.nextToken().trim();
             password_ = star.nextToken().trim();
-            matricNum = star.nextToken().trim();
-            gender = star.nextToken().trim();
-            nationality = star.nextToken().trim();
 
             if (username_.equalsIgnoreCase(username) && password_.equals(password)) {
+                matricNum = star.nextToken().trim();
+                gender = star.nextToken().trim();
+                nationality = star.nextToken().trim();
                 alr.add(name);
-                alr.add(username);
                 alr.add(mail);
-                alr.add(password);
                 alr.add(matricNum);
                 alr.add(gender);
                 alr.add(nationality);
@@ -170,6 +170,6 @@ public class StudentTextMng extends TextManager {
             st.append(student.getNationality().trim());
             al.add(st.toString());
         }
-        write("../database/Student.csv", al);
+        write(FILEPATH, al);
     }
 }

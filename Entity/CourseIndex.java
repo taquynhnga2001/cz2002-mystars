@@ -8,7 +8,8 @@ import text_manager.*;
 
 public class CourseIndex {
     private String index;
-    private String courseCode;
+	private String courseCode;
+	private int AU;
     private ArrayList<CourseIndexType> classTypes;
 
     // course code - course index information
@@ -20,6 +21,9 @@ public class CourseIndex {
 	private final int capacityIdx = 1;
 	private final int vacancyIdx = 2;
 	private final int waitlistIdx = 3;
+
+	private ArrayList<Student> studentEnrolled = new ArrayList<>();    
+	private ArrayList<Student> studentWaitlist = new ArrayList<>();
 
     public CourseIndex(String index) {
 		this.index = index;
@@ -48,7 +52,10 @@ public class CourseIndex {
     }
     public String getCourseCode() {
         return courseCode;
-    }
+	}
+	public int getAU() {
+		return AU;
+	}
     public int getCapacity() {
 		return capacity;
 	}
@@ -61,6 +68,12 @@ public class CourseIndex {
 	public ArrayList<CourseIndexType> getClassTypes() {
 		return classTypes;
 	}
+	public ArrayList<Student> getStudentEnrolled() {
+		return studentEnrolled;
+	}
+	public ArrayList<Student> getStudentWaitlist() {
+		return studentWaitlist;
+	}
 
     public void setCapacity(int capacity) {
 		this.capacity = capacity;
@@ -68,10 +81,13 @@ public class CourseIndex {
 	public void setVacancy(int vacancy) {
 		this.vacancy = vacancy;
 	}
-	public void getWaitlistSize(int waitlist) {
+	public void setWaitlistSize(int waitlist) {
 		this.waitlistSize = waitlist;
     }
     public void setCourseCode(String courseCode) {
         this.courseCode = courseCode;
-    }
+	}
+	public void setAU(int AU) {
+		this.AU = AU;
+	}
 }

@@ -1,10 +1,12 @@
 package entity;
 
 import java.io.*;
-// import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-// import java.util.Collections;
-import java.util.HashMap;
+
+import custom_exceptions.AlreadyEnrolled;
+import custom_exceptions.AlreadyInWaitlist;
+import custom_exceptions.NoVacancy;
+import custom_exceptions.WrongCourseIndex;
 
 // import javax.swing.text.html.HTMLDocument.Iterator;
 
@@ -20,25 +22,26 @@ public class Student extends User{ // Students are comparable and can be
 	private String nationality;
 
 	private final int nameIdx = 0;
-	private final int usernameIdx = 1;
-	private final int mailIdx = 2;
-	private final int passwordIdx = 3;
-	private final int matricNumIdx = 4;
-	private final int genderIdx = 5;
-	private final int nationalityIdx = 6;
+	private final int mailIdx = 1;
+	private final int matricNumIdx = 2;
+	private final int genderIdx = 3;
+	private final int nationalityIdx = 4;
 
-	// private HashMap<Integer, String> coursesEnrolled = new HashMap<Integer, String>();
+	private ArrayList<String> courseEnrolled = new ArrayList<>();
+	private ArrayList<String> courseWaitlist = new ArrayList<>();
+	private int registeredAU;
 
 	public Student(String username, String password) throws IOException{
 		super(username, password);
 		ArrayList<String> attributes = StudentTextMng.readStudent(username, password);
 		this.name = attributes.get(nameIdx);
-		// this.username = attributes.get(usernameIdx);
 		this.mail = attributes.get(mailIdx);
-		// this.password = attributes.get(passwordIdx);
 		this.matricNum = attributes.get(matricNumIdx);
 		this.gender = attributes.get(genderIdx);
 		this.nationality = attributes.get(nationalityIdx);
+
+		this.courseEnrolled = EnrolledTextMng.readFile(this.matricNum);
+		this.courseWaitlist = WailistTextMng.readFile(this.matricNum);
 	}
 
 	// public Student(String matricNum) {
@@ -114,5 +117,78 @@ public class Student extends User{ // Students are comparable and can be
 	public String getNationality() {
 		return nationality;
 	}
+	public int getRegisteredAU() {
+		return registeredAU;
+	}
 
+	/** Filter from course DB to point to Enrolled courses */
+	public ArrayList<CourseIndex> getCourseEnrolled(ArrayList<Course> courseDB) {
+		ArrayList<CourseIndex> al = new ArrayList<>();
+		// loop through all courses in the database that have student registered
+		for (int i=0; i<courseDB.size(); i++) {
+			Course course = courseDB.get(i);
+			ArrayList<CourseIndex> courseIndexs = course.getCourseIndexs();
+			boolean tookThisCouse = false;
+
+			// loop through all courseIndexs of that course in the database
+			for (int j=0; j<courseIndexs.size(); j++) {
+				CourseIndex courseIndex = courseIndexs.get(j);
+
+				// loop through all courseEnrolled of this Student and check if it is the same as this courseIndex
+				for (int k=0; k<this.courseEnrolled.size(); k++) {
+					if (courseEnrolled.get(k).equalsIgnoreCase(courseIndex.getIndex())) {
+						al.add(courseIndex);
+						registeredAU += course.getAU();
+						tookThisCouse = true;
+						break;
+					}
+				}
+				if (tookThisCouse) {
+					// no need to loop to other courseIndexs if the Student took this course
+					// continue to loop through other courses
+					break;
+				}
+			}
+		}
+		return al;
+	}
+	
+	public ArrayList<CourseIndex> getCourseWaitlist(ArrayList<Course> courseDB) {
+		ArrayList<CourseIndex> al = new ArrayList<>();
+		// loop through all courses in the database that still have students in waitlist
+		for (int i=0; i<courseDB.size(); i++) {
+			ArrayList<CourseIndex> courseIndexs = courseDB.get(i).getCourseIndexs();
+			boolean waitThisCourse = false;
+
+			// loop through all courseIndexs of that course in the database
+			for (int j=0; j<courseIndexs.size(); j++) {
+				CourseIndex courseIndex = courseIndexs.get(j);
+
+				// loop through all courseEnrolled of this Student and check if it is the same as this courseIndex
+				for (int k=0; k<this.courseWaitlist.size(); k++) {
+					if (courseWaitlist.get(k).equalsIgnoreCase(courseIndex.getIndex())) {
+						al.add(courseIndex);
+						waitThisCourse = true;
+						break;
+					}
+				}
+				if (waitThisCourse) {
+					// no need to loop to other courseIndexs if the Student in waitlist of this course
+					// continue to loop through other courses
+					break;
+				}
+			}
+		}
+		return al;
+	}
+
+	/** Add the courseIndex string to the ArrayList<String> courseEnrolled */
+	public void enrollCourse(String courseIndex) {
+		courseEnrolled.add(courseIndex);
+	}
+	/** Add the courseIndex string to the ArrayList<String> courseWaitlist */
+	public void waitCourse(String courseIndex) {
+		courseWaitlist.add(courseIndex);
+	}
+		
 }

@@ -1,17 +1,26 @@
 package view;
 
 import java.util.Date;
-
+import java.io.IOException;
 // import java.io.*;
-// import java.util.*;
+import java.util.*;
 
 import authentication.Auth;
 import entity.*;
+import text_manager.CourseTextMng;
 
 
-public class SystemManager {
+public class SystemView {
 	
+	public static ArrayList<Course> courseDB;
 	public static void main(String[] args) {
+
+		try {
+			// load common database
+			courseDB = CourseTextMng.readFile();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 		System.out.println("\n========== WELCOME TO MYSTARS ==========");
 		User user = Auth.login();
@@ -19,13 +28,11 @@ public class SystemManager {
 			if (user instanceof Student) {
 				Student student = (Student) user;
 				// call StudentMng here
-				System.out.println("student matric num: " + student.getMatricNum() + "\n");
-				StudentMng.printCouses();
-			} else {
-				// user instance of Admin
+				StudentView.view(student);
+			} else {  // user instance of Admin
 				Admin admin = (Admin) user;
 				// call AdminMng here
-				System.out.println("admin phone num: " + admin.getPhoneNume());
+				AdminView.view(admin);
 			}
 		}
 	}

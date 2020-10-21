@@ -3,7 +3,7 @@ package view;
 import java.util.*;
 import entity.*;
 
-public class AdminMng extends UserMng {
+public class AdminView extends UserView {
     public static void view(Admin admin) {
         Scanner sc = new Scanner(System.in);
         String choice;

@@ -15,16 +15,12 @@ import text_manager.*;
 public class Admin extends User {
 
 	private String name;
-	private String username;
 	private String mail;
-	private String password;
 	private String phoneNum;
 
 	private final int nameIdx = 0;
-	private final int usernameIdx = 1;
-	private final int mailIdx = 2;
-	private final int passwordIdx = 3;
-	private final int phoneNumIdx = 4;
+	private final int mailIdx = 1;
+	private final int phoneNumIdx = 2;
 
 	// private String adminDatabase= "database/Admin.txt";
 	// private ArrayList <CourseIndexType> tempIndexList = new ArrayList <CourseIndexType>();

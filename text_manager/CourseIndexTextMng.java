@@ -67,24 +67,26 @@ public class CourseIndexTextMng extends TextManager {
     }
 
     /** Save a list of CourseIndex objects to database */
-    public static void saveCourseIndex(List<CourseIndex> courseIndexes) throws IOException {
+    public static void saveCourseIndex(List<Course> courseDB) throws IOException {
         List<String> al = new ArrayList<>(); // to store CourseIndex data
-        String HEADING = "index,classType,group,day,time,venue,remark";
+        String HEADING = "index,courseCode,capacity,vacancy,waitlist";
         al.add(HEADING);
 
-        for (int i = 0; i < courseIndexes.size(); i++) {
-            CourseIndex courseIndex = courseIndexes.get(i);
-            StringBuilder st = new StringBuilder();
-            st.append(courseIndex.getIndex().trim());
-            st.append(SEPERATOR);
-            st.append(courseIndex.getCourseCode().trim());
-            st.append(SEPERATOR);
-            st.append(courseIndex.getCapacity());
-            st.append(SEPERATOR);
-            st.append(courseIndex.getVacancy());
-            st.append(SEPERATOR);
-            st.append(courseIndex.getWaitlistSize());
-            al.add(st.toString());
+        for (int i = 0; i < courseDB.size(); i++) {
+            ArrayList<CourseIndex> courseIndexs = courseDB.get(i).getCourseIndexs();
+            for (CourseIndex courseIndex : courseIndexs) {
+                StringBuilder st = new StringBuilder();
+                st.append(courseIndex.getIndex().trim());
+                st.append(SEPERATOR);
+                st.append(courseIndex.getCourseCode().trim());
+                st.append(SEPERATOR);
+                st.append(courseIndex.getCapacity());
+                st.append(SEPERATOR);
+                st.append(courseIndex.getVacancy());
+                st.append(SEPERATOR);
+                st.append(courseIndex.getWaitlistSize());
+                al.add(st.toString());
+            }
         }
         write(FILEPATH, al);
     }
