@@ -23,3 +23,4 @@ The following are information about the application:
 #### To run the program: (for Window user)
 - open the folder and double click on file `javac.bat`
 - OR just type `.\javac.bat` on cmd
+- do the same with file `.\del.bat` if you want to delete all class file
