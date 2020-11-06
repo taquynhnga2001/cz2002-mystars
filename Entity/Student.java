@@ -34,7 +34,7 @@ public class Student extends User{ // Students are comparable and can be
 		this.nationality = attributes.get(nationalityIdx);
 
 		this.courseEnrolled = EnrolledTextMng.readFile(this.matricNum);
-		this.courseWaitlist = WailistTextMng.readFile(this.matricNum);
+		this.courseWaitlist = WaitlistTextMng.readFile(this.matricNum);
 	}
 
 	// public Student(String matricNum) {

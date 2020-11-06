@@ -59,14 +59,14 @@ public class TableView {
 
 
     /**Display information of 2 chosen course indexs */
-    public static void display2CourseIndexs(CourseIndex currentIndex, CourseIndex newIndex) {
+    public static void display2CourseIndexs(CourseIndex index1, CourseIndex index2, String frameTitle, String label1, String label2) {
         // display course info in table
         String[] columnHeadings = {"Class Type", "Group", "Day", "Time","Venue", "Remark"};
         ArrayList<Object[]>[] data = new ArrayList[2]; // store 2 course indexs
         data[0] = new ArrayList<>();
         data[1] = new ArrayList<>();
         // load current index data
-        ArrayList<CourseIndexType> classTypes = currentIndex.getClassTypes();
+        ArrayList<CourseIndexType> classTypes = index1.getClassTypes();
         Iterator<CourseIndexType> type = classTypes.iterator();
         while (type.hasNext()) {
             CourseIndexType t = type.next();
@@ -75,7 +75,7 @@ public class TableView {
             data[0].add(nextRow);
         }
         // load new index data
-        classTypes = newIndex.getClassTypes();
+        classTypes = index2.getClassTypes();
         type = classTypes.iterator();
         while (type.hasNext()) {
             CourseIndexType t = type.next();
@@ -85,17 +85,17 @@ public class TableView {
         }
 
         // create table frame
-        final JFrame frame = new JFrame("Change Index Number of Course");
+        final JFrame frame = new JFrame(frameTitle);
 
         JPanel main = new JPanel();
         main.setLayout(new BoxLayout(main, BoxLayout.Y_AXIS));
 
-        JLabel lblHeading = new JLabel("Subject " + currentIndex.getCourseCode());
+        JLabel lblHeading = new JLabel("Subject " + index1.getCourseCode());
         lblHeading.setFont(new Font("Arial",Font.BOLD, 16));
         main.add(lblHeading);
 
         // create label and panel for current index
-        JLabel lblHeading1 = new JLabel("Current Index Number: " + currentIndex.getIndex());
+        JLabel lblHeading1 = new JLabel(label1 + index1.getIndex());
         lblHeading1.setFont(new Font("Arial",Font.BOLD, 14));
         //panel
         Object[][] rows = new Object[data[0].size()][];
@@ -109,7 +109,7 @@ public class TableView {
         main.add(scrollPaneCurIndex);
 
         // create label and panel for new index
-        JLabel lblHeading2 = new JLabel("New Index Number: " + newIndex.getIndex());
+        JLabel lblHeading2 = new JLabel(label2 + index2.getIndex());
         lblHeading2.setFont(new Font("Arial",Font.BOLD, 14));
         // panel
         rows = new Object[data[1].size()][];

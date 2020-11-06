@@ -7,7 +7,7 @@ import custom_exceptions.AlreadyInWaitlist;
 import java.util.*;
 import java.io.*;
 
-public class WailistTextMng extends TextManager {
+public class WaitlistTextMng extends TextManager {
 
     private static final String FILEPATH = FilePath.WAITLIST;
     private static final String SEPERATOR = ",";

@@ -3,6 +3,7 @@ package view;
 import java.io.IOException;
 import java.util.*;
 
+import authentication.Auth;
 import custom_exceptions.*;
 import entity.*;
 import text_manager.*;
@@ -52,24 +53,23 @@ public class StudentView extends UserView {
                     changeCourseIndex(student);
                     break;
                 }
-                case "S":
+                case "S": {
+                    swopCourseIndex(student);
+                    break;
+                }
                 case "N":
             }
         } while (!choice.equalsIgnoreCase("X"));
         // sc.close();
     }
 
-    /**Add course view for student */
+    /** Add course view for student */
     public static void addCourse(Student student) {
         System.out.println("\n----- Add Course -----");
         System.out.print("Enter Course Index that you want to add: ");
-        String courseIndexStr = sc.next();    
+        String courseIndexStr = sc.next();
         try {
             StudentController.addCourse(student, courseIndexStr);
-            // display course info and confirm to add course inside ^ function above
-            // if (StudentController.getConfirmAddCourse()) {
-            //     System.out.println("Add course successfully!");
-            // }
             System.out.println("Registered AUs: " + student.getRegisteredAU());
 
         } catch (WrongCourseIndex e) {
@@ -89,7 +89,7 @@ public class StudentView extends UserView {
         }
     }
 
-    /**Drop course view for student */
+    /** Drop course view for student */
     public static void dropCourse(Student student) {
         System.out.println("\n----- Drop Course -----");
         // display registered courses
@@ -104,10 +104,10 @@ public class StudentView extends UserView {
             System.out.println("\t" + index + " " + courseCode + " " + status);
         }
         for (CourseIndex courseIndex : courseWaitlist) {
-                String courseCode = courseIndex.getCourseCode();
-                String index = courseIndex.getIndex();
-                String status = "ON WAIT";
-                System.out.println("\t" + index + " " + courseCode + " " + status);
+            String courseCode = courseIndex.getCourseCode();
+            String index = courseIndex.getIndex();
+            String status = "ON WAIT";
+            System.out.println("\t" + index + " " + courseCode + " " + status);
         }
         // enter course index to drop
         System.out.print("Enter Course Index that you want to drop: ");
@@ -115,14 +115,6 @@ public class StudentView extends UserView {
 
         try {
             StudentController.dropCourse(student, courseIndexStr);
-            // save courseIndexs in the database if no exceptions thrown here
-            // if (StudentController.getConfirmDropCourse()) {
-            //     // System.out.println("Drop course successfully!");
-            //     if (StudentController.getDropCourseFrom().equals("enrolled")) {
-            //         student.setRegisteredAU(student.getRegisteredAU() - courseDropped.getAU());
-            //         StudentController.setDropCourseFrom(""); // reset
-            //     }
-            // }
             System.out.println("Registered AUs: " + student.getRegisteredAU());
         } catch (WrongCourseIndex e) {
             System.out.println(">>> Error! " + e.getMessage());
@@ -133,14 +125,14 @@ public class StudentView extends UserView {
         }
     }
 
-    /**Check/Print courses registered (enrolled and on waitlist) of a student */
+    /** Check/Print courses registered (enrolled and on waitlist) of a student */
     public static void courseRegistered(Student student) {
         System.out.println("\n----- Check/Print Courses Registered -----");
         ArrayList<CourseIndex>[] courseIndexs = StudentController.getCourseRegistered(student);
         ArrayList<CourseIndex> courseEnrolled = courseIndexs[0];
         ArrayList<CourseIndex> courseWaitlist = courseIndexs[1];
-        String[] columnHeadings = {"Course", "AU", "Index Number", "Status","Class Type", 
-        "Group", "Day", "Time", "Venue", "Remark"};
+        String[] columnHeadings = { "Course", "AU", "Index Number", "Status", "Class Type", "Group", "Day", "Time",
+                "Venue", "Remark" };
         ArrayList<Object[]> data = new ArrayList<>();
         // display registered courses
         for (CourseIndex courseIndex : courseEnrolled) {
@@ -152,18 +144,14 @@ public class StudentView extends UserView {
             Iterator<CourseIndexType> type = classTypes.iterator();
 
             CourseIndexType firstClass = type.next();
-            Object[] row = {courseCode, AU, index, status, 
-                firstClass.getClassType(), firstClass.getGroup(), 
-                firstClass.getDay(), firstClass.getTime(), 
-                firstClass.getVenue(), firstClass.getRemark()};
+            Object[] row = { courseCode, AU, index, status, firstClass.getClassType(), firstClass.getGroup(),
+                    firstClass.getDay(), firstClass.getTime(), firstClass.getVenue(), firstClass.getRemark() };
             data.add(row);
 
             while (type.hasNext()) {
                 CourseIndexType t = type.next();
-                Object[] nextRow = {"", "", "", "", 
-                    t.getClassType(), t.getGroup(), 
-                    t.getDay(), t.getTime(), 
-                    t.getVenue(), t.getRemark()};
+                Object[] nextRow = { "", "", "", "", t.getClassType(), t.getGroup(), t.getDay(), t.getTime(),
+                        t.getVenue(), t.getRemark() };
                 data.add(nextRow);
             }
         }
@@ -177,26 +165,23 @@ public class StudentView extends UserView {
             Iterator<CourseIndexType> type = classTypes.iterator();
 
             CourseIndexType firstClass = type.next();
-            Object[] row = {courseCode, AU, index, status, 
-                firstClass.getClassType(), firstClass.getGroup(), 
-                firstClass.getDay(), firstClass.getTime(), 
-                firstClass.getVenue(), firstClass.getRemark()};
+            Object[] row = { courseCode, AU, index, status, firstClass.getClassType(), firstClass.getGroup(),
+                    firstClass.getDay(), firstClass.getTime(), firstClass.getVenue(), firstClass.getRemark() };
             data.add(row);
 
             while (type.hasNext()) {
                 CourseIndexType t = type.next();
-                Object[] nextRow = {"", "", "", "", 
-                    t.getClassType(), t.getGroup(), 
-                    t.getDay(), t.getTime(), 
-                    t.getVenue(), t.getRemark()};
+                Object[] nextRow = { "", "", "", "", t.getClassType(), t.getGroup(), t.getDay(), t.getTime(),
+                        t.getVenue(), t.getRemark() };
                 data.add(nextRow);
             }
         }
-        int[] frameSize = {1410, 500};
-        TableView.displayTable("Check/Print Registered Courses", columnHeadings, data, "Your Registered Courses:", frameSize);
+        int[] frameSize = { 1410, 500 };
+        TableView.displayTable("Check/Print Registered Courses", columnHeadings, data, "Your Registered Courses:",
+                frameSize);
     }
 
-    /**Check vacancies available by course index */
+    /** Check vacancies available by course index */
     public static void checkVacancy() {
         String courseIndexStr;
         do {
@@ -240,32 +225,68 @@ public class StudentView extends UserView {
         }
     }
 
-    public static void swopCourseIndex(CourseIndex courseIndex, Student student) {
+    public static void swopCourseIndex(Student student) {
+        System.out.println("\n----- Swop Index Number with Another Student -----");
+        String yourIndex;
+        Student peer = null;
+        String peerUserName;
+        String peerPassword;
+        String peerIndex;
+        do {
+            System.out.println("Student #1");
+            System.out.println("\tYour Matric #1: " + student.getMatricNum());
+            System.out.print("\tYour Index Number #1: ");
+            yourIndex = sc.next();
+            System.out.println("Student #2");
+            System.out.println("\t(enter 'X' for all 3 below entries to exit)");
+            System.out.print("\tPeer's Username: ");
+            peerUserName = sc.next();
+            System.out.print("\tPeer's Password: ");
+            peerPassword = Auth.getHash(sc.next());
+            System.out.print("\tSwop with Peer's Index Number #2: ");
+            peerIndex = sc.next();
 
-    }
-
-    public static void printCouses() {
-        System.out.println("Course\tIndex\tGroup\tDay\tTime\tVenue\tRemark");
-        try {
-            ArrayList<Course> courses = CourseTextMng.readFile();
-            for (int i = 0; i < courses.size(); i++) {
-                ArrayList<CourseIndex> courseIndexs = courses.get(i).getCourseIndexs();
-                for (int j = 0; j < courseIndexs.size(); j++) {
-                    ArrayList<CourseIndexType> classTypes = courseIndexs.get(j).getClassTypes();
-                    for (int k = 0; k < classTypes.size(); k++) {
-                        CourseIndexType classType = classTypes.get(k);
-                        System.out.print(classType.getCourseCode());
-                        System.out.print("\t" + classType.getIndex());
-                        System.out.print("\t" + classType.getGroup());
-                        System.out.print("\t" + classType.getDay());
-                        System.out.print("\t" + classType.getTime());
-                        System.out.print("\t\t" + classType.getVenue());
-                        System.out.print("\t" + classType.getRemark() + "\n");
-                    }
-                }
+            if (peerUserName.equals("X") && peerPassword.equals(Auth.getHash("X")) && peerIndex.equals("X")) break;
+            try {
+                peer = new StudentTextMng().returnStudent(peerUserName, peerPassword);
+                StudentController.swopCourseIndex(student, peer, yourIndex, peerIndex);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (WrongPassword e) {
+                System.out.println(">>> Typed in wrong password of Student #2");
+            } catch (WrongUsername e) {
+                System.out.println(">>> Typed in wrong username of Student #2");
+            } catch (WrongCourseIndex | DidntEnrollOrWait | NotSameCourse | AlreadyEnrolled e) {
+                System.out.println(">>> " + e.getMessage());
+            } catch (ClashTime e) {
+                System.out.println(">>> " + e.getMessage() + ": " + StudentController.getClashedCourse());
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        } while (peer == null);
+        
     }
+
+    // public static void printCouses() {
+    //     System.out.println("Course\tIndex\tGroup\tDay\tTime\tVenue\tRemark");
+    //     try {
+    //         ArrayList<Course> courses = CourseTextMng.readFile();
+    //         for (int i = 0; i < courses.size(); i++) {
+    //             ArrayList<CourseIndex> courseIndexs = courses.get(i).getCourseIndexs();
+    //             for (int j = 0; j < courseIndexs.size(); j++) {
+    //                 ArrayList<CourseIndexType> classTypes = courseIndexs.get(j).getClassTypes();
+    //                 for (int k = 0; k < classTypes.size(); k++) {
+    //                     CourseIndexType classType = classTypes.get(k);
+    //                     System.out.print(classType.getCourseCode());
+    //                     System.out.print("\t" + classType.getIndex());
+    //                     System.out.print("\t" + classType.getGroup());
+    //                     System.out.print("\t" + classType.getDay());
+    //                     System.out.print("\t" + classType.getTime());
+    //                     System.out.print("\t\t" + classType.getVenue());
+    //                     System.out.print("\t" + classType.getRemark() + "\n");
+    //                 }
+    //             }
+    //         }
+    //     } catch (IOException e) {
+    //         e.printStackTrace();
+    //     }
+    // }
 }

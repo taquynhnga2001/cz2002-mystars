@@ -97,7 +97,7 @@ public class Auth {
         return null;
     }
 
-    private static String getHash(String pwString) {
+    public static String getHash(String pwString) {
         String pwHash = new String();
 
         try {

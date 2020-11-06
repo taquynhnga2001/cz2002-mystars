@@ -10,9 +10,6 @@ import java.util.*;
 
 public class StudentController {
 
-    private static String dropCourseFrom;
-    private static boolean confirmAddCourse;
-    private static boolean confirmDropCourse;
     private static String clashedCourseStr;
     private static ArrayList<Course> courseDB = new ArrayList<>();
 
@@ -57,7 +54,7 @@ public class StudentController {
                 throw new MaximumAURegistered();
             }
             // add to waitlist
-            WailistTextMng.addWaitlist(student.getMatricNum(), courseIndexStr);
+            WaitlistTextMng.addWaitlist(student.getMatricNum(), courseIndexStr);
             student.waitCourse(courseIndexStr);
             // update database
             chosenCourseIndex.setWaitlistSize(chosenCourseIndex.getWaitlistSize() + 1);
@@ -132,6 +129,22 @@ public class StudentController {
                 chosenCourseIndex.setVacancy(chosenCourseIndex.getVacancy() + 1); // vacancy++
                 System.out.println("Drop course successfully!");
                 student.setRegisteredAU(student.getRegisteredAU() - chosenCourseIndex.getAU());
+                // a student in waitlist will be added in enrolledDB
+                ArrayList<String[]> rows = WaitlistTextMng.readFile();
+                for (String[] row : rows) {
+                    if (row[1].equals(courseIndexStr)) {
+                        String matricNum = row[0];
+                        WaitlistTextMng.delWaitlistCourses(matricNum, courseIndexStr);
+                        try {
+                            EnrolledTextMng.addEnrolledCourses(matricNum, courseIndexStr);
+                        } catch (AlreadyEnrolled e1) {
+                            e1.printStackTrace();
+                        }
+                        chosenCourseIndex.setVacancy(chosenCourseIndex.getVacancy() - 1); // vacancy--
+                        chosenCourseIndex.setWaitlistSize(chosenCourseIndex.getWaitlistSize() - 1); // waitlistSize--
+                        break;
+                    }
+                } 
             } 
         } catch (AlreadyInWaitlist e) {
             // if go through all check above, can display chosen course index
@@ -144,7 +157,7 @@ public class StudentController {
             } while (!choice.equalsIgnoreCase("Y") && !choice.equalsIgnoreCase("N"));
             if (choice.equalsIgnoreCase("Y")) {
                 // drop the course in waitlist
-                WailistTextMng.delWaitlistCourses(student.getMatricNum(), courseIndexStr);
+                WaitlistTextMng.delWaitlistCourses(student.getMatricNum(), courseIndexStr);
                 student.dropCourse(courseIndexStr);
                 chosenCourseIndex.setWaitlistSize(chosenCourseIndex.getWaitlistSize() - 1); // waitlistSize--
                 System.out.println("Drop course successfully!");
@@ -181,7 +194,7 @@ public class StudentController {
         // calculate length of waitlist
         int counter = 0;
         try {
-            ArrayList<String[]> waitlist = WailistTextMng.readFile();
+            ArrayList<String[]> waitlist = WaitlistTextMng.readFile();
             for (String[] row : waitlist) {
                 if (row[1].equalsIgnoreCase(courseIndexStr)) counter++;
             }
@@ -211,7 +224,7 @@ public class StudentController {
 
         // if no exceptions above, then:
         // display table course index information
-        TableView.display2CourseIndexs(curIndex, newIndex);
+        TableView.display2CourseIndexs(curIndex, newIndex, "Change Index Number of Course", "Current Index Number ", "New Index Number ");
         // confirm to change course index
         String choice;
         Scanner sc = new Scanner(System.in);
@@ -235,9 +248,57 @@ public class StudentController {
         }
     }
 
-    public static void swopCourseIndex(String fromMatricNum, String toMatricNum, String fromCourseIndex,
-            String toCourseIndex) {
+    public static void swopCourseIndex(Student student1, Student student2, String index1, String index2)
+            throws WrongCourseIndex, DidntEnrollOrWait, NotSameCourse, ClashTime, IOException, AlreadyEnrolled {
+        // load the courseDB
+        ArrayList<Course> courseDB = getCourseDB();
+        // get the chosen courseIndexs in database
+        CourseIndex courseIdx1 = CourseTextMng.getCourseIndex(courseDB, index1);
+        CourseIndex courseIdx2 = CourseTextMng.getCourseIndex(courseDB, index2);
+        // check if they enrolled in that index number and in the same course
+        if (!student1.getCourseEnrolled(courseDB).contains(courseIdx1)) throw new DidntEnrollOrWait(1, index1);
+        if (!student2.getCourseEnrolled(courseDB).contains(courseIdx2)) throw new DidntEnrollOrWait(2, index2);
+        if (!courseIdx1.getCourseCode().equalsIgnoreCase(courseIdx2.getCourseCode())) throw new NotSameCourse();
+        // check if one of 2 students has clashing course index
+        CourseIndex clashedCourse1 = ClashWith(student1.getCourseEnrolled(courseDB), courseIdx2);
+        CourseIndex clashedCourse2 = ClashWith(student2.getCourseEnrolled(courseDB), courseIdx1);
+        if (clashedCourse1 != null) {
+            clashedCourseStr = clashedCourse1.getIndex();
+            throw new ClashTime(1);
+        } else if (clashedCourse2 != null) {
+            clashedCourseStr = clashedCourse2.getIndex();
+            throw new ClashTime(2);
+        }
 
+        // if no exceptions above, then:
+        // display table course index information
+        TableView.display2CourseIndexs(courseIdx1, courseIdx2, "Swop Index Number with Another Student",
+            "Student #1 - " + student1.getMatricNum() + " - Index Number ", 
+            "Student #2 - " + student2.getMatricNum() + " - Index Number ");
+        // confirm to swop course index
+        String choice;
+        Scanner sc = new Scanner(System.in);
+        do {
+            System.out.print("Confirm to Swop Index Number [Y/N]? ");
+            choice = sc.nextLine();
+        } while (!choice.equalsIgnoreCase("Y") && !choice.equalsIgnoreCase("N"));
+        // if confirm, update the database and attribute of the Student
+        if (choice.equalsIgnoreCase("Y")) {
+            // if go through all check above, can add course index
+            EnrolledTextMng.addEnrolledCourses(student1.getMatricNum(), index2);
+            student1.enrollCourse(index2);
+            EnrolledTextMng.addEnrolledCourses(student2.getMatricNum(), index1);
+            student2.enrollCourse(index1);
+            // drop the enrolled course
+            EnrolledTextMng.delEnrolledCourses(student1.getMatricNum(), index1);
+            student1.dropCourse(index1);
+            EnrolledTextMng.delEnrolledCourses(student2.getMatricNum(), index2);
+            student2.dropCourse(index2);
+            // save courseIndexs in the database
+            CourseIndexTextMng.saveCourseIndex(courseDB);
+            System.out.println("Student " + student1.getMatricNum() + " - Index Number " + index1 +
+            " has been successfully swopped with Student " + student2.getMatricNum() + " - Index Number " + index2);
+        }
     }
 
     public static String readNotification(Student student) {
