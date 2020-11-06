@@ -7,6 +7,7 @@ import java.util.*;
 
 import authentication.Auth;
 import entity.*;
+import registration_controller.StudentController;
 import text_manager.CourseTextMng;
 
 
@@ -28,6 +29,7 @@ public class SystemView {
 			if (user instanceof Student) {
 				Student student = (Student) user;
 				// call StudentMng here
+				StudentController.loadCourseDB();
 				StudentView.view(student);
 			} else {  // user instance of Admin
 				Admin admin = (Admin) user;

@@ -1,1 +1,2 @@
-javac "C:\Users\admin\PycharmProjects\cz2002-mystars\entity\SystemControl.java"
+javac .\view\SystemView.java
+java .\view\SystemView

@@ -31,6 +31,23 @@ public class WailistTextMng extends TextManager {
         return alr; // list of CourseIdx of a Student
     }
 
+    /** Read String from text file and return list of String[] {CourseIndexStr, MatricNum} in Waitlist */
+    public static ArrayList<String[]> readFile() throws IOException {
+        ArrayList<String> stringArray = read(FILEPATH);
+        ArrayList<String[]> alr = new ArrayList<>(); // to store CourseIndexs
+
+        for (int i = 1; i < stringArray.size(); i++) {
+            String st = (String) stringArray.get(i);
+            StringTokenizer star = new StringTokenizer(st, SEPERATOR); // pass in the string to the string
+                                                                            // tokenizer // using delimiter ","
+            String matricNum_ = star.nextToken().trim(); // first token: matricNum
+            String courseIndex_ = star.nextToken().trim(); // second token: courseIndex
+            String[] s = {matricNum_, courseIndex_};
+            alr.add(s);
+        }
+        return alr; // list of CourseIdx of a Student
+    }
+
 
     /** Save waitlist student in database after adding a 0-vacancies course 
      * Can just check if the student in waitlist of this courseIndex, not the course

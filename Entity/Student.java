@@ -3,14 +3,6 @@ package entity;
 import java.io.*;
 import java.util.ArrayList;
 
-import custom_exceptions.AlreadyEnrolled;
-import custom_exceptions.AlreadyInWaitlist;
-import custom_exceptions.DidntEnrollOrWait;
-import custom_exceptions.NoVacancy;
-import custom_exceptions.WrongCourseIndex;
-
-// import javax.swing.text.html.HTMLDocument.Iterator;
-
 import text_manager.*;
 
 public class Student extends User{ // Students are comparable and can be
@@ -118,6 +110,8 @@ public class Student extends User{ // Students are comparable and can be
 	public String getNationality() {
 		return nationality;
 	}
+	/**Should call getCourseEnrolled() before call this method to update the registeredAU 
+	 * unless have called method setRegisteredAU() before*/
 	public int getRegisteredAU() {
 		return registeredAU;
 	}

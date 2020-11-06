@@ -7,13 +7,11 @@ import java.util.ArrayList;
 import constants.FilePath;
 import custom_exceptions.*;
 import entity.*;
-import registration_controller.StudentController;
-import view.SystemView;
 
 public class CourseTextMng extends TextManager {
 
     private static final String FILEPATH = FilePath.COURSE;
-    private static final String SEPERATOR = ",";
+    // private static final String SEPERATOR = ",";
 
     /** Read String from text file and return list of Course objects */
     public static ArrayList<Course> readFile() throws IOException {

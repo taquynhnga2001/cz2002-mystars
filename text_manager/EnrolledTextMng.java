@@ -3,7 +3,6 @@ package text_manager;
 import constants.FilePath;
 import custom_exceptions.AlreadyEnrolled;
 
-// import entity.*;
 import java.io.IOException;
 import java.util.*;
 
@@ -69,7 +68,7 @@ public class EnrolledTextMng extends TextManager {
         for (int i = 1; i < stringArray.size(); i++) {
             String st = (String) stringArray.get(i);
             StringTokenizer star = new StringTokenizer(st, SEPERATOR); // pass in the string to the string
-                                                                            // tokenizer using delimiter ","
+                                                                       // tokenizer using delimiter ","
             String matricNum_ = star.nextToken().trim();   // first token: matricNum
             String courseIndex_ = star.nextToken().trim(); // second token: courseIndex
             if (!matricNum_.equalsIgnoreCase(matricNum) || !courseIndex_.equalsIgnoreCase(courseIndex)) {
