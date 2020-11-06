@@ -37,48 +37,6 @@ public class Student extends User{ // Students are comparable and can be
 		this.courseWaitlist = WaitlistTextMng.readFile(this.matricNum);
 	}
 
-	// public Student(String matricNum) {
-	// ArrayList<String> attributes = new StudentTextMng().readStudent("database/Student.csv", matricNum);
-	// this.name = attributes.get(nameIdx);
-	// String username = attributes.get(usernameIdx);
-	// this.mail = attributes.get(mailIdx);
-	// String password = attributes.get(passwordIdx);
-	// this.matricNum = matricNum;
-	// this.gender = attributes.get(genderIdx);
-	// this.nationality = attributes.get(nationalityIdx);
-	// 	this(username, password);
-	// }
-
-	// void addCourseIndex(int index) throws FileNotFoundException, ClassNotFoundException, IOException {
-	// 	CourseIndexType courseIndex = readCourseIndex(index);
-	// 	if (courseIndex.getVacancy() > 0) {
-	// 		courseIndex.enrollStudent(this); // if slot available, enroll student and update profile
-	// 		coursesEnrolled.put(index, courseIndex.getCourseCode());
-
-	// 	} else {
-	// 		courseIndex.joinWaitlist(this); // if slots unavailable, join them to waitlist
-	// 	}
-	// 	saveChanges(courseIndex, index);
-	// 	saveChanges(this); // update changes to databases
-	// }
-
-	// void dropCourseIndex(int index) throws FileNotFoundException, ClassNotFoundException, IOException {
-	// 	CourseIndexType courseIndex = readCourseIndex(index);
-	// 	courseIndex.dropStudent(this); // drop student and enroll the first student in waitlist
-
-	// 	if (courseIndex.getWaitlistSize() > 0) {
-	// 		courseIndex.enrollFromWaitist();
-	// 	}
-	// 	saveChanges(courseIndex, index);
-	// 	saveChanges(this); // update changes to databases
-	// }
-
-	// void printCoursesEnrolled() { // prints courses enrolled and indexes
-	// 	for (Integer key : coursesEnrolled.keySet()) {
-	// 		System.out.printf("Course Name: %s, Index: %d", coursesEnrolled.get(key), key);
-	// 	}
-	// }
-
 	// @Override
 	// public int compareTo(Student student) { // compares in the order, Name, gender, nationality
 	// 	// TODO Auto-generated method stub

@@ -27,7 +27,6 @@ public class StudentView extends UserView {
             System.out.println("(V) Check Vacancies Available");
             System.out.println("(I) Change Index Number of Course");
             System.out.println("(S) Swop Index Number with Another Student");
-            System.out.println("(N) Read notification");
             System.out.println("(X) Exit");
             System.out.print("Your choice: ");
             choice = sc.next().toUpperCase();
@@ -57,10 +56,8 @@ public class StudentView extends UserView {
                     swopCourseIndex(student);
                     break;
                 }
-                case "N":
             }
         } while (!choice.equalsIgnoreCase("X"));
-        // sc.close();
     }
 
     /** Add course view for student */
@@ -262,31 +259,5 @@ public class StudentView extends UserView {
                 System.out.println(">>> " + e.getMessage() + ": " + StudentController.getClashedCourse());
             }
         } while (peer == null);
-        
     }
-
-    // public static void printCouses() {
-    //     System.out.println("Course\tIndex\tGroup\tDay\tTime\tVenue\tRemark");
-    //     try {
-    //         ArrayList<Course> courses = CourseTextMng.readFile();
-    //         for (int i = 0; i < courses.size(); i++) {
-    //             ArrayList<CourseIndex> courseIndexs = courses.get(i).getCourseIndexs();
-    //             for (int j = 0; j < courseIndexs.size(); j++) {
-    //                 ArrayList<CourseIndexType> classTypes = courseIndexs.get(j).getClassTypes();
-    //                 for (int k = 0; k < classTypes.size(); k++) {
-    //                     CourseIndexType classType = classTypes.get(k);
-    //                     System.out.print(classType.getCourseCode());
-    //                     System.out.print("\t" + classType.getIndex());
-    //                     System.out.print("\t" + classType.getGroup());
-    //                     System.out.print("\t" + classType.getDay());
-    //                     System.out.print("\t" + classType.getTime());
-    //                     System.out.print("\t\t" + classType.getVenue());
-    //                     System.out.print("\t" + classType.getRemark() + "\n");
-    //                 }
-    //             }
-    //         }
-    //     } catch (IOException e) {
-    //         e.printStackTrace();
-    //     }
-    // }
 }

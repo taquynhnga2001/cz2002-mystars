@@ -22,8 +22,7 @@ public class StudentController {
         // check if this chosen courseIndex is in database
         CourseIndex chosenCourseIndex = CourseTextMng.getCourseIndex(courseDB, courseIndexStr);
 
-        // check if this Course in courseEnrolled of that student (if this/another
-        // CourseIndex enrolled)
+        // check if this Course in courseEnrolled of that student (if this/another CourseIndex enrolled)
         ArrayList<CourseIndex> courseIndexEnrolled = student.getCourseEnrolled(courseDB);
         for (int i = 0; i < courseIndexEnrolled.size(); i++) {
             CourseIndex courseIndex_ = courseIndexEnrolled.get(i);
@@ -31,8 +30,7 @@ public class StudentController {
                 throw new AlreadyEnrolled();
             }
         }
-        // check if this Course in Waitlist of that student (this/another CourseIndex in
-        // waitlist)
+        // check if this Course in Waitlist of that student (this/another CourseIndex in waitlist)
         ArrayList<CourseIndex> courseIndexWaitlist = student.getCourseWaitlist(courseDB);
         for (int i = 0; i < courseIndexWaitlist.size(); i++) {
             CourseIndex courseIndex_ = courseIndexWaitlist.get(i);
@@ -93,8 +91,7 @@ public class StudentController {
         CourseIndex chosenCourseIndex = CourseTextMng.getCourseIndex(courseDB, courseIndexStr);
 
         try {
-            // check if this Course in courseEnrolled of that student (if this/another
-            // CourseIndex enrolled)
+            // check if this Course in courseEnrolled of that student (if this/another CourseIndex enrolled)
             ArrayList<CourseIndex> courseIndexEnrolled = student.getCourseEnrolled(courseDB);
             for (int i = 0; i < courseIndexEnrolled.size(); i++) {
                 CourseIndex courseIndex_ = courseIndexEnrolled.get(i);
@@ -102,8 +99,7 @@ public class StudentController {
                     throw new AlreadyEnrolled();
                 }
             }
-            // check if this Course in Waitlist of that student (this/another CourseIndex in
-            // waitlist)
+            // check if this Course in Waitlist of that student (this/another CourseIndex in waitlist)
             ArrayList<CourseIndex> courseIndexWaitlist = student.getCourseWaitlist(courseDB);
             for (int i = 0; i < courseIndexWaitlist.size(); i++) {
                 CourseIndex courseIndex_ = courseIndexWaitlist.get(i);
@@ -142,6 +138,7 @@ public class StudentController {
                         }
                         chosenCourseIndex.setVacancy(chosenCourseIndex.getVacancy() - 1); // vacancy--
                         chosenCourseIndex.setWaitlistSize(chosenCourseIndex.getWaitlistSize() - 1); // waitlistSize--
+                        SendNotification.sendMail(courseIndexStr);
                         break;
                     }
                 } 
@@ -299,10 +296,6 @@ public class StudentController {
             System.out.println("Student " + student1.getMatricNum() + " - Index Number " + index1 +
             " has been successfully swopped with Student " + student2.getMatricNum() + " - Index Number " + index2);
         }
-    }
-
-    public static String readNotification(Student student) {
-        return "";
     }
 
     /**Return the CourseIndex that is clashed with the chosen course index. Return null if no clash.
