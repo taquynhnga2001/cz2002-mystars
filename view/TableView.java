@@ -54,7 +54,7 @@ public class TableView {
             data.add(nextRow);
         }
         int[] frameSize = {900, 145};
-        displayTable("Course Index Information", columnHeadings, data, "Index Number " + courseIndex.getIndex() + " - Course " + courseIndex.getCourseCode(), frameSize);
+        displayTable("Course Index Information", columnHeadings, data, "Index Number " + courseIndex.getIndex() + " - Course " + courseIndex.getCourseCode() + " " + courseIndex.getCourseName(), frameSize);
     }
 
 
@@ -126,6 +126,138 @@ public class TableView {
         frame.add(main);
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         int[] frameSize = {910, 300};
+        frame.setSize(frameSize[0], frameSize[1]);
+        frame.setVisible(true);
+    }
+
+    /**Display studentDB */
+    public static void displayStudentDB(ArrayList<Student> studentDB) {
+        // student info in table
+        String[] columnHeadings = {"No.", "Name", "Matric Num", "Gender", "Nationality"};
+        ArrayList<Object[]> data = new ArrayList<>();
+        // add student info to data
+        int no = 0;
+        for (Student student : studentDB) {
+            String name = student.getName();
+            String matricNum = student.getMatricNum();
+            String gender = student.getGender();
+            String nationality = student.getNationality();
+            Object[] row = { ++no, name, matricNum, gender, nationality };
+            data.add(row);
+        }
+        int[] frameSize = {900, 500};
+        displayTable("List of Students", columnHeadings, data, "", frameSize);
+    }
+
+    /**Display StudentDB with new Student marking */
+    public static void displayStudentDB(ArrayList<Student> studentDB, Student newStudent) {
+        // student info in table
+        String[] columnHeadings = {"No.", "Name", "Matric Num", "Gender", "Nationality"};
+        ArrayList<Object[]> data = new ArrayList<>();
+        // add student info to data
+        int no = 0;
+        for (Student student : studentDB) {
+            String name = student.getName();
+            String matricNum = student.getMatricNum();
+            String status = "";
+            if (newStudent.getMatricNum().equalsIgnoreCase(matricNum)) status = " [NEW]"; // mark new student
+            String gender = student.getGender();
+            String nationality = student.getNationality();
+            Object[] row = { ++no + status, name, matricNum, gender, nationality };
+            data.add(row);
+        }
+        int[] frameSize = {700, 500};
+        displayTable("List of Students", columnHeadings, data, "", frameSize);
+    }
+
+    /**Display CourseDB with new Course marking */
+    public static void displayCourseAfterAdding(ArrayList<Course> courseDB, Course newCourse, String choiceOfDisplay) {
+        // data table 1: courses
+        // course info in table
+        String[] columnHeadings1 = {"No.", "Course Code", "Course Name", "School", "AU"};
+        ArrayList<Object[]> dataCourse = new ArrayList<>();
+        // add course info to dataCourse
+        int no = 0;
+        for (Course course : courseDB) {
+            String courseCode = course.getCourseCode();
+            String status = "";
+            if (newCourse.getCourseCode().equalsIgnoreCase(courseCode)) {
+                if (choiceOfDisplay.equalsIgnoreCase("A")) status = " [NEW]"; // mark new course
+                else status = "[UPDATED]";
+            }
+            
+            String courseName = course.getCourseName();
+            String school = course.getSchool();
+            String AU = "" + course.getAU();
+            Object[] row = { ++no + status, courseCode, courseName, school, AU };
+            dataCourse.add(row);
+        }
+
+        // data table 2: course index
+        String[] columnHeadings2 = { "Index Number", "Capacity", "Class Type", "Group", "Day", "Time",
+                "Venue", "Remark" };
+        ArrayList<Object[]> dataIndex = new ArrayList<>();
+        // display registered courses
+        for (CourseIndex courseIndex : newCourse.getCourseIndexs()) {
+            String index = courseIndex.getIndex();
+            int capacity = courseIndex.getCapacity();
+            ArrayList<CourseIndexType> classTypes = courseIndex.getClassTypes();
+            Iterator<CourseIndexType> type = classTypes.iterator();
+
+            CourseIndexType firstClass = type.next();
+            Object[] row = { index, capacity, firstClass.getClassType(), firstClass.getGroup(),
+                    firstClass.getDay(), firstClass.getTime(), firstClass.getVenue(), firstClass.getRemark() };
+            dataIndex.add(row);
+
+            while (type.hasNext()) {
+                CourseIndexType t = type.next();
+                Object[] nextRow = { "", "", t.getClassType(), t.getGroup(), t.getDay(), t.getTime(),
+                        t.getVenue(), t.getRemark() };
+                dataIndex.add(nextRow);
+            }
+        }
+
+        // create table frame
+        final JFrame frame = new JFrame("List of Courses");
+
+        JPanel main = new JPanel();
+        main.setLayout(new BoxLayout(main, BoxLayout.Y_AXIS));
+
+        // create label and panel for table 1
+        JLabel lblHeading1 = new JLabel("Courses");
+        lblHeading1.setFont(new Font("Arial",Font.BOLD, 14));
+        //panel
+        Object[][] rows = new Object[dataCourse.size()][];
+        for (int i = 0; i<dataCourse.size(); i++) {
+            rows[i] = dataCourse.get(i);
+        }
+        JTable table1 = new JTable(rows, columnHeadings1);
+        JScrollPane panel1 = new JScrollPane(table1);
+        table1.setFillsViewportHeight(true);
+        main.add(lblHeading1);
+        main.add(panel1);
+
+        // create label and panel for table 2
+        String adjactive = "";
+        if (choiceOfDisplay.equalsIgnoreCase("A")) adjactive = "new"; // mark new course
+        else adjactive = "updated";
+        JLabel lblHeading2 = new JLabel("Index Numbers in the " + adjactive +  " Course " + newCourse.getCourseCode() + " " + newCourse.getCourseName());
+        lblHeading2.setFont(new Font("Arial",Font.BOLD, 14));
+        // panel
+        rows = new Object[dataIndex.size()][];
+        for (int i = 0; i<dataIndex.size(); i++) {
+            rows[i] = dataIndex.get(i);
+        }
+        JTable table2 = new JTable(rows, columnHeadings2);
+        JScrollPane panel2 = new JScrollPane(table2);
+        table2.setFillsViewportHeight(true);
+        main.add(lblHeading2);
+        main.add(panel2);
+
+        // add main panel to frame
+        frame.add(main);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        int[] frameSize = {910, 500};
         frame.setSize(frameSize[0], frameSize[1]);
         frame.setVisible(true);
     }

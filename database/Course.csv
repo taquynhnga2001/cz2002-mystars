@@ -1,5 +1,6 @@
-courseCode,School,AU
-CZ2001,SCSE,3
-CZ2002,SCSE,3
-MH2100,SPMS,4
-MH2500,SPMS,4
+courseCode,courseName,School,AU
+CZ2001,Algorithms,SCSE,3
+CZ2002,Object Oriented Design and Programming,SCSE,3
+MH2100,Calculus III,SPMS,4
+MH2500,Probability and Introduction to Statistics,SPMS,4
+

@@ -9,7 +9,7 @@ import entity.*;
 import text_manager.*;
 import registration_controller.*;
 
-public class StudentView extends UserView {
+public class StudentView {
 
     private static Scanner sc = new Scanner(System.in);
 

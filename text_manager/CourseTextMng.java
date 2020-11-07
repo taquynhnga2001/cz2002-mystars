@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import constants.FilePath;
 import custom_exceptions.*;
+import custom_exceptions.course_existed.*;
 import entity.*;
 
 public class CourseTextMng extends TextManager {
@@ -26,7 +27,7 @@ public class CourseTextMng extends TextManager {
             Course course = new Course(courseCode);
             alr.add(course);
         }
-        return alr; // list of CourseIdx
+        return alr; // list of Course
     }
 
     /** Read string from text file and return a Course object */
@@ -55,6 +56,7 @@ public class CourseTextMng extends TextManager {
         String courseCode;
         String school;
         String AU;
+        String courseName;
 
         for (int i = 1; i < stringArray.size(); i++) {
             String st = (String) stringArray.get(i);
@@ -63,9 +65,10 @@ public class CourseTextMng extends TextManager {
             courseCode = star.nextToken().trim(); // first token
 
             if (courseCode.equalsIgnoreCase(courseCode_)) {
+                courseName = star.nextToken().trim();
                 school = star.nextToken().trim(); // second token...
                 AU = star.nextToken().trim();
-                // alr.add(courseCode);
+                alr.add(courseName);
                 alr.add(school);
                 alr.add(AU);
                 return alr;
@@ -77,20 +80,45 @@ public class CourseTextMng extends TextManager {
     /** Save courses in database after adding or updating */
     public static void saveCourses(List<Course> courses) throws IOException {
         List<String> al = new ArrayList<String>(); // to store Course data
-        String HEADING = "courseCode,School,AU";
+        String HEADING = "courseCode,courseName,School,AU";
         al.add(HEADING);
-
         for (int i = 0; i < courses.size(); i++) {
             Course course = courses.get(i);
             StringBuilder st = new StringBuilder();
             st.append(course.getCourseCode().trim());
             st.append(SEPERATOR);
+            st.append(SEPERATOR);
+            st.append(course.getCourseName());
             st.append(course.getSchool().trim());
             st.append(SEPERATOR);
             st.append(course.getAU());
             al.add(st.toString());
         }
         write(FILEPATH, al);
+    }
+
+    /**Save Course in database after adding */
+    public static void addCourse(String courseCode, String courseName, String school, String AU)
+            throws IOException, CourseExisted {
+        ArrayList<String> stringArray = read(FILEPATH); // to store the old database
+
+        for (int i = 1; i < stringArray.size(); i++) {
+            String st = (String) stringArray.get(i);
+            StringTokenizer star = new StringTokenizer(st, SEPERATOR); // pass in the string to the string
+                                                                       // tokenizer using delimiter ","
+            String courseCode_ = star.nextToken().trim(); // first token: courseCode
+            if (courseCode_.equalsIgnoreCase(courseCode)) {
+                throw new CourseExisted(courseCode);
+            }
+        }
+        // if courseCode is new, add to enrolled
+        StringBuilder st = new StringBuilder();
+        st.append(courseCode).append(SEPERATOR);
+        st.append(courseName).append(SEPERATOR);
+        st.append(school).append(SEPERATOR);
+        st.append(AU);
+        stringArray.add(st.toString());
+        write(FILEPATH, stringArray);
     }
 
     /**Return a CourseIndex object in the CourseDB */

@@ -10,6 +10,7 @@ public class CourseIndex {
     private String index;
 	private String courseCode;
 	private int AU;
+	private String courseName;
     private ArrayList<CourseIndexType> classTypes;
 
     // course code - course index information
@@ -56,6 +57,9 @@ public class CourseIndex {
 	public int getAU() {
 		return AU;
 	}
+	public String getCourseName() {
+		return courseName;
+	}
     public int getCapacity() {
 		return capacity;
 	}
@@ -89,5 +93,8 @@ public class CourseIndex {
 	}
 	public void setAU(int AU) {
 		this.AU = AU;
+	}
+	public void setCourseName(String courseName) {
+		this.courseName = courseName;
 	}
 }

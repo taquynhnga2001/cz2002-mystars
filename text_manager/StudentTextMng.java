@@ -12,7 +12,6 @@ import custom_exceptions.WrongUsername;
 public class StudentTextMng extends TextManager {
 
     private static final String FILEPATH = FilePath.STUDENT;
-    private static final String SEPERATOR = ",";
 
     /** Read String from text file and return list of Student objects */
     public static ArrayList<Student> readFile() throws IOException {
@@ -171,5 +170,21 @@ public class StudentTextMng extends TextManager {
             al.add(st.toString());
         }
         write(FILEPATH, al);
+    }
+
+    /**Add a student from String information to the database*/
+    public static void addStudent(String name, String username, String mail, String password, String matricNum,
+            String gender, String nationality) throws IOException {
+        // read String from text file
+        ArrayList<String> stringArray = read(FILEPATH);
+        String newStudentString = name + SEPERATOR + 
+                                username + SEPERATOR + 
+                                mail + SEPERATOR + 
+                                password + SEPERATOR +
+                                matricNum + SEPERATOR + 
+                                gender + SEPERATOR + 
+                                nationality;
+        stringArray.add(newStudentString);
+        write(FILEPATH, stringArray);
     }
 }

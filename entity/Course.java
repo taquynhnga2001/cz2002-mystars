@@ -7,13 +7,16 @@ import custom_exceptions.*;
 import text_manager.*;
 
 public class Course {
-    protected String courseCode;
-    protected String school;
-    protected int AU;
+    private String courseCode;
+    private String courseName;
+    private String school;
+    private int AU;
     private ArrayList<CourseIndex> courseIndexs;
 
-    private final int schoolIdx = 0;
-    private final int AUIdx = 1;
+    private final int courseNameIdx = 0;
+    private final int schoolIdx = 1;
+    private final int AUIdx = 2;
+    
 
     public Course(String courseCode) {
         this.courseCode = courseCode;
@@ -21,12 +24,14 @@ public class Course {
             ArrayList<String> attributes = CourseTextMng.readCourse(this.courseCode);
             this.school = attributes.get(schoolIdx);
             this.AU = Integer.parseInt(attributes.get(AUIdx));
+            this.courseName = attributes.get(courseNameIdx);
             // construct CourseIndexs for this Course
             this.courseIndexs = CourseIndexTextMng.readCourseIndexsOfCourse(this.courseCode);
             for (int i=0; i < this.courseIndexs.size(); i++) {
                 CourseIndex courseIndex = this.courseIndexs.get(i);
                 courseIndex.setCourseCode(this.courseCode);
                 courseIndex.setAU(this.AU);
+                courseIndex.setCourseName(this.courseName);
             }
         } catch (WrongCourseCode e) {
             System.out.println(">>> Error: " + e.getMessage());
@@ -45,6 +50,9 @@ public class Course {
     public int getAU() {
         return AU;
     }
+    public String getCourseName() {
+        return courseName;
+    }
     public ArrayList<CourseIndex> getCourseIndexs(){
         return courseIndexs;
     }
@@ -57,6 +65,9 @@ public class Course {
     }
     public void setAU(int AU) {
         this.AU = AU;
+    }
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
     }
 
 }

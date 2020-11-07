@@ -125,5 +125,21 @@ public class CourseIndexTypeTextMng extends TextManager {
         }
         write(FILEPATH, al); 
     }
+
+    /**Save CourseIndexType in database after adding */
+    public static void addCourseIndexType(String index, String classType, String group, String day, String time, String venue, String remark)
+            throws IOException {
+        ArrayList<String> stringArray = read(FILEPATH); // retrieve the old database
+        StringBuilder st = new StringBuilder();
+        st.append(index).append(SEPERATOR);
+        st.append(classType).append(SEPERATOR);
+        st.append(group).append(SEPERATOR);
+        st.append(day).append(SEPERATOR);
+        st.append(time).append(SEPERATOR);
+        st.append(venue).append(SEPERATOR);
+        st.append(remark.replace(",", "|"));
+        stringArray.add(st.toString());
+        write(FILEPATH, stringArray);
+    }
     
 }

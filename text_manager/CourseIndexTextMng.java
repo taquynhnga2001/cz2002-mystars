@@ -5,6 +5,7 @@ import java.util.*;
 
 import constants.FilePath;
 import custom_exceptions.*;
+import custom_exceptions.course_existed.*;
 import entity.*;
 
 public class CourseIndexTextMng extends TextManager {
@@ -89,5 +90,32 @@ public class CourseIndexTextMng extends TextManager {
             }
         }
         write(FILEPATH, al);
+    }
+
+    /**Save CourseIndex in database after adding */
+    public static void addCourseIndex(String index, String courseCode, String capacity)
+            throws IOException, CourseIndexExisted {
+        ArrayList<String> stringArray = read(FILEPATH); // to store the old database
+
+        for (int i = 1; i < stringArray.size(); i++) {
+            String st = (String) stringArray.get(i);
+            StringTokenizer star = new StringTokenizer(st, SEPERATOR); // pass in the string to the string
+                                                                       // tokenizer using delimiter ","
+            String index_ = star.nextToken().trim(); // first token: courseCode
+            if (index_.equalsIgnoreCase(index)) {
+                throw new CourseIndexExisted(index);
+            }
+        }
+        // if courseIndex is new, add to enrolled
+        String vacancy = capacity;
+        String waitlist = "0";
+        StringBuilder st = new StringBuilder();
+        st.append(index).append(SEPERATOR);
+        st.append(courseCode).append(SEPERATOR);
+        st.append(capacity).append(SEPERATOR);
+        st.append(vacancy).append(SEPERATOR);
+        st.append(waitlist);
+        stringArray.add(st.toString());
+        write(FILEPATH, stringArray);
     }
 }
