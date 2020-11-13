@@ -14,6 +14,7 @@ import registration_controller.AdminController;
 import text_manager.AccessPeriodTextMng;
 import text_manager.CourseTextMng;
 
+
 public class AdminView extends UserView {
 
     private static Scanner sc = new Scanner(System.in);
@@ -21,11 +22,10 @@ public class AdminView extends UserView {
     public static void view(Admin admin) {
         String choice;
         do {
-            System.out.println(Color.CYAN_BOLD);
-            System.out.println("+===========================================================+");
-            System.out.println("|                            HOME                           |");
-            System.out.println("+===========================================================+");
-            System.out.println(Color.RESET);
+            System.out.println();
+            PrintColor.println("+===========================================================+", "BLUE_BOLD");
+            PrintColor.println("|                            HOME                           |", "BLUE_BOLD");
+            PrintColor.println("+===========================================================+", "BLUE_BOLD");
             System.out.println("(E) Edit student access period");
             System.out.println("(S) Add a student");
             System.out.println("(C) Add/Update a course");
@@ -66,11 +66,9 @@ public class AdminView extends UserView {
     }
 
     public static void editAccessPeriod() {
-        System.out.println(Color.CYAN);
-            System.out.println("+-----------------------------------------------------------+");
-            System.out.println("|                  Edit Student Access Period               |");
-            System.out.println("+-----------------------------------------------------------+");
-            System.out.println(Color.RESET);
+        PrintColor.println("+-----------------------------------------------------------+", "BLUE_BOLD");
+        PrintColor.println("|                  Edit Student Access Period               |", "BLUE_BOLD");
+        PrintColor.println("+-----------------------------------------------------------+", "BLUE_BOLD");
         Date date = AccessPeriodTextMng.getAccessPeriod();
         System.out.println("Old Access Period: " + AccessPeriodTextMng.toString(date));
         System.out.println("New Access Period: ");
@@ -78,24 +76,22 @@ public class AdminView extends UserView {
         String dateStr = sc.next();
         System.out.print("\tTime (HH:mm:ss): ");
         String timeStr = sc.next();
-        System.out.print("Confirm to edit the Access Period to " + dateStr + " " + timeStr + " [Y/N]? ");
+        PrintColor.print("Confirm to edit the Access Period to " + dateStr + " " + timeStr + " [Y/N]? ", "YELLOW");
         String choice = sc.next().toUpperCase();
         if (choice.equals("Y")) {
             try {
                 AdminController.editAccessPeriod(dateStr, timeStr);
-                System.out.println("Edited Student Access Period successfully! ");
+                PrintColor.println("Edited Student Access Period successfully! ", "GREEN");
             } catch (ParseException | DateTimeException e) {
-                System.out.println(">>> Wrong Input: Typed in wrong format for date and time");
+                PrintColor.println(">>> Wrong Input: Typed in wrong format for date and time", "RED");
             }
         }
     }
 
     public static void addStudent() {
-        System.out.println();
-            System.out.println("+-----------------------------------------------------------+");
-            System.out.println("|                        Add a Student                      |");
-            System.out.println("+-----------------------------------------------------------+");
-            System.out.println();
+        PrintColor.println("+-----------------------------------------------------------+", "BLUE_BOLD");        
+        PrintColor.println("|                        Add a Student                      |", "BLUE_BOLD");
+        PrintColor.println("+-----------------------------------------------------------+", "BLUE_BOLD");
         System.out.println("Enter Student's Information: ");
         System.out.print("\tName: ");
         sc.nextLine();
@@ -110,51 +106,41 @@ public class AdminView extends UserView {
         String gender = sc.next().toUpperCase();
         System.out.print("\tNationality: ");
         String nationality = sc.next();
-        System.out.print("Confirm to add this Student [Y/N]? ");
+        PrintColor.print("Confirm to add this Student [Y/N]? ", "YELLOW");
         String choice = sc.next().toUpperCase();
 
         if (choice.equals("Y")) {
             try {
                 Student newStudent = AdminController.addStudent(name, username, matricNum, gender, nationality);
                 if (newStudent != null)
-                    System.out.println("Student has been added successfully!");
+                PrintColor.println("Student has been added successfully!", "GREEN");
                 TableView.displayStudentDB(AdminController.getStudentDB(), newStudent);
             } catch (UsernameExisted e) {
-                System.out.println(Color.RED);
-                System.out.println(">>> " + e.getMessage());
-                System.out.println(Color.RESET);
+                PrintColor.println(">>> " + e.getMessage(), "RED");
             } catch (StudentExisted e) {
-                System.out.println(Color.RED);
-                System.out.println(">>> " + e.getMessage());
-                System.out.println(Color.RESET);
+                PrintColor.println(">>> " + e.getMessage(), "RED");
             } catch (MatricNumExisted e) {
-                System.out.println(Color.RED);
-                System.out.println(">>> " + e.getMessage());
-                System.out.println(Color.RESET);
+                PrintColor.println(">>> " + e.getMessage(), "RED");
             } catch (IOException e) {
                 System.out.println(Color.RED);
                 e.printStackTrace();
                 System.out.println(Color.RESET);
             } catch (WrongInputGender e) {
-                System.out.println(Color.RED);
-                System.out.println(">>> " + e.getMessage());
-                System.out.println(Color.RESET);
+                PrintColor.println(">>> " + e.getMessage(), "RED");
             }
         }
     }
 
     public static void addCourse() {
-        System.out.println();
-            System.out.println("+-----------------------------------------------------------+");
-            System.out.println("|                    Add/Update a Course                    |");
-            System.out.println("+-----------------------------------------------------------+");
-            System.out.println();
+        PrintColor.println("+-----------------------------------------------------------+", "BLUE_BOLD");
+        PrintColor.println("|                    Add/Update a Course                    |", "BLUE_BOLD");
+        PrintColor.println("+-----------------------------------------------------------+", "BLUE_BOLD");
         System.out.print("Add or Update [A/U]? ");
         String choice = sc.next().toUpperCase();
         switch (choice) {
             // adding a new course
             case "A": {
-                System.out.println("=============== Add a Course ===============");
+                PrintColor.println("=============== Add a Course ===============", "CYAN_BOLD");
                 System.out.print("\tCourse code: ");
                 String courseCode = sc.next().toUpperCase();
                 sc.nextLine();
@@ -165,7 +151,7 @@ public class AdminView extends UserView {
                 System.out.print("\tAU: ");
                 String AU = sc.next();
                 // Confirm to add the Course
-                System.out.print("Confirm to add the Course " + courseCode + " " + courseName + " [Y/N]? ");
+                PrintColor.print("Confirm to add the Course " + courseCode + " " + courseName + " [Y/N]? ", "YELLOW");
                 String confirmCourse = sc.next();
                 if (confirmCourse.equalsIgnoreCase("Y"))
                     try {
@@ -173,7 +159,7 @@ public class AdminView extends UserView {
                         // add their CourseIndex
                         String courseIndex;
                         do {
-                            System.out.println("-------- Add Index Numbers --------");
+                            PrintColor.println("-------- Add Index Numbers --------", "CYAN_BOLD");
                             System.out.println("(enter 'X' to stop adding Index Number)");
                             System.out.print("\tIndex Number: ");
                             courseIndex = sc.next();
@@ -182,8 +168,7 @@ public class AdminView extends UserView {
                             System.out.print("\tCapacity: ");
                             String capacity = sc.next();
                             // Confirm to add the Index Number
-                            System.out
-                                    .print("Confirm to add the Index Number " + courseIndex + " to this course [Y/N]?");
+                            PrintColor.print("Confirm to add the Index Number " + courseIndex + " to this course [Y/N]?", "YELLOW");
                             String confirmIndex = sc.next();
                             if (confirmIndex.equalsIgnoreCase("Y"))
                                 try {
@@ -192,7 +177,7 @@ public class AdminView extends UserView {
                                     // add their CourseIndexType
                                     String classType;
                                     do {
-                                        System.out.println("-------- Add Classses for this Index Number --------");
+                                        PrintColor.println("-------- Add Classses for this Index Number --------", "CYAN_BOLD");
                                         System.out.println("(enter 'X' to stop adding Classes)");
                                         System.out.print("\tClass [LEC/STUDIO or TUT or LAB]: ");
                                         classType = sc.next().toUpperCase();
@@ -210,7 +195,7 @@ public class AdminView extends UserView {
                                         System.out.print("\tRemark: ");
                                         String remark = sc.nextLine();
                                         // Confirm to add the Class
-                                        System.out.print("Confirm to add the Class to this Index Number [Y/N]?");
+                                        PrintColor.print("Confirm to add the Class to this Index Number [Y/N]?", "YELLOW");
                                         String confirmClass = sc.next();
                                         if (confirmClass.equalsIgnoreCase("Y")) {
                                             newCourse = AdminController.addCourseIndexType(courseIndex, classType,
@@ -220,40 +205,40 @@ public class AdminView extends UserView {
                                     // display in table
                                     TableView.displayCourseAfterAdding(AdminController.getCourseDB(), newCourse, "A");
                                 } catch (CourseIndexExisted e) {
-                                    System.out.println(">>> " + e.getMessage());
+                                    PrintColor.println(">>> " + e.getMessage(), "RED");
                                 }
                         } while (!(courseIndex.equalsIgnoreCase("X")));
                     } catch (IOException e) {
                         e.printStackTrace();
                     } catch (CourseExisted e) {
-                        System.out.println(">>> " + e.getMessage());
+                        PrintColor.println(">>> " + e.getMessage(), "RED");
                     }
                 break;
             }
             // updating an existing course
             case "U": {
-                System.out.println("=============== Update a Course ===============");
+                PrintColor.println("=============== Update a Course ===============", "CYAN_BOLD");
                 System.out.print("\tCourse code: ");
                 String courseCode = sc.next().toUpperCase();
                 try {
                     Course updateCourse = CourseTextMng.getCourse(AdminController.getCourseDB(), courseCode);
                     TableView.displayCourseB4Updating(updateCourse);
                     // update general info
-                    System.out.println("-------- Update General Course Information ----------");
+                    PrintColor.println("-------- Update General Course Information ----------", "CYAN");
                     System.out.print("Enter Attributes of the Course to update (code/name/school/AU) (Press 'enter' if no update on Couse): ");
                     sc.nextLine();
                     String[] attributes = sc.nextLine().toLowerCase().trim().split(" ");
                     AdminController.updateCourse(updateCourse, attributes);
 
                     // update index info
-                    System.out.println("--------- Update Course Index Information --------");
+                    PrintColor.println("--------- Update Course Index Information --------", "CYAN");
                     System.out.print("Enter Index Numbers of the Course to update (Press 'enter' if no update on Couse Index): ");
                     String[] indexs = sc.nextLine().toLowerCase().trim().split(" ");
                     for (String index : indexs) {
                         try {
                             CourseIndex updateIndex = CourseTextMng.getCourseIndex(AdminController.getCourseDB(), index);
                             if (!updateCourse.getCourseIndexs().contains(updateIndex)) {
-                                System.out.println(">>> The Index Number " + index + " does not belong to this Course");
+                                PrintColor.println(">>> The Index Number " + index + " does not belong to this Course", "RED");
                                 continue;
                             }
                             System.out.print("Enter Attributes of the Index to update (index/capacity): ");
@@ -261,21 +246,21 @@ public class AdminView extends UserView {
                             String[] attributes1 = att.trim().toLowerCase().split(" ");
                             AdminController.updateCourseIndex(updateIndex, attributes1);
                         } catch (WrongCourseIndex e) {
-                            System.out.println(">>> " + e.getMessage());
+                            PrintColor.println(">>> " + e.getMessage(), "RED");
                         }
                     }
                     // update class info
                     // too tired, not done yet (T_T)
                     TableView.displayCourseAfterAdding(AdminController.getCourseDB(), updateCourse, "U");
                 } catch (WrongCourseCode e) {
-                    System.out.println(">>> " + e.getMessage());
+                    PrintColor.println(">>> " + e.getMessage(), "RED");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
                 sc.nextLine();
                 break;
             }
-            default: System.out.println(">>> Wrong Input: Type 'A' or 'U'");
+            default: PrintColor.println(">>> Wrong Input: Type 'A' or 'U'", "RED");
         } 
 
     }
@@ -284,11 +269,9 @@ public class AdminView extends UserView {
     public static void checkVacancy() {
         String courseIndexStr;
         do {
-            System.out.println();
-            System.out.println("+-----------------------------------------------------------+");
-            System.out.println("|                 Check Vacancies Available                 |");
-            System.out.println("+-----------------------------------------------------------+");
-            System.out.println();
+            PrintColor.println("+-----------------------------------------------------------+", "BLUE_BOLD");
+            PrintColor.println("|                 Check Vacancies Available                 |", "BLUE_BOLD");
+            PrintColor.println("+-----------------------------------------------------------+", "BLUE_BOLD");
             System.out.print("Enter Course Index that you want to check (Enter 'X' to exit): ");
             courseIndexStr = sc.next();
             if (courseIndexStr.equalsIgnoreCase("X"))
@@ -298,7 +281,7 @@ public class AdminView extends UserView {
                 System.out.println("Places available " + ": [" + result[0] + "/" + result[1] + "]");
                 System.out.println("Length of Waitlist: " + result[2]);
             } catch (WrongCourseIndex e) {
-                System.out.println(">>> " + e.getMessage());
+                PrintColor.println(">>> " + e.getMessage(), "RED");
             }
         } while (!courseIndexStr.equalsIgnoreCase("X"));
     }
@@ -307,11 +290,9 @@ public class AdminView extends UserView {
     public static void printStudentByIndex() {
         String courseIndexStr;
         do {
-            System.out.println();
-            System.out.println("+-----------------------------------------------------------+");
-            System.out.println("|             Print student list by Course Index            |");
-            System.out.println("+-----------------------------------------------------------+");
-            System.out.println();
+            PrintColor.println("+-----------------------------------------------------------+", "BLUE_BOLD");
+            PrintColor.println("|             Print student list by Course Index            |", "BLUE_BOLD");
+            PrintColor.println("+-----------------------------------------------------------+", "BLUE_BOLD");
             System.out.print("Enter Course Index (Enter 'X' to exit): ");
             courseIndexStr = sc.next().toUpperCase();
             if (courseIndexStr.equalsIgnoreCase("X"))
@@ -319,7 +300,7 @@ public class AdminView extends UserView {
             try {
                 AdminController.printStudentByIndex(courseIndexStr);
             } catch (WrongCourseIndex e) {
-                System.out.println(">>> " + e.getMessage());
+                PrintColor.println(">>> " + e.getMessage(), "RED");
             }
         } while (!courseIndexStr.equalsIgnoreCase("X"));
     }
@@ -328,11 +309,9 @@ public class AdminView extends UserView {
     public static void printStudentByCourse() {
         String course;
         do {
-            System.out.println();
-            System.out.println("+-----------------------------------------------------------+");
-            System.out.println("|                Print student list by Course               |");
-            System.out.println("+-----------------------------------------------------------+");
-            System.out.println();
+            PrintColor.println("+-----------------------------------------------------------+", "BLUE_BOLD");
+            PrintColor.println("|                Print student list by Course               |", "BLUE_BOLD");
+            PrintColor.println("+-----------------------------------------------------------+", "BLUE_BOLD");
             System.out.print("Enter Course Code (Enter 'X' to exit): ");
             course = sc.next().toUpperCase();
             if (course.equalsIgnoreCase("X"))
@@ -340,7 +319,7 @@ public class AdminView extends UserView {
             try {
                 AdminController.printStudentByCourse(course);
             } catch (WrongCourseCode e) {
-                System.out.println(">>> " + e.getMessage());
+                PrintColor.println(">>> " + e.getMessage(), "RED");
             } catch (WrongCourseIndex e) {
                 e.printStackTrace();
             }

@@ -33,7 +33,7 @@ public class Auth {
 
         System.out.print("Username: ");
         username = sc.next();
-        password = getHash(PasswordField.readPassword("Password: "));
+        password = getHash(PasswordField.readPassword("Password:  "));
 
         int haveRead = 0;
 
@@ -47,7 +47,7 @@ public class Auth {
                         System.out.println(Color.RESET);
                         System.out.print("Username: ");
                         username = sc.next();
-                        password = getHash(PasswordField.readPassword("Password: "));
+                        password = getHash(PasswordField.readPassword("Password:  "));
                     } else {
                         haveRead = 1;
                         System.out.print(Color.GREEN);
@@ -61,14 +61,14 @@ public class Auth {
                     System.out.println(Color.RESET);
                     System.out.print("Username: ");
                     username = sc.next();
-                    password = getHash(PasswordField.readPassword("Password: "));
+                    password = getHash(PasswordField.readPassword("Password:  "));
                 } catch (WrongPassword e) {
                     System.out.print(Color.RED);
                     System.out.print(">>> Error! " + e.getMessage());
                     System.out.println(Color.RESET);
                     System.out.print("Username: ");
                     username = sc.next();
-                    password = getHash(PasswordField.readPassword("Password: "));
+                    password = getHash(PasswordField.readPassword("Password:  "));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

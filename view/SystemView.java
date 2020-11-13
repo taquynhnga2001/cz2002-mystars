@@ -24,7 +24,7 @@ public class SystemView {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		System.out.println(Color.CYAN_BOLD);
+		System.out.println(Color.BLUE_BOLD);
 		System.out.println("+===========================================================+");
 		System.out.println("|                     WELCOME TO MYSTARS                    |");
 		System.out.println("+===========================================================+" + Color.RESET);

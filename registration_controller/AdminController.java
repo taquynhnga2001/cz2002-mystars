@@ -109,14 +109,14 @@ public class AdminController {
                     break;
                 }
                 default: {
-                    System.out.println(">>> Wrong Input: Course does not have " + att + " value!");
+                    PrintColor.println(">>> Wrong Input: Course does not have " + att + " value!", "RED");
                     checkCF = false;
                     break;
                 }
             }
         }
         if (checkCF) {
-            System.out.print("Confirm to update this Course [Y/N]? ");
+            PrintColor.print("Confirm to update this Course [Y/N]? ", "YELLOW");
             String choice = sc.next().toUpperCase();
             if (choice.equals("Y")) {
                 for (String att: attributes) {
@@ -139,7 +139,7 @@ public class AdminController {
                         }
                     }
                 }
-                System.out.println("Updated Course successfully!");
+                PrintColor.println("Updated Course successfully!", "GREEN");
                 CourseTextMng.saveCourses(getCourseDB());
                 return true;
             }
@@ -166,14 +166,14 @@ public class AdminController {
                     break;
                 }
                 default: {
-                    System.out.println(">>> Wrong Input: Course Index does not have " + att + " value!");
+                    PrintColor.println(">>> Wrong Input: Course Index does not have " + att + " value!", "RED");
                     checkCF = false;
                     break;
                 }
             }
         }
         if (checkCF) {
-            System.out.print("Confirm to update this Course Index [Y/N]? ");
+            PrintColor.print("Confirm to update this Course Index [Y/N]? ", "YELLOW");
             String choice = sc.next().toUpperCase();
             if (choice.equals("Y")) {
                 for (String att : attributes) {
@@ -191,7 +191,7 @@ public class AdminController {
                         }
                     }
                 }
-                System.out.println("Updated Course Index successfully!");
+                PrintColor.println("Updated Course Index successfully!", "GREEN");
                 CourseIndexTextMng.saveCourseIndex(getCourseDB());
                 CourseIndexTypeTextMng.saveCourseIndexTypes(getCourseDB());
                 return true;
