@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.*;
 
 import authentication.Auth;
+import authentication.PasswordField;
+import constants.Color;
 import custom_exceptions.*;
 import entity.*;
 import text_manager.*;
@@ -19,8 +21,11 @@ public class StudentView {
 
         String choice;
         do {
-            // System.out.println("Registered AUs: " + student.getRegisteredAU());
-            System.out.println("\n========== HOME ==========\n");
+            System.out.println(Color.CYAN_BOLD);
+            System.out.println("+===========================================================+");
+            System.out.println("|                            HOME                           |");
+            System.out.println("+===========================================================+");
+            System.out.println(Color.RESET);
             System.out.println("(A) Add Course");
             System.out.println("(D) Drop Course");
             System.out.println("(R) Check/Print Courses Registered");
@@ -62,7 +67,11 @@ public class StudentView {
 
     /** Add course view for student */
     public static void addCourse(Student student) {
-        System.out.println("\n----- Add Course -----");
+        System.out.println();
+            System.out.println("+-----------------------------------------------------------+");
+            System.out.println("|                         Add Course                        |");
+            System.out.println("+-----------------------------------------------------------+");
+            System.out.println();
         System.out.print("Enter Course Index that you want to add: ");
         String courseIndexStr = sc.next();
         try {
@@ -88,7 +97,11 @@ public class StudentView {
 
     /** Drop course view for student */
     public static void dropCourse(Student student) {
-        System.out.println("\n----- Drop Course -----");
+        System.out.println();
+            System.out.println("+-----------------------------------------------------------+");
+            System.out.println("|                        Drop Course                        |");
+            System.out.println("+-----------------------------------------------------------+");
+            System.out.println();
         // display registered courses
         System.out.println("Courses Registered:");
         ArrayList<CourseIndex>[] courseIndexs = StudentController.getCourseRegistered(student);
@@ -124,7 +137,11 @@ public class StudentView {
 
     /** Check/Print courses registered (enrolled and on waitlist) of a student */
     public static void courseRegistered(Student student) {
-        System.out.println("\n----- Check/Print Courses Registered -----");
+        System.out.println();
+            System.out.println("+-----------------------------------------------------------+");
+            System.out.println("|               Check/Print Courses Registered              |");
+            System.out.println("+-----------------------------------------------------------+");
+            System.out.println();
         ArrayList<CourseIndex>[] courseIndexs = StudentController.getCourseRegistered(student);
         ArrayList<CourseIndex> courseEnrolled = courseIndexs[0];
         ArrayList<CourseIndex> courseWaitlist = courseIndexs[1];
@@ -184,7 +201,11 @@ public class StudentView {
     public static void checkVacancy() {
         String courseIndexStr;
         do {
-            System.out.println("\n----- Check Vacancies Available -----");
+            System.out.println();
+            System.out.println("+-----------------------------------------------------------+");
+            System.out.println("|                 Check Vacancies Available                 |");
+            System.out.println("+-----------------------------------------------------------+");
+            System.out.println();
             System.out.print("Enter Course Index that you want to check (Enter 'X' to exit): ");
             courseIndexStr = sc.next();
             if (courseIndexStr.equalsIgnoreCase("X"))
@@ -200,7 +221,11 @@ public class StudentView {
     }
 
     public static void changeCourseIndex(Student student) {
-        System.out.println("\n----- Change Index Number of Course -----");
+        System.out.println();
+            System.out.println("+-----------------------------------------------------------+");
+            System.out.println("|               Change Index Number of Course               |");
+            System.out.println("+-----------------------------------------------------------+");
+            System.out.println();
         System.out.print("Enter Current Index Number: ");
         String curIndex = sc.next().toUpperCase();
         System.out.print("Enter New Index Number: ");
@@ -225,7 +250,11 @@ public class StudentView {
     }
 
     public static void swopCourseIndex(Student student) {
-        System.out.println("\n----- Swop Index Number with Another Student -----");
+        System.out.println();
+            System.out.println("+-----------------------------------------------------------+");
+            System.out.println("|           Swop Index Number with Another Student          |");
+            System.out.println("+-----------------------------------------------------------+");
+            System.out.println();
         String yourIndex;
         Student peer = null;
         String peerUserName;
@@ -241,7 +270,7 @@ public class StudentView {
             System.out.print("\tPeer's Username: ");
             peerUserName = sc.next();
             System.out.print("\tPeer's Password: ");
-            peerPassword = Auth.getHash(sc.next());
+            peerPassword = Auth.getHash(PasswordField.readPassword(""));
             System.out.print("\tSwop with Peer's Index Number #2: ");
             peerIndex = sc.next();
 

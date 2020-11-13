@@ -2,14 +2,15 @@ package view;
 
 import java.util.Date;
 import java.io.IOException;
-// import java.io.*;
 import java.util.*;
 
 import authentication.Auth;
 import entity.*;
 import registration_controller.AdminController;
 import registration_controller.StudentController;
+import text_manager.AccessPeriodTextMng;
 import text_manager.CourseTextMng;
+import constants.Color;
 
 
 public class SystemView {
@@ -23,14 +24,23 @@ public class SystemView {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
-		System.out.println("\n========== WELCOME TO MYSTARS ==========");
+		System.out.println(Color.CYAN_BOLD);
+		System.out.println("+===========================================================+");
+		System.out.println("|                     WELCOME TO MYSTARS                    |");
+		System.out.println("+===========================================================+" + Color.RESET);
 		User user = Auth.login();
 		if (user!=null) {
 			if (user instanceof Student) {
-				Student student = (Student) user;
-				StudentController.loadCourseDB();
-				StudentView.view(student);
+				Date accessPeriod = AccessPeriodTextMng.getAccessPeriod();
+				if (accessPeriod.compareTo(new Date()) >= 0) {
+					System.out.print(Color.RED);
+					System.out.print(">>> Cannot access MyStars now. Access Period is " + AccessPeriodTextMng.toString(accessPeriod) + ".");
+					System.out.println(Color.RESET);
+				} else {
+					Student student = (Student) user;
+					StudentController.loadCourseDB();
+					StudentView.view(student);
+				}
 			} else {  // user instance of Admin
 				Admin admin = (Admin) user;
 				AdminController.loadCourseDB();

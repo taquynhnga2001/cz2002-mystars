@@ -1,8 +1,11 @@
 package view;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.time.DateTimeException;
 import java.util.*;
 
+import constants.Color;
 import custom_exceptions.*;
 import custom_exceptions.course_existed.*;
 import custom_exceptions.student_existed.*;
@@ -18,7 +21,11 @@ public class AdminView extends UserView {
     public static void view(Admin admin) {
         String choice;
         do {
-            System.out.println("\n========== HOME ==========\n");
+            System.out.println(Color.CYAN_BOLD);
+            System.out.println("+===========================================================+");
+            System.out.println("|                            HOME                           |");
+            System.out.println("+===========================================================+");
+            System.out.println(Color.RESET);
             System.out.println("(E) Edit student access period");
             System.out.println("(S) Add a student");
             System.out.println("(C) Add/Update a course");
@@ -59,16 +66,40 @@ public class AdminView extends UserView {
     }
 
     public static void editAccessPeriod() {
-        System.out.println("\n----- Edit Student Access Period -----");
+        System.out.println(Color.CYAN);
+            System.out.println("+-----------------------------------------------------------+");
+            System.out.println("|                  Edit Student Access Period               |");
+            System.out.println("+-----------------------------------------------------------+");
+            System.out.println(Color.RESET);
         Date date = AccessPeriodTextMng.getAccessPeriod();
-        System.out.println("Old Access Period: " + date.toString());
+        System.out.println("Old Access Period: " + AccessPeriodTextMng.toString(date));
+        System.out.println("New Access Period: ");
+        System.out.print("\tDate (dd-MM-yyyy): ");
+        String dateStr = sc.next();
+        System.out.print("\tTime (HH:mm:ss): ");
+        String timeStr = sc.next();
+        System.out.print("Confirm to edit the Access Period to " + dateStr + " " + timeStr + " [Y/N]? ");
+        String choice = sc.next().toUpperCase();
+        if (choice.equals("Y")) {
+            try {
+                AdminController.editAccessPeriod(dateStr, timeStr);
+                System.out.println("Edited Student Access Period successfully! ");
+            } catch (ParseException | DateTimeException e) {
+                System.out.println(">>> Wrong Input: Typed in wrong format for date and time");
+            }
+        }
     }
 
     public static void addStudent() {
-        System.out.println("\n----- Add a Student -----");
+        System.out.println();
+            System.out.println("+-----------------------------------------------------------+");
+            System.out.println("|                        Add a Student                      |");
+            System.out.println("+-----------------------------------------------------------+");
+            System.out.println();
         System.out.println("Enter Student's Information: ");
         System.out.print("\tName: ");
-        String name = sc.next();
+        sc.nextLine();
+        String name = sc.nextLine();
         System.out.print("\tUsername: ");
         String username = sc.next();
         System.out.println("\t<Mail is automatically created as " + username + "@e.ntu.edu.sg>");
@@ -76,36 +107,54 @@ public class AdminView extends UserView {
         String matricNum = sc.next();
         System.out.println("\t<Password is automatically created as same as Matric Number>");
         System.out.print("\tGender [M/F]: ");
-        String gender = sc.next();
+        String gender = sc.next().toUpperCase();
         System.out.print("\tNationality: ");
         String nationality = sc.next();
+        System.out.print("Confirm to add this Student [Y/N]? ");
+        String choice = sc.next().toUpperCase();
 
-        try {
-            Student newStudent = AdminController.addStudent(name, username, matricNum, gender, nationality);
-            if (newStudent != null)
-                System.out.println("Student has been added successfully!");
-            TableView.displayStudentDB(AdminController.getStudentDB(), newStudent);
-        } catch (UsernameExisted e) {
-            System.out.println(">>> " + e.getMessage());
-        } catch (StudentExisted e) {
-            System.out.println(">>> " + e.getMessage());
-        } catch (MatricNumExisted e) {
-            System.out.println(">>> " + e.getMessage());
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (WrongInputGender e) {
-            System.out.println(">>> " + e.getMessage());
+        if (choice.equals("Y")) {
+            try {
+                Student newStudent = AdminController.addStudent(name, username, matricNum, gender, nationality);
+                if (newStudent != null)
+                    System.out.println("Student has been added successfully!");
+                TableView.displayStudentDB(AdminController.getStudentDB(), newStudent);
+            } catch (UsernameExisted e) {
+                System.out.println(Color.RED);
+                System.out.println(">>> " + e.getMessage());
+                System.out.println(Color.RESET);
+            } catch (StudentExisted e) {
+                System.out.println(Color.RED);
+                System.out.println(">>> " + e.getMessage());
+                System.out.println(Color.RESET);
+            } catch (MatricNumExisted e) {
+                System.out.println(Color.RED);
+                System.out.println(">>> " + e.getMessage());
+                System.out.println(Color.RESET);
+            } catch (IOException e) {
+                System.out.println(Color.RED);
+                e.printStackTrace();
+                System.out.println(Color.RESET);
+            } catch (WrongInputGender e) {
+                System.out.println(Color.RED);
+                System.out.println(">>> " + e.getMessage());
+                System.out.println(Color.RESET);
+            }
         }
     }
 
     public static void addCourse() {
-        System.out.println("\n----- Add/Update a Course -----");
+        System.out.println();
+            System.out.println("+-----------------------------------------------------------+");
+            System.out.println("|                    Add/Update a Course                    |");
+            System.out.println("+-----------------------------------------------------------+");
+            System.out.println();
         System.out.print("Add or Update [A/U]? ");
         String choice = sc.next().toUpperCase();
         switch (choice) {
             // adding a new course
             case "A": {
-                System.out.println("----- Add a Course -----");
+                System.out.println("=============== Add a Course ===============");
                 System.out.print("\tCourse code: ");
                 String courseCode = sc.next().toUpperCase();
                 sc.nextLine();
@@ -124,7 +173,8 @@ public class AdminView extends UserView {
                         // add their CourseIndex
                         String courseIndex;
                         do {
-                            System.out.println("Add Index Numbers (enter 'X' to stop adding Index Number)");
+                            System.out.println("-------- Add Index Numbers --------");
+                            System.out.println("(enter 'X' to stop adding Index Number)");
                             System.out.print("\tIndex Number: ");
                             courseIndex = sc.next();
                             if (courseIndex.equalsIgnoreCase("X"))
@@ -142,8 +192,8 @@ public class AdminView extends UserView {
                                     // add their CourseIndexType
                                     String classType;
                                     do {
-                                        System.out.println(
-                                                "Add Classses for this Index Number (enter 'X' to stop adding Classes)");
+                                        System.out.println("-------- Add Classses for this Index Number --------");
+                                        System.out.println("(enter 'X' to stop adding Classes)");
                                         System.out.print("\tClass [LEC/STUDIO or TUT or LAB]: ");
                                         classType = sc.next().toUpperCase();
                                         if (classType.equalsIgnoreCase("X"))
@@ -182,21 +232,21 @@ public class AdminView extends UserView {
             }
             // updating an existing course
             case "U": {
-                System.out.println("----- Update a Course -----");
+                System.out.println("=============== Update a Course ===============");
                 System.out.print("\tCourse code: ");
                 String courseCode = sc.next().toUpperCase();
                 try {
                     Course updateCourse = CourseTextMng.getCourse(AdminController.getCourseDB(), courseCode);
                     TableView.displayCourseB4Updating(updateCourse);
                     // update general info
-                    System.out.println("-- Update General Course Information --");
+                    System.out.println("-------- Update General Course Information ----------");
                     System.out.print("Enter Attributes of the Course to update (code/name/school/AU) (Press 'enter' if no update on Couse): ");
                     sc.nextLine();
                     String[] attributes = sc.nextLine().toLowerCase().trim().split(" ");
                     AdminController.updateCourse(updateCourse, attributes);
 
                     // update index info
-                    System.out.println("-- Update Course Index Information --");
+                    System.out.println("--------- Update Course Index Information --------");
                     System.out.print("Enter Index Numbers of the Course to update (Press 'enter' if no update on Couse Index): ");
                     String[] indexs = sc.nextLine().toLowerCase().trim().split(" ");
                     for (String index : indexs) {
@@ -234,7 +284,11 @@ public class AdminView extends UserView {
     public static void checkVacancy() {
         String courseIndexStr;
         do {
-            System.out.println("\n----- Check Vacancies Available -----");
+            System.out.println();
+            System.out.println("+-----------------------------------------------------------+");
+            System.out.println("|                 Check Vacancies Available                 |");
+            System.out.println("+-----------------------------------------------------------+");
+            System.out.println();
             System.out.print("Enter Course Index that you want to check (Enter 'X' to exit): ");
             courseIndexStr = sc.next();
             if (courseIndexStr.equalsIgnoreCase("X"))
@@ -253,7 +307,11 @@ public class AdminView extends UserView {
     public static void printStudentByIndex() {
         String courseIndexStr;
         do {
-            System.out.println("\n----- Print student list by Course Index -----");
+            System.out.println();
+            System.out.println("+-----------------------------------------------------------+");
+            System.out.println("|             Print student list by Course Index            |");
+            System.out.println("+-----------------------------------------------------------+");
+            System.out.println();
             System.out.print("Enter Course Index (Enter 'X' to exit): ");
             courseIndexStr = sc.next().toUpperCase();
             if (courseIndexStr.equalsIgnoreCase("X"))
@@ -270,7 +328,11 @@ public class AdminView extends UserView {
     public static void printStudentByCourse() {
         String course;
         do {
-            System.out.println("\n----- Print student list by Course -----");
+            System.out.println();
+            System.out.println("+-----------------------------------------------------------+");
+            System.out.println("|                Print student list by Course               |");
+            System.out.println("+-----------------------------------------------------------+");
+            System.out.println();
             System.out.print("Enter Course Code (Enter 'X' to exit): ");
             course = sc.next().toUpperCase();
             if (course.equalsIgnoreCase("X"))

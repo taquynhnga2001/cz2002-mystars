@@ -6,6 +6,9 @@ import custom_exceptions.*;
 
 import java.io.IOException;
 import java.util.Scanner;
+
+import constants.Color;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -21,15 +24,16 @@ public class Auth {
         domain = sc.nextLine();
         
         while (!domain.equalsIgnoreCase("Staff") && !domain.equalsIgnoreCase("Student")) {
-            System.out.println(">>> Error! Wrong input!");
+            System.out.print(Color.RED);
+            System.out.print(">>> Error! Wrong input!");
+            System.out.println(Color.RESET);
             System.out.print("Domain (Staff/Student): ");
             domain = sc.nextLine();
         }
 
         System.out.print("Username: ");
         username = sc.next();
-        System.out.print("Password: ");
-        password = getHash(sc.next());
+        password = getHash(PasswordField.readPassword("Password: "));
 
         int haveRead = 0;
 
@@ -38,28 +42,33 @@ public class Auth {
                 try {
                     Student student = new StudentTextMng().returnStudent(username, password);
                     if (student == null) {
-                        System.out.println(">>> Error! Typed in wrong username and password. Type again.\n");
+                        System.out.print(Color.RED);
+                        System.out.print(">>> Error! Typed in wrong username and password. Type again.\n");
+                        System.out.println(Color.RESET);
                         System.out.print("Username: ");
                         username = sc.next();
-                        System.out.print("Password: ");
-                        password = getHash(sc.next());
+                        password = getHash(PasswordField.readPassword("Password: "));
                     } else {
                         haveRead = 1;
-                        System.out.println(">>> Login successfully!\n");
+                        System.out.print(Color.GREEN);
+                        System.out.print(">>> Login successfully!\n");
+                        System.out.println(Color.RESET);
                         return student;
                     }
                 } catch (WrongUsername e) {
-                    System.out.println(">>> Error! " + e.getMessage());
+                    System.out.print(Color.RED);
+                    System.out.print(">>> Error! " + e.getMessage());
+                    System.out.println(Color.RESET);
                     System.out.print("Username: ");
                     username = sc.next();
-                    System.out.print("Password: ");
-                    password = getHash(sc.next());
+                    password = getHash(PasswordField.readPassword("Password: "));
                 } catch (WrongPassword e) {
-                    System.out.println(">>> Error! " + e.getMessage());
+                    System.out.print(Color.RED);
+                    System.out.print(">>> Error! " + e.getMessage());
+                    System.out.println(Color.RESET);
                     System.out.print("Username: ");
                     username = sc.next();
-                    System.out.print("Password: ");
-                    password = getHash(sc.next());
+                    password = getHash(PasswordField.readPassword("Password: "));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -69,25 +78,32 @@ public class Auth {
             do {
                 try {
                     Admin prof = new AdminTextMng().returnAdmin(username, password);
-                    if (prof == null)
-                        System.out.println(">>> Error! Typed in wrong username and password. Type again.\n");
+                    if (prof == null) {
+                        System.out.print(Color.RED);
+                        System.out.print(">>> Error! Typed in wrong username and password. Type again.\n");
+                        System.out.println(Color.RESET);
+                    }
                     else {
                         haveRead = 1;
-                        System.out.println(">>> Login successfully!");
+                        System.out.print(Color.GREEN);
+                        System.out.print(">>> Login successfully!\n");
+                        System.out.println(Color.RESET);
                         return prof;
                     }
                 } catch (WrongUsername e) {
-                    System.out.println(">>> Error! " + e.getMessage());
+                    System.out.print(Color.RED);
+                    System.out.print(">>> Error! " + e.getMessage());
+                    System.out.println(Color.RESET);
                     System.out.print("Username: ");
                     username = sc.next();
-                    System.out.print("Password: ");
-                    password = getHash(sc.next());
+                    password = getHash(PasswordField.readPassword("Password: "));
                 } catch (WrongPassword e) {
-                    System.out.println(">>> Error! " + e.getMessage());
+                    System.out.print(Color.RED);
+                    System.out.print(">>> Error! " + e.getMessage());
+                    System.out.println(Color.RESET);
                     System.out.print("Username: ");
                     username = sc.next();
-                    System.out.print("Password: ");
-                    password = getHash(sc.next());
+                    password = getHash(PasswordField.readPassword("Password: "));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

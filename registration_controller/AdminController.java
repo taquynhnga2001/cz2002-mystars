@@ -3,6 +3,8 @@ package registration_controller;
 import entity.*;
 
 import java.io.IOException;
+import java.text.*;
+import java.time.DateTimeException;
 import java.util.*;
 
 import authentication.Auth;
@@ -255,6 +257,21 @@ public class AdminController {
         }
         selectionSort(listComparables);
         TableView.displayStudentSorting(listComparables, "Course " + courseStr + " " + course.getCourseName());
+    }
+
+    /**Edit student access period */
+    public static void editAccessPeriod(String dateStr, String timeStr) throws ParseException, DateTimeException {
+        try {
+            SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+            formatter.parse(dateStr + " " + timeStr);
+            String[] d = dateStr.split("-");
+            String[] t = timeStr.split(":");
+            if (Integer.parseInt(d[0])>=32 || Integer.parseInt(d[1])>12) throw new DateTimeException("");
+            if (Integer.parseInt(t[0])>=24 || Integer.parseInt(t[1])>=60 || Integer.parseInt(t[2])>=60) throw new DateTimeException("");
+            AccessPeriodTextMng.setAccessPeriod(dateStr + " " + timeStr);
+        } catch (ParseException e) {
+            throw new ParseException(" ", 0);
+        }
     }
 
     private static void selectionSort (Comparable[] list) {
