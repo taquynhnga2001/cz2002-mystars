@@ -97,4 +97,7 @@ public class CourseIndex {
 	public void setCourseName(String courseName) {
 		this.courseName = courseName;
 	}
+	public void setCourseIndex(String index) {
+		this.index = index;
+	}
 }

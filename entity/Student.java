@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 import text_manager.*;
 
-public class Student extends User{ // Students are comparable and can be
+public class Student extends User implements Comparable<Student> { // Students are comparable and can be
 																   // sorted by name>gender>natioanlity
 																//    implements Comparable<Student> 
 	private String name;
@@ -37,17 +37,16 @@ public class Student extends User{ // Students are comparable and can be
 		this.courseWaitlist = WaitlistTextMng.readFile(this.matricNum);
 	}
 
-	// @Override
-	// public int compareTo(Student student) { // compares in the order, Name, gender, nationality
-	// 	// TODO Auto-generated method stub
-	// 	if (this.getName().compareTo(student.getName()) != 0) {
-	// 		return this.getName().compareTo(student.getName());
-	// 	}
-	// 	if (this.getGender().compareTo(student.getGender()) != 0) {
-	// 		return this.getGender().compareTo(student.getGender());
-	// 	}
-	// 	return this.getNationality().compareTo(student.getNationality());
-	// }
+	@Override
+	public int compareTo(Student student) { // compares in the order, Name, gender, nationality
+		if (this.getName().compareTo(student.getName()) != 0) {
+			return this.getName().compareTo(student.getName());
+		}
+		if (this.getGender().compareTo(student.getGender()) != 0) {
+			return this.getGender().compareTo(student.getGender());
+		}
+		return this.getNationality().compareTo(student.getNationality());
+	}
 
 	// public String toString() { // Student can be printed to show name, gender, nationality
 	// 	return "Name: %s, Gender: %s, Nationality: %s".formatted(name, gender, nationality);

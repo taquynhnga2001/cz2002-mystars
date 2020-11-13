@@ -87,8 +87,8 @@ public class CourseTextMng extends TextManager {
             StringBuilder st = new StringBuilder();
             st.append(course.getCourseCode().trim());
             st.append(SEPERATOR);
-            st.append(SEPERATOR);
             st.append(course.getCourseName());
+            st.append(SEPERATOR);
             st.append(course.getSchool().trim());
             st.append(SEPERATOR);
             st.append(course.getAU());
@@ -135,5 +135,14 @@ public class CourseTextMng extends TextManager {
             }
         }
         throw new WrongCourseIndex();
+    }
+
+    public static Course getCourse(ArrayList<Course> courseDB, String courseCode)
+            throws custom_exceptions.WrongCourseCode {
+        for (int i=0; i<courseDB.size(); i++) {
+            Course course = courseDB.get(i);
+            if (course.getCourseCode().equals(courseCode)) return course;
+        }
+        throw new WrongCourseCode();
     }
 }

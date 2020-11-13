@@ -3,7 +3,7 @@ package registration_controller;
 import entity.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.*;
 
 import authentication.Auth;
 import custom_exceptions.*;
@@ -49,9 +49,7 @@ public class AdminController {
         CourseTextMng.addCourse(courseCode, courseName, school, AU);
     }
 
-    /**
-     * Add a new course index. After adding a course index, add their class types
-     */
+    /**Add a new course index. After adding a course index, add their class types*/
     public static void addCourseIndex(String courseIndex, String courseCode, String capacity)
             throws IOException, CourseIndexExisted {
         // add to database
@@ -77,13 +75,137 @@ public class AdminController {
     }
 
 
+    /**Updating an existing course. Return true if confirm to update */
+    public static boolean updateCourse(Course updateCourse, String[] attributes) throws IOException {
+        Scanner sc = new Scanner(System.in);
+        String newCode = "";
+        String newName = "";
+        String newSchool = "";
+        String newAU = "";
+        boolean checkCF = true;
+        for (String att : attributes) {
+            switch (att) {
+                case "code": {
+                    System.out.print("\tNew Course code: ");
+                    newCode = sc.next();
+                    break;
+                }
+                case "name": {
+                    System.out.print("\tNew Course name: ");
+                    sc.nextLine();
+                    newName = sc.nextLine();
+                    break;
+                }
+                case "school": {
+                    System.out.print("\tNew School: ");
+                    newSchool = sc.next();
+                    break;
+                }
+                case "au": {
+                    System.out.print("\tNew AUs: ");
+                    newAU = sc.next();
+                    break;
+                }
+                default: {
+                    System.out.println(">>> Wrong Input: Course does not have " + att + " value!");
+                    checkCF = false;
+                    break;
+                }
+            }
+        }
+        if (checkCF) {
+            System.out.print("Confirm to update this Course [Y/N]? ");
+            String choice = sc.next().toUpperCase();
+            if (choice.equals("Y")) {
+                for (String att: attributes) {
+                    switch (att) {
+                        case "code": {
+                            updateCourse.setCouseCode(newCode);
+                            break;
+                        }
+                        case "name": {
+                            updateCourse.setCourseName(newName);
+                            break;
+                        }
+                        case "school": {
+                            updateCourse.setSchool(newSchool);
+                            break;
+                        }
+                        case "au": {
+                            updateCourse.setAU(Integer.parseInt(newAU));
+                            break;
+                        }
+                    }
+                }
+                System.out.println("Updated Course successfully!");
+                CourseTextMng.saveCourses(getCourseDB());
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    /**Update an existing course index. Return true if confirm to update */
+    public static boolean updateCourseIndex(CourseIndex updateIndex, String[] attributes) throws IOException {
+        Scanner sc = new Scanner(System.in);
+        String newIndex = "";
+        String capacity = "";
+        boolean checkCF = true;
+        for (String att : attributes) {
+            switch (att) {
+                case "index": {
+                    System.out.print("\tNew index number: ");
+                    newIndex = sc.next();
+                    break;
+                }
+                case "capacity": {
+                    System.out.print("\tNew capacity: ");
+                    capacity = sc.next();
+                    break;
+                }
+                default: {
+                    System.out.println(">>> Wrong Input: Course Index does not have " + att + " value!");
+                    checkCF = false;
+                    break;
+                }
+            }
+        }
+        if (checkCF) {
+            System.out.print("Confirm to update this Course Index [Y/N]? ");
+            String choice = sc.next().toUpperCase();
+            if (choice.equals("Y")) {
+                for (String att : attributes) {
+                    switch (att) {
+                        case "index": {
+                            updateIndex.setCourseIndex(newIndex);
+                            // update index of EnrolledCourse.csv and Waitlist.csv if change index
+                            // then send email to registered students to inform index number changed
+                            // not done yet
+                            break;
+                        }
+                        case "capacity": {
+                            updateIndex.setCapacity(Integer.parseInt(capacity));
+                            break;
+                        }
+                    }
+                }
+                System.out.println("Updated Course Index successfully!");
+                CourseIndexTextMng.saveCourseIndex(getCourseDB());
+                CourseIndexTypeTextMng.saveCourseIndexTypes(getCourseDB());
+                return true;
+            }
+        }
+        return false;
+    }
+
+
     /** Return int[3] array includes {vacancy, capacity, lenth of waitlist} */
     public static int[] checkVacancy(String courseIndexStr) throws WrongCourseIndex {
         // load the courseDB
         ArrayList<Course> courseDB = getCourseDB();
         // get the chosen courseIndex is in database
         CourseIndex courseIndex = CourseTextMng.getCourseIndex(courseDB, courseIndexStr);
-        TableView.displayCourseInfo(courseIndex);
+        TableView.displayCourseIndexInfo(courseIndex);
         int vacancy = courseIndex.getVacancy();
         int capacity = courseIndex.getCapacity();
         int[] result = new int[3];
@@ -102,6 +224,53 @@ public class AdminController {
         }
         return result;
     }
+
+    /** Print student list by Course Index*/
+    public static void printStudentByIndex(String courseIndexStr) throws WrongCourseIndex {
+        CourseIndex courseIndex = CourseTextMng.getCourseIndex(getCourseDB(), courseIndexStr);
+        ArrayList<Student> listStudents = new ArrayList<>();
+        for (Student s : getStudentDB()) {
+            if (s.getCourseEnrolled(getCourseDB()).contains(courseIndex)) listStudents.add(s);
+        }
+        Comparable[] listComparables = new Student[listStudents.size()];
+        for (int i = 0; i<listStudents.size(); i++) {
+            listComparables[i] = listStudents.get(i);
+        }
+        selectionSort(listComparables);
+        TableView.displayStudentSorting(listComparables, "Index " + courseIndexStr);
+    }
+
+    /**Print student list by Course Index*/
+    public static void printStudentByCourse(String courseStr) throws WrongCourseIndex, WrongCourseCode {
+        Course course = CourseTextMng.getCourse(getCourseDB(), courseStr);
+        ArrayList<Student> listStudents = new ArrayList<>();
+        for (CourseIndex courseIndex : course.getCourseIndexs()) {
+            for (Student s : getStudentDB()) {
+                if (s.getCourseEnrolled(getCourseDB()).contains(courseIndex)) listStudents.add(s);
+            }
+        }
+        Comparable[] listComparables = new Student[listStudents.size()];
+        for (int i = 0; i<listStudents.size(); i++) {
+            listComparables[i] = listStudents.get(i);
+        }
+        selectionSort(listComparables);
+        TableView.displayStudentSorting(listComparables, "Course " + courseStr + " " + course.getCourseName());
+    }
+
+    private static void selectionSort (Comparable[] list) {
+		int min;
+		Comparable temp;
+		for (int index = 0; index < list.length-1; index++){
+			min = index;
+			for (int scan = index+1; scan < list.length; scan++)
+				if (list[scan].compareTo(list[min]) < 0)
+					min = scan;
+			// Swap the values
+			temp = list[min];
+			list[min] = list[index];
+			list[index] = temp;
+		}
+	}
 
 
     /**Load from database to create objects of courses */

@@ -173,8 +173,10 @@ public class StudentView {
                 data.add(nextRow);
             }
         }
+        String[] title = new String[1];
+        title[0] = "Your Registered Courses:";
         int[] frameSize = { 1410, 500 };
-        TableView.displayTable("Check/Print Registered Courses", columnHeadings, data, "Your Registered Courses:",
+        TableView.displayTable("Check/Print Registered Courses", columnHeadings, data, title,
                 frameSize);
     }
 

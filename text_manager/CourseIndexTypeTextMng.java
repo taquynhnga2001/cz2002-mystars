@@ -100,28 +100,31 @@ public class CourseIndexTypeTextMng extends TextManager {
 
 
     /** Save a list of CourseIndexType objects to database */
-    public static void saveCourseIndexTypes(List<CourseIndexType> courseIndexes) throws IOException {
+    public static void saveCourseIndexTypes(ArrayList<Course> courseDB) throws IOException {
         List<String> al = new ArrayList<>(); // to store CourseIndex data
         String HEADING = "index,classType,group,day,time,venue,remark";
         al.add(HEADING);
 
-        for (int i = 0; i < courseIndexes.size(); i++) {
-            CourseIndexType courseIndex = courseIndexes.get(i);
-            StringBuilder st = new StringBuilder();
-            st.append(courseIndex.getIndex().trim());
-            st.append(SEPERATOR);
-            st.append(courseIndex.getClassType().trim());
-            st.append(SEPERATOR);
-            st.append(courseIndex.getGroup().trim());
-            st.append(SEPERATOR);
-            st.append(courseIndex.getDay().trim());
-            st.append(SEPERATOR);
-            st.append(courseIndex.getTime().trim());
-            st.append(SEPERATOR);
-            st.append(courseIndex.getVenue().trim());
-            st.append(SEPERATOR);
-            st.append(courseIndex.getRemark().trim().replace(",", "|"));
-            al.add(st.toString());
+        for (Course course : courseDB) {
+            for (CourseIndex index : course.getCourseIndexs()) {
+                for (CourseIndexType classType : index.getClassTypes()) {
+                    StringBuilder st = new StringBuilder();
+                    st.append(classType.getIndex().trim());
+                    st.append(SEPERATOR);
+                    st.append(classType.getClassType().trim());
+                    st.append(SEPERATOR);
+                    st.append(classType.getGroup().trim());
+                    st.append(SEPERATOR);
+                    st.append(classType.getDay().trim());
+                    st.append(SEPERATOR);
+                    st.append(classType.getTime().trim());
+                    st.append(SEPERATOR);
+                    st.append(classType.getVenue().trim());
+                    st.append(SEPERATOR);
+                    st.append(classType.getRemark().trim().replace(",", "|"));
+                    al.add(st.toString());
+                }
+            }
         }
         write(FILEPATH, al); 
     }

@@ -61,7 +61,7 @@ public class StudentController {
         }
 
         // if go through all check above, can display chosen course index
-        TableView.displayCourseInfo(chosenCourseIndex);
+        TableView.displayCourseIndexInfo(chosenCourseIndex);
 
         Scanner sc = new Scanner(System.in);
         String choice;
@@ -111,7 +111,7 @@ public class StudentController {
             throw new DidntEnrollOrWait();
         } catch (AlreadyEnrolled e) {
             // if go through all check above, can display chosen course index
-            TableView.displayCourseInfo(chosenCourseIndex);
+            TableView.displayCourseIndexInfo(chosenCourseIndex);
             Scanner sc = new Scanner(System.in);
             String choice;
             do {
@@ -145,7 +145,7 @@ public class StudentController {
             } 
         } catch (AlreadyInWaitlist e) {
             // if go through all check above, can display chosen course index
-            TableView.displayCourseInfo(chosenCourseIndex);
+            TableView.displayCourseIndexInfo(chosenCourseIndex);
             Scanner sc = new Scanner(System.in);
             String choice;
             do {
@@ -182,7 +182,7 @@ public class StudentController {
         ArrayList<Course> courseDB = getCourseDB();
         // get the chosen courseIndex is in database
         CourseIndex courseIndex = CourseTextMng.getCourseIndex(courseDB, courseIndexStr);
-        TableView.displayCourseInfo(courseIndex);
+        TableView.displayCourseIndexInfo(courseIndex);
         int vacancy = courseIndex.getVacancy();
         int capacity = courseIndex.getCapacity();
         int[] result = new int[3];
