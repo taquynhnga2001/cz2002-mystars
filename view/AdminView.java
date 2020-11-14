@@ -18,6 +18,7 @@ import text_manager.CourseTextMng;
 public class AdminView extends UserView {
 
     private static Scanner sc = new Scanner(System.in);
+    private static boolean logout = false;
 
     public static void view(Admin admin) {
         String choice;
@@ -32,6 +33,7 @@ public class AdminView extends UserView {
             System.out.println("(V) Check availble slot for a Course Index");
             System.out.println("(PI) Print student list by Course Index");
             System.out.println("(PC) Print student list by Course Code");
+            System.out.println("(L) Logout");
             System.out.println("(X) Exit");
             System.out.print("Your choice: ");
             choice = sc.next().toUpperCase();
@@ -60,12 +62,18 @@ public class AdminView extends UserView {
                     printStudentByCourse();
                     break;
                 }
+                case "L": {
+                    logout();
+                    sc.nextLine();
+                    break;
+                }
             }
-        } while (!choice.equalsIgnoreCase("X"));
+        } while (!choice.equalsIgnoreCase("X") && !choice.equalsIgnoreCase("L"));
         sc.close();
     }
 
     public static void editAccessPeriod() {
+        System.out.println();
         PrintColor.println("+-----------------------------------------------------------+", "BLUE_BOLD");
         PrintColor.println("|                  Edit Student Access Period               |", "BLUE_BOLD");
         PrintColor.println("+-----------------------------------------------------------+", "BLUE_BOLD");
@@ -89,6 +97,7 @@ public class AdminView extends UserView {
     }
 
     public static void addStudent() {
+        System.out.println();
         PrintColor.println("+-----------------------------------------------------------+", "BLUE_BOLD");        
         PrintColor.println("|                        Add a Student                      |", "BLUE_BOLD");
         PrintColor.println("+-----------------------------------------------------------+", "BLUE_BOLD");
@@ -132,6 +141,7 @@ public class AdminView extends UserView {
     }
 
     public static void addCourse() {
+        System.out.println();
         PrintColor.println("+-----------------------------------------------------------+", "BLUE_BOLD");
         PrintColor.println("|                    Add/Update a Course                    |", "BLUE_BOLD");
         PrintColor.println("+-----------------------------------------------------------+", "BLUE_BOLD");
@@ -269,6 +279,7 @@ public class AdminView extends UserView {
     public static void checkVacancy() {
         String courseIndexStr;
         do {
+            System.out.println();
             PrintColor.println("+-----------------------------------------------------------+", "BLUE_BOLD");
             PrintColor.println("|                 Check Vacancies Available                 |", "BLUE_BOLD");
             PrintColor.println("+-----------------------------------------------------------+", "BLUE_BOLD");
@@ -290,6 +301,7 @@ public class AdminView extends UserView {
     public static void printStudentByIndex() {
         String courseIndexStr;
         do {
+            System.out.println();
             PrintColor.println("+-----------------------------------------------------------+", "BLUE_BOLD");
             PrintColor.println("|             Print student list by Course Index            |", "BLUE_BOLD");
             PrintColor.println("+-----------------------------------------------------------+", "BLUE_BOLD");
@@ -309,6 +321,7 @@ public class AdminView extends UserView {
     public static void printStudentByCourse() {
         String course;
         do {
+            System.out.println();
             PrintColor.println("+-----------------------------------------------------------+", "BLUE_BOLD");
             PrintColor.println("|                Print student list by Course               |", "BLUE_BOLD");
             PrintColor.println("+-----------------------------------------------------------+", "BLUE_BOLD");
@@ -331,4 +344,10 @@ public class AdminView extends UserView {
         return database;
     }
 
+    public static void logout() {
+        logout = true;
+    }
+    public static boolean getLogout() {
+        return logout;
+    }
 }

@@ -66,7 +66,7 @@ public class StudentController {
         Scanner sc = new Scanner(System.in);
         String choice;
         do {
-            System.out.print("Confirm to Add Course [Y/N]? ");
+            PrintColor.print("Confirm to Add Course [Y/N]? ", "YELLOW");
             choice = sc.nextLine();
         } while (!choice.equalsIgnoreCase("Y") && !choice.equalsIgnoreCase("N"));
 
@@ -78,7 +78,7 @@ public class StudentController {
             chosenCourseIndex.setVacancy(chosenCourseIndex.getVacancy() - 1); // vacancy--
             // save courseIndexs in the database
             CourseIndexTextMng.saveCourseIndex(courseDB);
-            System.out.println("Add course successfully!");
+            PrintColor.println("Add course successfully!", "GREEN");
         }
     }
 
@@ -115,7 +115,7 @@ public class StudentController {
             Scanner sc = new Scanner(System.in);
             String choice;
             do {
-                System.out.print("Confirm to Drop Course [Y/N]? ");
+                PrintColor.print("Confirm to Drop Course [Y/N]? ", "YELLOW");
                 choice = sc.nextLine();
             } while (!choice.equalsIgnoreCase("Y") && !choice.equalsIgnoreCase("N"));
             if (choice.equalsIgnoreCase("Y")) {
@@ -123,7 +123,7 @@ public class StudentController {
                 EnrolledTextMng.delEnrolledCourses(student.getMatricNum(), courseIndexStr);
                 student.dropCourse(courseIndexStr);
                 chosenCourseIndex.setVacancy(chosenCourseIndex.getVacancy() + 1); // vacancy++
-                System.out.println("Drop course successfully!");
+                PrintColor.println("Drop course successfully!", "GREEN");
                 student.setRegisteredAU(student.getRegisteredAU() - chosenCourseIndex.getAU());
                 // a student in waitlist will be added in enrolledDB
                 ArrayList<String[]> rows = WaitlistTextMng.readFile();
@@ -149,7 +149,7 @@ public class StudentController {
             Scanner sc = new Scanner(System.in);
             String choice;
             do {
-                System.out.print("Confirm to Drop Course [Y/N]? ");
+                PrintColor.print("Confirm to Drop Course [Y/N]? ", "YELLOW");
                 choice = sc.nextLine();
             } while (!choice.equalsIgnoreCase("Y") && !choice.equalsIgnoreCase("N"));
             if (choice.equalsIgnoreCase("Y")) {
@@ -157,7 +157,7 @@ public class StudentController {
                 WaitlistTextMng.delWaitlistCourses(student.getMatricNum(), courseIndexStr);
                 student.dropCourse(courseIndexStr);
                 chosenCourseIndex.setWaitlistSize(chosenCourseIndex.getWaitlistSize() - 1); // waitlistSize--
-                System.out.println("Drop course successfully!");
+                PrintColor.println("Drop course successfully!", "GREEN");
             } 
         } finally {
             // save courseIndexs in the database
@@ -226,7 +226,7 @@ public class StudentController {
         String choice;
         Scanner sc = new Scanner(System.in);
         do {
-            System.out.print("Confirm to Change Index Number [Y/N]? ");
+            PrintColor.print("Confirm to Change Index Number [Y/N]? ", "YELLOW");
             choice = sc.nextLine();
         } while (!choice.equalsIgnoreCase("Y") && !choice.equalsIgnoreCase("N"));
         // if confirm, update the database and attribute of the Student
@@ -241,7 +241,7 @@ public class StudentController {
             curIndex.setVacancy(curIndex.getVacancy() + 1); // vacancy++
             // save courseIndexs in the database
             CourseIndexTextMng.saveCourseIndex(courseDB);
-            System.out.println("Index Number " + currentIndexStr + " has been changed to " + newIndexStr);
+            PrintColor.println("Index Number " + currentIndexStr + " has been changed to " + newIndexStr, "GREEN");
         }
     }
 
@@ -276,7 +276,7 @@ public class StudentController {
         String choice;
         Scanner sc = new Scanner(System.in);
         do {
-            System.out.print("Confirm to Swop Index Number [Y/N]? ");
+            PrintColor.print("Confirm to Swop Index Number [Y/N]? ", "YELLOW");
             choice = sc.nextLine();
         } while (!choice.equalsIgnoreCase("Y") && !choice.equalsIgnoreCase("N"));
         // if confirm, update the database and attribute of the Student
@@ -293,8 +293,8 @@ public class StudentController {
             student2.dropCourse(index2);
             // save courseIndexs in the database
             CourseIndexTextMng.saveCourseIndex(courseDB);
-            System.out.println("Student " + student1.getMatricNum() + " - Index Number " + index1 +
-            " has been successfully swopped with Student " + student2.getMatricNum() + " - Index Number " + index2);
+            PrintColor.println("Student " + student1.getMatricNum() + " - Index Number " + index1 +
+            " has been successfully swopped with Student " + student2.getMatricNum() + " - Index Number " + index2, "GREEN");
         }
     }
 

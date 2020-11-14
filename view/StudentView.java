@@ -14,24 +14,22 @@ import registration_controller.*;
 public class StudentView {
 
     private static Scanner sc = new Scanner(System.in);
+    private static boolean logout = false;
 
     public static void view(Student student) {
-        // retrieve DataTime now, if is in access period then continue, otherwise notify
-        // student access period
-
         String choice;
         do {
-            System.out.println(Color.CYAN_BOLD);
-            System.out.println("+===========================================================+");
-            System.out.println("|                            HOME                           |");
-            System.out.println("+===========================================================+");
-            System.out.println(Color.RESET);
+            System.out.println();
+            PrintColor.println("+===========================================================+", "BLUE_BOLD");
+            PrintColor.println("|                            HOME                           |", "BLUE_BOLD");
+            PrintColor.println("+===========================================================+", "BLUE_BOLD");
             System.out.println("(A) Add Course");
             System.out.println("(D) Drop Course");
             System.out.println("(R) Check/Print Courses Registered");
             System.out.println("(V) Check Vacancies Available");
             System.out.println("(I) Change Index Number of Course");
             System.out.println("(S) Swop Index Number with Another Student");
+            System.out.println("(L) Logout");
             System.out.println("(X) Exit");
             System.out.print("Your choice: ");
             choice = sc.next().toUpperCase();
@@ -61,17 +59,20 @@ public class StudentView {
                     swopCourseIndex(student);
                     break;
                 }
+                case "L": {
+                    logout();
+                    break;
+                }
             }
-        } while (!choice.equalsIgnoreCase("X"));
+        } while (!choice.equalsIgnoreCase("X") && !choice.equalsIgnoreCase("L"));
     }
 
     /** Add course view for student */
     public static void addCourse(Student student) {
         System.out.println();
-            System.out.println("+-----------------------------------------------------------+");
-            System.out.println("|                         Add Course                        |");
-            System.out.println("+-----------------------------------------------------------+");
-            System.out.println();
+        PrintColor.println("+-----------------------------------------------------------+", "BLUE_BOLD");
+        PrintColor.println("|                         Add Course                        |", "BLUE_BOLD");
+        PrintColor.println("+-----------------------------------------------------------+", "BLUE_BOLD");
         System.out.print("Enter Course Index that you want to add: ");
         String courseIndexStr = sc.next();
         try {
@@ -79,17 +80,17 @@ public class StudentView {
             System.out.println("Registered AUs: " + student.getRegisteredAU());
 
         } catch (WrongCourseIndex e) {
-            System.out.println(">>> Error! " + e.getMessage());
+            PrintColor.println(">>> Error! " + e.getMessage(), "RED");
         } catch (AlreadyEnrolled e) {
-            System.out.println(">>> " + e.getMessage());
+            PrintColor.println(">>> " + e.getMessage(), "RED");
         } catch (AlreadyInWaitlist e) {
-            System.out.println(">>> " + e.getMessage());
+            PrintColor.println(">>> " + e.getMessage(), "RED");
         } catch (ClashTime e) {
-            System.out.println(">>> " + e.getMessage() + ": " + StudentController.getClashedCourse());
+            PrintColor.println(">>> " + e.getMessage() + ": " + StudentController.getClashedCourse(), "RED");
         } catch (NoVacancy e) {
-            System.out.println(">>> " + e.getMessage() + " You are added in waitlist of this couse index.");
+            PrintColor.println(">>> " + e.getMessage() + " You are added in waitlist of this couse index.", "RED");
         } catch (MaximumAURegistered e) {
-            System.out.println(">>> " + e.getMessage());
+            PrintColor.println(">>> " + e.getMessage(), "RED");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -98,10 +99,9 @@ public class StudentView {
     /** Drop course view for student */
     public static void dropCourse(Student student) {
         System.out.println();
-            System.out.println("+-----------------------------------------------------------+");
-            System.out.println("|                        Drop Course                        |");
-            System.out.println("+-----------------------------------------------------------+");
-            System.out.println();
+        PrintColor.println("+-----------------------------------------------------------+", "BLUE_BOLD");
+        PrintColor.println("|                        Drop Course                        |", "BLUE_BOLD");
+        PrintColor.println("+-----------------------------------------------------------+", "BLUE_BOLD");
         // display registered courses
         System.out.println("Courses Registered:");
         ArrayList<CourseIndex>[] courseIndexs = StudentController.getCourseRegistered(student);
@@ -127,21 +127,20 @@ public class StudentView {
             StudentController.dropCourse(student, courseIndexStr);
             System.out.println("Registered AUs: " + student.getRegisteredAU());
         } catch (WrongCourseIndex e) {
-            System.out.println(">>> Error! " + e.getMessage());
+            PrintColor.println(">>> Error! " + e.getMessage(), "RED");
         } catch (IOException e) {
             e.printStackTrace();
         } catch (DidntEnrollOrWait e) {
-            System.out.println(">>> " + e.getMessage());
+            PrintColor.println(">>> " + e.getMessage(), "RED");
         }
     }
 
     /** Check/Print courses registered (enrolled and on waitlist) of a student */
     public static void courseRegistered(Student student) {
         System.out.println();
-            System.out.println("+-----------------------------------------------------------+");
-            System.out.println("|               Check/Print Courses Registered              |");
-            System.out.println("+-----------------------------------------------------------+");
-            System.out.println();
+        PrintColor.println("+-----------------------------------------------------------+", "BLUE_BOLD");        
+        PrintColor.println("|               Check/Print Courses Registered              |", "BLUE_BOLD");
+        PrintColor.println("+-----------------------------------------------------------+", "BLUE_BOLD");        
         ArrayList<CourseIndex>[] courseIndexs = StudentController.getCourseRegistered(student);
         ArrayList<CourseIndex> courseEnrolled = courseIndexs[0];
         ArrayList<CourseIndex> courseWaitlist = courseIndexs[1];
@@ -202,10 +201,9 @@ public class StudentView {
         String courseIndexStr;
         do {
             System.out.println();
-            System.out.println("+-----------------------------------------------------------+");
-            System.out.println("|                 Check Vacancies Available                 |");
-            System.out.println("+-----------------------------------------------------------+");
-            System.out.println();
+            PrintColor.println("+-----------------------------------------------------------+", "BLUE_BOLD");        
+            PrintColor.println("|                 Check Vacancies Available                 |", "BLUE_BOLD");
+            PrintColor.println("+-----------------------------------------------------------+", "BLUE_BOLD");        
             System.out.print("Enter Course Index that you want to check (Enter 'X' to exit): ");
             courseIndexStr = sc.next();
             if (courseIndexStr.equalsIgnoreCase("X"))
@@ -215,17 +213,16 @@ public class StudentView {
                 System.out.println("Places available " + ": [" + result[0] + "/" + result[1] + "]");
                 System.out.println("Length of Waitlist: " + result[2]);
             } catch (WrongCourseIndex e) {
-                System.out.println(">>> " + e.getMessage());
+                PrintColor.println(">>> " + e.getMessage(), "RED");
             }
         } while (!courseIndexStr.equalsIgnoreCase("X"));
     }
 
     public static void changeCourseIndex(Student student) {
         System.out.println();
-            System.out.println("+-----------------------------------------------------------+");
-            System.out.println("|               Change Index Number of Course               |");
-            System.out.println("+-----------------------------------------------------------+");
-            System.out.println();
+        PrintColor.println("+-----------------------------------------------------------+", "BLUE_BOLD");        
+        PrintColor.println("|               Change Index Number of Course               |", "BLUE_BOLD");
+        PrintColor.println("+-----------------------------------------------------------+", "BLUE_BOLD");        
         System.out.print("Enter Current Index Number: ");
         String curIndex = sc.next().toUpperCase();
         System.out.print("Enter New Index Number: ");
@@ -233,17 +230,17 @@ public class StudentView {
         try {
             StudentController.changeCourseIndex(student, curIndex, newIndex);
         } catch (WrongCourseIndex e) {
-            System.out.println(">>> " + e.getMessage());
+            PrintColor.println(">>> " + e.getMessage(), "RED");
         } catch (NotSameCourse e) {
-            System.out.println(">>> " + e.getMessage());
+            PrintColor.println(">>> " + e.getMessage(), "RED");
         } catch (NoVacancy e) {
-            System.out.println(">>> " + e.getMessage());
+            PrintColor.println(">>> " + e.getMessage(), "RED");
         } catch (DidntEnrollOrWait e) {
-            System.out.println(">>> Did not enroll this Course.");
+            PrintColor.println(">>> Did not enroll this Course.", "RED");
         } catch (ClashTime e) {
-            System.out.println(">>> " + e.getMessage() + ": " + StudentController.getClashedCourse());
+            PrintColor.println(">>> " + e.getMessage() + ": " + StudentController.getClashedCourse(), "RED");
         } catch (AlreadyEnrolled e) {
-            System.out.println(">>> " + e.getMessage());
+            PrintColor.println(">>> " + e.getMessage(), "RED");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -251,10 +248,9 @@ public class StudentView {
 
     public static void swopCourseIndex(Student student) {
         System.out.println();
-            System.out.println("+-----------------------------------------------------------+");
-            System.out.println("|           Swop Index Number with Another Student          |");
-            System.out.println("+-----------------------------------------------------------+");
-            System.out.println();
+        PrintColor.println("+-----------------------------------------------------------+", "BLUE_BOLD");        
+        PrintColor.println("|           Swop Index Number with Another Student          |", "BLUE_BOLD");
+        PrintColor.println("+-----------------------------------------------------------+", "BLUE_BOLD");        
         String yourIndex;
         Student peer = null;
         String peerUserName;
@@ -281,14 +277,21 @@ public class StudentView {
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (WrongPassword e) {
-                System.out.println(">>> Typed in wrong password of Student #2");
+                PrintColor.println(">>> Typed in wrong password of Student #2", "RED");
             } catch (WrongUsername e) {
-                System.out.println(">>> Typed in wrong username of Student #2");
+                PrintColor.println(">>> Typed in wrong username of Student #2", "RED");
             } catch (WrongCourseIndex | DidntEnrollOrWait | NotSameCourse | AlreadyEnrolled e) {
-                System.out.println(">>> " + e.getMessage());
+                PrintColor.println(">>> " + e.getMessage(), "RED");
             } catch (ClashTime e) {
-                System.out.println(">>> " + e.getMessage() + ": " + StudentController.getClashedCourse());
+                PrintColor.println(">>> " + e.getMessage() + ": " + StudentController.getClashedCourse(), "RED");
             }
         } while (peer == null);
+    }
+
+    public static void logout() {
+        logout = true;
+    }
+    public static boolean getLogout() {
+        return logout;
     }
 }

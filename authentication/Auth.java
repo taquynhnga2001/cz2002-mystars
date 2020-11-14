@@ -21,14 +21,14 @@ public class Auth {
 
         Scanner sc = new Scanner(System.in);
         System.out.print("Domain (Staff/Student): ");
-        domain = sc.nextLine();
+        domain = sc.next();
         
         while (!domain.equalsIgnoreCase("Staff") && !domain.equalsIgnoreCase("Student")) {
             System.out.print(Color.RED);
             System.out.print(">>> Error! Wrong input!");
             System.out.println(Color.RESET);
             System.out.print("Domain (Staff/Student): ");
-            domain = sc.nextLine();
+            domain = sc.next();
         }
 
         System.out.print("Username: ");
@@ -109,7 +109,6 @@ public class Auth {
                 }
             } while (haveRead == 0);
         }
-        sc.close();
         return null;
     }
 
