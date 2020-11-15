@@ -5,7 +5,6 @@ import java.util.*;
 
 import authentication.Auth;
 import authentication.PasswordField;
-import constants.Color;
 import custom_exceptions.*;
 import entity.*;
 import text_manager.*;
@@ -14,7 +13,6 @@ import registration_controller.*;
 public class StudentView {
 
     private static Scanner sc = new Scanner(System.in);
-    private static boolean logout = false;
 
     public static void view(Student student) {
         String choice;
@@ -29,8 +27,8 @@ public class StudentView {
             System.out.println("(V) Check Vacancies Available");
             System.out.println("(I) Change Index Number of Course");
             System.out.println("(S) Swop Index Number with Another Student");
-            System.out.println("(L) Logout");
-            System.out.println("(X) Exit");
+            System.out.println("(P) Course Planner Generator");
+            System.out.println("(X) Logout");
             System.out.print("Your choice: ");
             choice = sc.next().toUpperCase();
 
@@ -59,12 +57,12 @@ public class StudentView {
                     swopCourseIndex(student);
                     break;
                 }
-                case "L": {
-                    logout();
+                case "P": {
+                    planCourses();
                     break;
                 }
             }
-        } while (!choice.equalsIgnoreCase("X") && !choice.equalsIgnoreCase("L"));
+        } while (!choice.equalsIgnoreCase("X"));
     }
 
     /** Add course view for student */
@@ -288,10 +286,16 @@ public class StudentView {
         } while (peer == null);
     }
 
-    public static void logout() {
-        logout = true;
-    }
-    public static boolean getLogout() {
-        return logout;
+    public static void planCourses() {
+        System.out.println();
+        PrintColor.println("+-----------------------------------------------------------+", "BLUE_BOLD");        
+        PrintColor.println("|                  Course Planner Generator                 |", "BLUE_BOLD");
+        PrintColor.println("+-----------------------------------------------------------+", "BLUE_BOLD"); 
+        System.out.print("Enter courses: ");
+        sc.nextLine();
+        String coursesStr = sc.nextLine(); 
+        String[] courseCodes = coursesStr.split(" "); 
+        
+        CoursePlannerView.view(CoursePlanner.plan(courseCodes, StudentController.getCourseDB()));
     }
 }

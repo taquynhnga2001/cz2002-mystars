@@ -46,7 +46,11 @@ public class CourseIndex {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-    }
+	}
+	
+	public String toString() {
+		return "Index " + this.index + " | " + this.courseCode + " " + this.courseName;
+	}
 
     public String getIndex() {
         return index;

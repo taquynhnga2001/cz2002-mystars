@@ -19,6 +19,8 @@ public class PrintColor {
                 break;
             case "BLUE_BOLD": color = Color.BLUE_BOLD;
                 break;
+            case "PURPLE": color = Color.PURPLE;
+                break;
             default: color = Color.RESET;
         }
         System.out.print(color + text + Color.RESET);
@@ -37,6 +39,8 @@ public class PrintColor {
             case "CYAN_BOLD": color = Color.CYAN_BOLD;
                 break;
             case "BLUE_BOLD": color = Color.BLUE_BOLD;
+                break;
+            case "PURPLE": color = Color.PURPLE;
                 break;
             default: color = Color.RESET;
         }

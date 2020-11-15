@@ -46,9 +46,15 @@ public class AdminController {
 
     /** Add a new course. After adding a course, add their CourseIndexs */
     public static void addCourse(String courseCode, String courseName, String school, String AU)
-            throws IOException, CourseExisted {
-        // add to database
+            throws IOException, CourseExisted, NumberFormatException {
+        // check data validation
+        try {
+            Integer.parseInt(AU);
+            // add to database
         CourseTextMng.addCourse(courseCode, courseName, school, AU);
+        } catch (NumberFormatException e) {
+            throw new NumberFormatException();
+        }
     }
 
     /**Add a new course index. After adding a course index, add their class types*/

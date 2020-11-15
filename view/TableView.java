@@ -196,7 +196,7 @@ public class TableView {
                 data.add(row);
             }
             String[] title = { "List of Students enrolled in: " + by };
-            int[] frameSize = { 800, 500 };
+            int[] frameSize = { 800, 300 };
             displayTable("List of Students", columnHeadings, data, title, frameSize);
         }
 

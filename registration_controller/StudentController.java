@@ -27,7 +27,7 @@ public class StudentController {
         for (int i = 0; i < courseIndexEnrolled.size(); i++) {
             CourseIndex courseIndex_ = courseIndexEnrolled.get(i);
             if (chosenCourseIndex.getCourseCode().equalsIgnoreCase(courseIndex_.getCourseCode())) {
-                throw new AlreadyEnrolled();
+                throw new AlreadyEnrolled(chosenCourseIndex);
             }
         }
         // check if this Course in Waitlist of that student (this/another CourseIndex in waitlist)
@@ -35,11 +35,11 @@ public class StudentController {
         for (int i = 0; i < courseIndexWaitlist.size(); i++) {
             CourseIndex courseIndex_ = courseIndexWaitlist.get(i);
             if (chosenCourseIndex.getCourseCode().equalsIgnoreCase(courseIndex_.getCourseCode())) {
-                throw new AlreadyInWaitlist();
+                throw new AlreadyInWaitlist(chosenCourseIndex);
             }
         }
         // check if the courseIndex clashes time with any enrolled courses
-        CourseIndex clashedCourse = ClashWith(courseIndexEnrolled, chosenCourseIndex);
+        CourseIndex clashedCourse = clashWith(courseIndexEnrolled, chosenCourseIndex);
         if (clashedCourse != null) {
             clashedCourseStr = clashedCourse.getIndex();
             throw new ClashTime();
@@ -96,7 +96,7 @@ public class StudentController {
             for (int i = 0; i < courseIndexEnrolled.size(); i++) {
                 CourseIndex courseIndex_ = courseIndexEnrolled.get(i);
                 if (chosenCourseIndex.getCourseCode().equalsIgnoreCase(courseIndex_.getCourseCode())) {
-                    throw new AlreadyEnrolled();
+                    throw new AlreadyEnrolled(chosenCourseIndex);
                 }
             }
             // check if this Course in Waitlist of that student (this/another CourseIndex in waitlist)
@@ -104,7 +104,7 @@ public class StudentController {
             for (int i = 0; i < courseIndexWaitlist.size(); i++) {
                 CourseIndex courseIndex_ = courseIndexWaitlist.get(i);
                 if (chosenCourseIndex.getCourseCode().equalsIgnoreCase(courseIndex_.getCourseCode())) {
-                    throw new AlreadyInWaitlist();
+                    throw new AlreadyInWaitlist(chosenCourseIndex);
                 }
             }
             // reach here when didn't enroll or in waitlist
@@ -138,7 +138,7 @@ public class StudentController {
                         }
                         chosenCourseIndex.setVacancy(chosenCourseIndex.getVacancy() - 1); // vacancy--
                         chosenCourseIndex.setWaitlistSize(chosenCourseIndex.getWaitlistSize() - 1); // waitlistSize--
-                        SendNotification.sendMail(courseIndexStr);
+                        SendNotification.sendMail(chosenCourseIndex);
                         break;
                     }
                 } 
@@ -213,7 +213,7 @@ public class StudentController {
         if (!student.getCourseEnrolled(courseDB).contains(curIndex)) throw new DidntEnrollOrWait();
         if (!curIndex.getCourseCode().equalsIgnoreCase(newIndex.getCourseCode())) throw new NotSameCourse();
         if (newIndex.getVacancy() == 0) throw new NoVacancy();
-        CourseIndex clashedCourse = ClashWith(student.getCourseEnrolled(courseDB), newIndex);
+        CourseIndex clashedCourse = clashWith(student.getCourseEnrolled(courseDB), newIndex);
         if (clashedCourse != null) {
             clashedCourseStr = clashedCourse.getIndex();
             throw new ClashTime();
@@ -257,8 +257,8 @@ public class StudentController {
         if (!student2.getCourseEnrolled(courseDB).contains(courseIdx2)) throw new DidntEnrollOrWait(2, index2);
         if (!courseIdx1.getCourseCode().equalsIgnoreCase(courseIdx2.getCourseCode())) throw new NotSameCourse();
         // check if one of 2 students has clashing course index
-        CourseIndex clashedCourse1 = ClashWith(student1.getCourseEnrolled(courseDB), courseIdx2);
-        CourseIndex clashedCourse2 = ClashWith(student2.getCourseEnrolled(courseDB), courseIdx1);
+        CourseIndex clashedCourse1 = clashWith(student1.getCourseEnrolled(courseDB), courseIdx2);
+        CourseIndex clashedCourse2 = clashWith(student2.getCourseEnrolled(courseDB), courseIdx1);
         if (clashedCourse1 != null) {
             clashedCourseStr = clashedCourse1.getIndex();
             throw new ClashTime(1);
@@ -300,7 +300,7 @@ public class StudentController {
 
     /**Return the CourseIndex that is clashed with the chosen course index. Return null if no clash.
      * Only compare with CourseIndex of other Couses*/
-    private static CourseIndex ClashWith(ArrayList<CourseIndex> courseIndexEnrolled, CourseIndex chosenCourseIndex) {
+    public static CourseIndex clashWith(ArrayList<CourseIndex> courseIndexEnrolled, CourseIndex chosenCourseIndex) {
         // check if the courseIndex clashes time with any enrolled courses
         for (int i = 0; i < courseIndexEnrolled.size(); i++) {
             CourseIndex courseIndex = courseIndexEnrolled.get(i);

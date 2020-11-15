@@ -44,7 +44,7 @@ public class EnrolledTextMng extends TextManager {
             String matricNum_ = star.nextToken().trim(); // first token: matricNum
             String courseIndex_ = star.nextToken().trim(); // second token: courseIndex
             if (matricNum_.equalsIgnoreCase(matricNum) && courseIndex_.equalsIgnoreCase(courseIndex)) {
-                throw new AlreadyEnrolled();
+                throw new AlreadyEnrolled(courseIndex_);
             }
         }
         // if matricNum and courseIndex is new, add to enrolled

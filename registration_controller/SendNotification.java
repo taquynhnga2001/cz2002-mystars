@@ -10,9 +10,11 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import entity.CourseIndex;
+
 public class SendNotification {
 
-	public static void sendMail(String courseIndex) {
+	public static void sendMail(CourseIndex courseIndex) {
 
 		final String username = "mystarsntu@gmail.com"; // to be added
 		final String password = "mystars123!"; // to be added
@@ -36,9 +38,12 @@ public class SendNotification {
 			message.setFrom(new InternetAddress("mystarsntu@gmail.com"));
 			message.setRecipients(Message.RecipientType.TO,
 				InternetAddress.parse("quynhnga001@e.ntu.edu.sg")); // to be added an email addr
+
+			String courseInfo = "\nIndex " + courseIndex.getIndex() + " - " + courseIndex.getCourseCode() + " " + courseIndex.getCourseName();
 			message.setSubject("Add Course");
 			message.setText("Dear Student,"
-				+ "\n\nYour registration for the Course Index " + courseIndex + " was successfully!" 
+				+ "\n\nYour registration for the Course Index " + courseIndex.getIndex() + " was successfully!" 
+				+ "\n\n" + courseInfo
 				+ "\n\nBest regards,\nMyStars");
 
 			Transport.send(message);

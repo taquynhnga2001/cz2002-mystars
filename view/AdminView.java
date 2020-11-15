@@ -18,7 +18,6 @@ import text_manager.CourseTextMng;
 public class AdminView extends UserView {
 
     private static Scanner sc = new Scanner(System.in);
-    private static boolean logout = false;
 
     public static void view(Admin admin) {
         String choice;
@@ -33,8 +32,7 @@ public class AdminView extends UserView {
             System.out.println("(V) Check availble slot for a Course Index");
             System.out.println("(PI) Print student list by Course Index");
             System.out.println("(PC) Print student list by Course Code");
-            System.out.println("(L) Logout");
-            System.out.println("(X) Exit");
+            System.out.println("(X) Logout");
             System.out.print("Your choice: ");
             choice = sc.next().toUpperCase();
 
@@ -45,6 +43,7 @@ public class AdminView extends UserView {
                 }
                 case "S": {
                     addStudent();
+                    break;
                 }
                 case "C": {
                     addCourse();
@@ -62,13 +61,8 @@ public class AdminView extends UserView {
                     printStudentByCourse();
                     break;
                 }
-                case "L": {
-                    logout();
-                    sc.nextLine();
-                    break;
-                }
             }
-        } while (!choice.equalsIgnoreCase("X") && !choice.equalsIgnoreCase("L"));
+        } while (!choice.equalsIgnoreCase("X"));
         sc.close();
     }
 
@@ -135,7 +129,7 @@ public class AdminView extends UserView {
                 e.printStackTrace();
                 System.out.println(Color.RESET);
             } catch (WrongInputGender e) {
-                PrintColor.println(">>> " + e.getMessage(), "RED");
+                PrintColor.println(">>> Invalid data entries: " + e.getMessage(), "RED");
             }
         }
     }
@@ -222,6 +216,8 @@ public class AdminView extends UserView {
                         e.printStackTrace();
                     } catch (CourseExisted e) {
                         PrintColor.println(">>> " + e.getMessage(), "RED");
+                    } catch (NumberFormatException e) {
+                        PrintColor.println(">>> Invalid data entries: AU must be a positive integer number.", "RED");
                     }
                 break;
             }
@@ -235,30 +231,31 @@ public class AdminView extends UserView {
                     TableView.displayCourseB4Updating(updateCourse);
                     // update general info
                     PrintColor.println("-------- Update General Course Information ----------", "CYAN");
-                    System.out.print("Enter Attributes of the Course to update (code/name/school/AU) (Press 'enter' if no update on Couse): ");
+                    System.out.print("Enter Attributes of the Course to update (code/name/school/AU) (Enter 'X' if no update on Couse): ");
                     sc.nextLine();
                     String[] attributes = sc.nextLine().toLowerCase().trim().split(" ");
-                    AdminController.updateCourse(updateCourse, attributes);
+                    if (!attributes[0].equalsIgnoreCase("X")) AdminController.updateCourse(updateCourse, attributes);
 
                     // update index info
                     PrintColor.println("--------- Update Course Index Information --------", "CYAN");
-                    System.out.print("Enter Index Numbers of the Course to update (Press 'enter' if no update on Couse Index): ");
+                    System.out.print("Enter Index Numbers of the Course to update (Enter 'X' if no update on Couse Index): ");
                     String[] indexs = sc.nextLine().toLowerCase().trim().split(" ");
-                    for (String index : indexs) {
-                        try {
-                            CourseIndex updateIndex = CourseTextMng.getCourseIndex(AdminController.getCourseDB(), index);
-                            if (!updateCourse.getCourseIndexs().contains(updateIndex)) {
-                                PrintColor.println(">>> The Index Number " + index + " does not belong to this Course", "RED");
-                                continue;
+                    if (!indexs[0].equalsIgnoreCase("X"))
+                        for (String index : indexs) {
+                            try {
+                                CourseIndex updateIndex = CourseTextMng.getCourseIndex(AdminController.getCourseDB(), index);
+                                if (!updateCourse.getCourseIndexs().contains(updateIndex)) {
+                                    PrintColor.println(">>> The Index Number " + index + " does not belong to this Course", "RED");
+                                    continue;
+                                }
+                                System.out.print("Enter Attributes of the Index to update (index/capacity): ");
+                                String att = sc.nextLine();
+                                String[] attributes1 = att.trim().toLowerCase().split(" ");
+                                AdminController.updateCourseIndex(updateIndex, attributes1);
+                            } catch (WrongCourseIndex e) {
+                                PrintColor.println(">>> " + e.getMessage(), "RED");
                             }
-                            System.out.print("Enter Attributes of the Index to update (index/capacity): ");
-                            String att = sc.nextLine();
-                            String[] attributes1 = att.trim().toLowerCase().split(" ");
-                            AdminController.updateCourseIndex(updateIndex, attributes1);
-                        } catch (WrongCourseIndex e) {
-                            PrintColor.println(">>> " + e.getMessage(), "RED");
                         }
-                    }
                     // update class info
                     // too tired, not done yet (T_T)
                     TableView.displayCourseAfterAdding(AdminController.getCourseDB(), updateCourse, "U");
@@ -342,12 +339,5 @@ public class AdminView extends UserView {
     public static Map<String, List<Object>> loadDatabase() {
         Map<String, List<Object>> database = new HashMap<>();
         return database;
-    }
-
-    public static void logout() {
-        logout = true;
-    }
-    public static boolean getLogout() {
-        return logout;
     }
 }
