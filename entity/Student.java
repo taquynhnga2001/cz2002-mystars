@@ -7,7 +7,6 @@ import text_manager.*;
 
 public class Student extends User implements Comparable<Student> { // Students are comparable and can be
 																   // sorted by name>gender>natioanlity
-																//    implements Comparable<Student> 
 	private String name;
 	private String mail;
 	private String gender;
@@ -48,9 +47,6 @@ public class Student extends User implements Comparable<Student> { // Students a
 		return this.getNationality().compareTo(student.getNationality());
 	}
 
-	// public String toString() { // Student can be printed to show name, gender, nationality
-	// 	return "Name: %s, Gender: %s, Nationality: %s".formatted(name, gender, nationality);
-	// }
 
 	public String getName() {
 		return name;
