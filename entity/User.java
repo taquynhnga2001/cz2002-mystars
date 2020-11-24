@@ -1,9 +1,5 @@
 package entity;
 
-import java.util.*;
-
-import custom_exceptions.WrongCourseIndex;
-
 public class User{ // realises serializable so that password can be hashed
 	private String username;
 	private String password;
