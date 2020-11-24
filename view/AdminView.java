@@ -15,7 +15,7 @@ import text_manager.AccessPeriodTextMng;
 import text_manager.CourseTextMng;
 
 
-public class AdminView extends UserView {
+public class AdminView {
 
     private static Scanner sc = new Scanner(System.in);
 

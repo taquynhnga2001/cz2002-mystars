@@ -135,17 +135,17 @@ public class Student extends User implements Comparable<Student> { // Students a
 		return al;
 	}
 
-	/** Add the courseIndex string to the ArrayList<String> courseEnrolled */
+	/** Add the courseIndex string to the ArrayList of String courseEnrolled */
 	public void enrollCourse(String courseIndex) {
 		courseEnrolled.add(courseIndex);
 	}
-	/** Add the courseIndex string to the ArrayList<String> courseWaitlist */
+	/** Add the courseIndex string to the ArrayList of String courseWaitlist */
 	public void waitCourse(String courseIndex) {
 		courseWaitlist.add(courseIndex);
 	}
 	
 	/**
-	 * Drop the courseIndex string in the ArrayList<String> courseEnrolled and courseWaitlist 
+	 * Drop the courseIndex string in the ArrayList of String courseEnrolled and courseWaitlist 
 	 * If true: drop successfully 
 	 * If false: throw Exception*/
 	public void dropCourse(String courseIndex) {

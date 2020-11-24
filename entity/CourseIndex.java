@@ -23,9 +23,6 @@ public class CourseIndex {
 	private final int vacancyIdx = 2;
 	private final int waitlistIdx = 3;
 
-	private ArrayList<Student> studentEnrolled = new ArrayList<>();    
-	private ArrayList<Student> studentWaitlist = new ArrayList<>();
-
     public CourseIndex(String index) {
 		this.index = index;
         try {
@@ -75,12 +72,6 @@ public class CourseIndex {
 	}
 	public ArrayList<CourseIndexType> getClassTypes() {
 		return classTypes;
-	}
-	public ArrayList<Student> getStudentEnrolled() {
-		return studentEnrolled;
-	}
-	public ArrayList<Student> getStudentWaitlist() {
-		return studentWaitlist;
 	}
 
     public void setCapacity(int capacity) {

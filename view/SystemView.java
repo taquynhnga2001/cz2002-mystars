@@ -11,8 +11,6 @@ import text_manager.*;
 
 public class SystemView {
 
-	public static ArrayList<Course> courseDB;
-
 	public static void main(String[] args) {
 		System.out.println();
 		PrintColor.println("+===========================================================+", "BLUE_BOLD");

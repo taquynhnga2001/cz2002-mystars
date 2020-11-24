@@ -5,10 +5,8 @@ import java.util.ArrayList;
 
 import custom_exceptions.*;
 import text_manager.*;
-// import jdk.internal.jimage.decompressor.SignatureParser.ParseResult;
 
 public class CourseIndexType {					
-	// implements Comparable <CourseIndexType> 
 	// course index type information
 	private String index;
 	private String classType;
