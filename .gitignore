@@ -1,4 +1,8 @@
 *.class
 .idea
 .vscode
-javadoc
+javadoc.authentication.*
+javadoc.constants.*
+javadoc.custom_exceptions.*
+javadoc.entity.*
+javadoc.view.*
