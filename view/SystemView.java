@@ -1,7 +1,6 @@
 package view;
 
 import java.util.Date;
-import java.util.*;
 
 import authentication.Auth;
 import entity.*;
@@ -35,9 +34,5 @@ public class SystemView {
 				AdminView.view(admin);
 			}
 		}
-	}
-
-	public static Date accessPeriod() {
-		return null;
 	}
 }
