@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"src.authentication"},{"l":"src.constants"},{"l":"src.custom_exceptions"},{"l":"src.custom_exceptions.course_existed"},{"l":"src.custom_exceptions.student_existed"},{"l":"src.entity"},{"l":"src.registration_controller"},{"l":"src.text_manager"},{"l":"src.view"}]

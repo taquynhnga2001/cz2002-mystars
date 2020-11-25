@@ -1,0 +1,9 @@
+src.authentication
+src.constants
+src.custom_exceptions
+src.custom_exceptions.course_existed
+src.custom_exceptions.student_existed
+src.entity
+src.registration_controller
+src.text_manager
+src.view
