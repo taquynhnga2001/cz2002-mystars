@@ -70,7 +70,6 @@ public class CoursePlanner {
 
     private static HashMap<CourseIndex, ArrayList<CourseIndex>> getAdjacencyList(ArrayList<Course> chosenCourses) {
         HashMap<CourseIndex, ArrayList<CourseIndex>> adjList = new HashMap<>();
-
         for (int i=0; i<chosenCourses.size()-1; i++) {
             Course nextCourse = chosenCourses.get(i+1);
             for (CourseIndex index : chosenCourses.get(i).getCourseIndexs()) {
@@ -91,7 +90,6 @@ public class CoursePlanner {
         for (CourseIndex last : chosenCourses.get(chosenCourses.size()-1).getCourseIndexs()) {
             adjList.put(last, new ArrayList<>());
         }
-
         return adjList;
     }
 

@@ -31,7 +31,6 @@ public class Admin extends User {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
 	}
 
 	
