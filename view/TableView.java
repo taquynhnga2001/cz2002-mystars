@@ -23,8 +23,6 @@ public class TableView {
         JScrollPane scrollPane = new JScrollPane(table);
         table.setFillsViewportHeight(true);
 
-        // JLabel lblHeading = new JLabel(title);
-        // lblHeading.setFont(new Font("Arial",Font.TRUETYPE_FONT, 14));
 
         frame.getContentPane().setLayout(new BorderLayout());
 

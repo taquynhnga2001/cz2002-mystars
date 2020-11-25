@@ -45,11 +45,7 @@ public class CoursePlanner {
         while (!L.isEmpty()) {
             Object[] v = L.remove();
             CourseIndex index = (CourseIndex) v[0];
-            // System.out.print("v" + index.getIndex() + " ");
             for (CourseIndex neighbor : adjList.get(index)) {
-                // System.out.print("w" + neighbor.getIndex() + " ");
-                // isClashed(paths.get((int) v[1]), neighbor);
-                // contains(paths.get((int) v[1]), neighbor);
                 if (!isClashed(paths.get((int) v[1]), neighbor) && !contains(paths.get((int) v[1]), neighbor)) {
                     Object[] w = new Object[2];
                     w[0] = neighbor;
@@ -62,7 +58,6 @@ public class CoursePlanner {
                     if (path_w.size() == total)
                         result.add(path_w);
                     p++;
-                    // System.out.print(" added");
                 }
             }
         }
@@ -71,12 +66,6 @@ public class CoursePlanner {
 
     private static HashMap<CourseIndex, ArrayList<CourseIndex>> getAdjacencyList(ArrayList<Course> chosenCourses) {
         HashMap<CourseIndex, ArrayList<CourseIndex>> adjList = new HashMap<>();
-        // ArrayList<CourseIndex> potentialIndexs = new ArrayList<>();
-        // for (Course c : chosenCourses) {
-        //     for (CourseIndex i : c.getCourseIndexs()) {
-        //         potentialIndexs.add(i);
-        //     }
-        // }
         for (int i=0; i<chosenCourses.size()-1; i++) {
             Course nextCourse = chosenCourses.get(i+1);
             for (CourseIndex index : chosenCourses.get(i).getCourseIndexs()) {
@@ -97,24 +86,6 @@ public class CoursePlanner {
         for (CourseIndex last : chosenCourses.get(chosenCourses.size()-1).getCourseIndexs()) {
             adjList.put(last, new ArrayList<>());
         }
-
-        // for (CourseIndex index : potentialIndexs) {
-        //     adjList.put(index, (ArrayList<CourseIndex>) potentialIndexs.clone());
-        //     // remove index of same course
-        //     for (CourseIndex ci : potentialIndexs) {
-        //         if (ci.getCourseCode().equals(index.getCourseCode())) {
-        //             adjList.get(index).remove(ci);
-        //         }
-        //     }
-        //     // remove clashed index
-        //     CourseIndex clashedIndex;
-        //     do {
-        //         clashedIndex = StudentController.clashWith(adjList.get(index), index);
-        //         if (clashedIndex == null)
-        //             break;
-        //         adjList.get(index).remove(clashedIndex);
-        //     } while (clashedIndex != null);
-        // }
         return adjList;
     }
 

@@ -1,6 +1,6 @@
 package entity;
 
-public class User{ // realises serializable so that password can be hashed
+public class User{ 
 	private String username;
 	private String password;
 
